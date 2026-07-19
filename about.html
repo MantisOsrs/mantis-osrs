@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Coming Soon | Mantis OSRS</title>
+  <style>
+    :root {
+      --bg:#090e0b;
+      --panel:#151f18;
+      --panel-raised:#1a271d;
+      --line:#344a38;
+      --line-bright:rgba(134,202,112,.62);
+      --text:#edf2ed;
+      --muted:#9eac9d;
+      --green:#86ca70;
+      --green-pale:#c8ecb3;
+    }
+
+    * { box-sizing:border-box; }
+
+    html { scroll-behavior:smooth; }
+
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 8% 18%,rgba(87,148,73,.1),transparent 25rem),
+        radial-gradient(circle at 92% 72%,rgba(87,148,73,.07),transparent 29rem),
+        linear-gradient(180deg,#0e1510 0%,#090e0b 100%);
+      font-family:Arial,Helvetica,sans-serif;
+      overflow-x:hidden;
+    }
+
+    body::before,
+    body::after {
+      content:"";
+      position:fixed;
+      top:0;
+      bottom:0;
+      width:1px;
+      pointer-events:none;
+      background:linear-gradient(180deg,transparent,rgba(134,202,112,.28),transparent);
+      box-shadow:0 0 24px rgba(121,218,98,.12);
+    }
+
+    body::before { left:4vw; }
+    body::after { right:4vw; }
+
+    .wrap {
+      width:min(1180px,calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    header {
+      min-height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .brand {
+      display:inline-flex;
+      align-items:center;
+      min-height:34px;
+      padding:8px 11px;
+      border:1px solid rgba(134,202,112,.58);
+      color:var(--text);
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:.75rem;
+      font-weight:800;
+      box-shadow:0 0 10px rgba(121,218,98,.07),inset 0 0 10px rgba(121,218,98,.025);
+    }
+
+
+    .site-links {
+      display:flex;
+      align-items:center;
+      gap:0;
+    }
+
+    .site-links a {
+      color:var(--muted);
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.62rem;
+      font-weight:800;
+      transition:color .18s ease;
+    }
+
+    .site-links a:hover,
+    .site-links a[aria-current="page"] {
+      color:var(--green-pale);
+    }
+
+    .site-links a + a {
+      position:relative;
+      margin-left:18px;
+      padding-left:18px;
+    }
+
+    .site-links a + a::before {
+      content:"";
+      position:absolute;
+      left:0;
+      top:50%;
+      width:1px;
+      height:15px;
+      transform:translateY(-50%);
+      background:var(--line-bright);
+      box-shadow:0 0 7px rgba(121,218,98,.15);
+    }
+
+    main {
+      min-height:calc(100vh - 65px);
+      display:grid;
+      place-items:center;
+      padding:70px 0 88px;
+    }
+
+    .coming-soon {
+      position:relative;
+      width:min(920px,100%);
+      min-height:430px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 270px;
+      align-items:center;
+      gap:44px;
+      padding:54px 58px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(135deg,rgba(255,255,255,.032),transparent 42%),
+        linear-gradient(180deg,rgba(27,40,30,.98),rgba(18,27,21,.99));
+      box-shadow:
+        0 24px 55px rgba(0,0,0,.27),
+        inset 0 1px 0 rgba(255,255,255,.025),
+        0 0 34px rgba(121,218,98,.04);
+    }
+
+    .coming-soon::before {
+      content:"";
+      position:absolute;
+      inset:14px;
+      pointer-events:none;
+      border:1px solid rgba(134,202,112,.08);
+    }
+
+    .copy,
+    .character-stage {
+      position:relative;
+      z-index:1;
+    }
+
+    .status {
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      margin-bottom:18px;
+      color:var(--green-pale);
+      font-size:.62rem;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .status::before {
+      content:"";
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 10px rgba(134,202,112,.55);
+      animation:pulse 2.2s ease-in-out infinite;
+    }
+
+    h1 {
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(3.5rem,8vw,6.2rem);
+      font-weight:400;
+      letter-spacing:-.06em;
+      line-height:.88;
+    }
+
+    h2 {
+      margin:16px 0 15px;
+      color:var(--green-pale);
+      font-size:clamp(1.1rem,2vw,1.45rem);
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .copy p {
+      max-width:520px;
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.75;
+    }
+
+    .home-link {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:27px;
+      padding:10px 14px;
+      border:1px solid rgba(134,202,112,.4);
+      color:var(--green-pale);
+      background:rgba(134,202,112,.04);
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.62rem;
+      font-weight:900;
+      transition:background .18s ease,border-color .18s ease,transform .18s ease;
+    }
+
+    .home-link:hover {
+      transform:translateY(-1px);
+      border-color:var(--green);
+      background:rgba(134,202,112,.08);
+    }
+
+    .character-stage {
+      min-height:290px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+    }
+
+    .character-stage::before {
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:5px;
+      width:210px;
+      height:210px;
+      transform:translateX(-50%);
+      border:1px solid rgba(134,202,112,.15);
+      background:
+        radial-gradient(circle,rgba(134,202,112,.11),transparent 64%),
+        linear-gradient(45deg,transparent 49%,rgba(134,202,112,.05) 50%,transparent 51%),
+        linear-gradient(-45deg,transparent 49%,rgba(134,202,112,.05) 50%,transparent 51%);
+      box-shadow:0 0 30px rgba(121,218,98,.035);
+      transform-origin:center;
+      animation:frameFloat 4s ease-in-out infinite;
+    }
+
+    .character-stage::after {
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:0;
+      width:170px;
+      height:18px;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:rgba(0,0,0,.42);
+      filter:blur(7px);
+    }
+
+    .character-stage img {
+      position:relative;
+      z-index:1;
+      width:auto;
+      height:280px;
+      image-rendering:pixelated;
+      filter:drop-shadow(0 16px 18px rgba(0,0,0,.45));
+      animation:characterIdle 3.7s ease-in-out infinite;
+    }
+
+
+    @keyframes pulse {
+      0%,100% { opacity:.55; transform:scale(.88); }
+      50% { opacity:1; transform:scale(1.12); }
+    }
+
+    @keyframes characterIdle {
+      0%,100% { transform:translateY(0); }
+      50% { transform:translateY(-5px); }
+    }
+
+    @keyframes frameFloat {
+      0%,100% { transform:translateX(-50%) rotate(0deg); }
+      50% { transform:translateX(-50%) rotate(.8deg); }
+    }
+
+    @media (max-width:760px) {
+      .wrap { width:min(100% - 28px,1180px); }
+
+      header {
+        min-height:74px;
+        align-items:flex-start;
+        padding:14px 0;
+      }
+
+      .site-links {
+        flex-wrap:wrap;
+        justify-content:flex-end;
+        row-gap:8px;
+      }
+
+      .site-links a + a {
+        margin-left:12px;
+        padding-left:12px;
+      }
+
+      main { padding:38px 0 54px; }
+
+      .coming-soon {
+        grid-template-columns:1fr;
+        gap:24px;
+        padding:40px 30px 28px;
+      }
+
+      .character-stage {
+        min-height:235px;
+      }
+
+      .character-stage::before {
+        width:185px;
+        height:185px;
+      }
+
+      .character-stage img {
+        height:225px;
+      }
+    }
+
+    @media (max-width:520px) {
+      header { display:block; }
+      .site-links { margin-top:15px; justify-content:flex-start; }
+      h1 { font-size:3.55rem; }
+      .coming-soon { padding:34px 22px 25px; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .status::before,
+      .character-stage::before,
+      .character-stage img {
+        animation:none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="index.html">Mantis OSRS</a>
+      <nav class="site-links" aria-label="Primary navigation">
+        <a href="about.html" aria-current="page">About Us</a>
+        <a href="https://discord.gg/YaPqtQWQ7N" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="https://wiseoldman.net/groups/6808" target="_blank" rel="noopener noreferrer">Wise Old Man</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="coming-soon" aria-labelledby="page-title">
+        <div class="copy">
+          <div class="status">Page in progress</div>
+          <h1 id="page-title">About Us</h1>
+          <h2>Coming Soon</h2>
+          <p>We’re preparing a proper introduction to Mantis. This page is still under construction and will be available soon.</p>
+          <a class="home-link" href="index.html">← Return Home</a>
+        </div>
+
+        <div class="character-stage" aria-label="Old School RuneScape character standing beside the coming soon message">
+          <img src="images/about-member-placeholder.png" alt="Old School RuneScape character">
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

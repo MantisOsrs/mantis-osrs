@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2026 Bingo — Mantis OSRS</title>
+  <style>
+    :root {
+      --bg:#dfe8dc;
+      --paper:#edf3ea;
+      --ink:#1c2a20;
+      --muted:#5f7063;
+      --line:#aebcab;
+      --panel:#f8fbf6;
+      --shadow:0 10px 26px rgba(35,55,39,.10);
+      --green:#4c8f52;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      min-height:100vh;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left,#f0f5ed 0,#e2ebe0 42%,#d5e0d2 100%);
+      font:14px/1.35 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+
+    .site-home-bar {
+      width:min(1480px,calc(100% - 24px));
+      margin:12px auto 0;
+    }
+
+    .site-home-link {
+      display:inline-flex;
+      align-items:center;
+      min-height:38px;
+      padding:0 14px;
+      border:1px solid #9db69d;
+      border-radius:999px;
+      color:#315b36;
+      background:rgba(248,251,246,.97);
+      box-shadow:0 5px 16px rgba(0,0,0,.08);
+      text-decoration:none;
+      font-weight:700;
+    }
+
+    .site-home-link:hover {
+      background:#ffffff;
+    }
+
+    .wrap {
+      width:min(1480px,calc(100% - 24px));
+      margin:0 auto;
+      padding:18px 0 28px;
+    }
+
+    .panel {
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:var(--panel);
+      box-shadow:var(--shadow);
+    }
+
+    h1 {
+      margin:0 0 12px;
+      font-size:22px;
+      line-height:1.2;
+      letter-spacing:.2px;
+    }
+
+    .board-frame {
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+      border:1px solid #9eae9c;
+      border-radius:12px;
+      background:#c5d2c2;
+      padding:8px;
+    }
+
+    .board-frame a {
+      display:flex;
+      width:100%;
+      justify-content:center;
+      align-items:center;
+      text-decoration:none;
+    }
+
+    img {
+      display:block;
+      width:100%;
+      height:auto;
+      max-width:100%;
+      max-height:calc(100vh - 150px);
+      object-fit:contain;
+    }
+
+    .hint {
+      margin:9px 2px 0;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    @media(max-width:640px) {
+      .wrap {
+        padding-top:12px;
+      }
+
+      .panel {
+        padding:10px;
+        border-radius:12px;
+      }
+
+      h1 {
+        font-size:20px;
+      }
+
+      .board-frame {
+        padding:4px;
+        border-radius:9px;
+      }
+
+      img {
+        max-height:none;
+      }
+    }
+  
+    /* Ambient Mantis glow — structure unchanged */
+    body {
+      position: relative;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(113, 188, 92, .13), transparent 24rem),
+        radial-gradient(circle at 88% 68%, rgba(173, 224, 148, .09), transparent 22rem),
+        radial-gradient(circle at top left, #f0f5ed 0, #e2ebe0 42%, #d5e0d2 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: 360px;
+      height: 360px;
+      left: -150px;
+      top: 170px;
+      border-radius: 50%;
+      background: rgba(111, 190, 89, .08);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    header,
+    main,
+    footer,
+    .site-home-bar,
+    .wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel,
+    .board-frame {
+      box-shadow:
+        0 14px 34px rgba(35, 55, 39, .12),
+        inset 0 1px 0 rgba(255,255,255,.45);
+    }
+
+    .site-home-link {
+      box-shadow:
+        0 8px 22px rgba(35,55,39,.10),
+        0 0 18px rgba(116,185,95,.05);
+    }
+
+  
+    /* Match the Mantis homepage palette */
+    :root {
+      --bg:#101912;
+      --panel:#18231b;
+      --line:#394b3d;
+      --text:#eef4eb;
+      --muted:#a7b4a5;
+      --green-pale:#d3f3bd;
+    }
+
+    body {
+      color:var(--text);
+      background:
+        linear-gradient(180deg,#050706 0%,#090c0a 42%,#0d120f 100%);
+      overflow-x:hidden;
+    }
+
+    .site-home-link {
+      color:var(--green-pale);
+      background:rgba(24,35,27,.96);
+      border-color:#536a57;
+      box-shadow:
+        0 10px 26px rgba(0,0,0,.20),
+        inset 0 1px 0 rgba(255,255,255,.025);
+    }
+
+    .site-home-link:hover {
+      background:#1e2c21;
+    }
+
+    .panel {
+      color:var(--text);
+      background:
+        linear-gradient(145deg,#1b281e,#17221a);
+      border-color:#445947;
+      box-shadow:
+        0 18px 42px rgba(0,0,0,.18),
+        inset 0 1px 0 rgba(255,255,255,.03);
+    }
+
+    .board-frame {
+      background:#101912;
+      border-color:#526655;
+      box-shadow:
+        0 14px 34px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.025);
+    }
+
+    h1 {
+      color:var(--text);
+      text-shadow:0 14px 32px rgba(0,0,0,.24);
+    }
+
+    .hint {
+      color:var(--muted);
+    }
+
+
+    body::before,
+    body::after {
+      inset:auto;
+      width:auto;
+      height:auto;
+      border-radius:0;
+      background:none;
+      filter:none;
+      opacity:1;
+    }
+
+
+    /* Vertical ambient glow streaks */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      top: -22vh;
+      bottom: -22vh;
+      width: 52px;
+      height: auto;
+      border-radius: 0;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(8px);
+      opacity: .82;
+      background:
+        linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(165, 255, 164, .00) 10%,
+          rgba(165, 255, 164, .08) 24%,
+          rgba(120, 255, 143, .20) 40%,
+          rgba(236, 255, 244, .72) 50%,
+          rgba(120, 255, 143, .20) 60%,
+          rgba(165, 255, 164, .08) 76%,
+          rgba(165, 255, 164, .00) 90%,
+          transparent 100%
+        );
+      animation: streakDrift 8s ease-in-out infinite;
+    }
+
+    body::before {
+      left: 8%;
+    }
+
+    body::after {
+      right: 8%;
+      width: 52px;
+      opacity: .82;
+      animation-delay: -3.2s;
+      animation-duration: 10s;
+    }
+
+    @keyframes streakDrift {
+      0%, 100% { transform: translateY(-7%); }
+      50% { transform: translateY(7%); }
+    }
+
+    @media (max-width: 700px) {
+      body::before {
+        left: -28px;
+        width: 38px;
+      }
+
+      body::after {
+        right: -24px;
+        width: 38px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body::before,
+      body::after {
+        animation: none !important;
+      }
+    }
+
+  
+    /* glossy black sheen */
+    body {
+      position: relative;
+    }
+
+    body > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    body::selection {
+      background: rgba(170,255,164,.25);
+    }
+
+  
+    /* Team rosters — styled like the replay team cards */
+    .teams-section {
+      margin-top:24px;
+    }
+
+    .teams-title {
+      margin:0 0 12px;
+      color:var(--text);
+      font-size:17px;
+      line-height:1.2;
+      letter-spacing:.2px;
+    }
+
+    .teams-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      align-items:start;
+    }
+
+    .roster-card {
+      overflow:hidden;
+      border:1px solid #c9c3b4;
+      border-radius:14px;
+      color:#1f2328;
+      background:#fffdf8;
+      box-shadow:
+        0 10px 24px rgba(0,0,0,.12),
+        inset 0 1px 0 rgba(255,255,255,.55);
+    }
+
+    .roster-head {
+      padding:10px 12px;
+      font-weight:800;
+      font-size:14px;
+      line-height:1.2;
+    }
+
+    .roster-head.sage   { background:#d9edcf; }
+    .roster-head.moss   { background:#cce1bf; }
+    .roster-head.red    { background:#f2d0cf; }
+    .roster-head.green  { background:#d9edcf; }
+    .roster-head.blue   { background:#d6e4f8; }
+    .roster-head.yellow { background:#f7ebbd; }
+    .roster-head.purple { background:#ead8e8; }
+    .roster-head.gray   { background:#e5e5e5; }
+
+    .roster-list {
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+
+    .roster-list li {
+      padding:7px 11px;
+      border-top:1px solid #ebe5d6;
+      font-size:13px;
+      line-height:1.25;
+    }
+
+    @media(max-width:640px) {
+      .teams-section {
+        margin-top:18px;
+      }
+
+      .teams-grid {
+        grid-template-columns:1fr;
+      }
+
+      .roster-card {
+        border-radius:12px;
+      }
+    }
+
+  
+    /* Dark roster-list refinement */
+    .roster-card{
+      border-color:#3c4b3f;
+      color:#eef4eb;
+      background:#121915;
+      box-shadow:
+        0 10px 24px rgba(0,0,0,.22),
+        inset 0 1px 0 rgba(255,255,255,.025);
+    }
+
+    .roster-head{
+      color:#172019;
+    }
+
+    .roster-list{
+      color:#eef4eb;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0)),
+        #121915;
+    }
+
+    .roster-list li{
+      color:#e8efe6;
+      border-top-color:#2d3930;
+    }
+
+    .roster-list li:nth-child(even){
+      background:rgba(255,255,255,.018);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="site-home-bar">
+    <a class="site-home-link" href="../index.html">← Mantis Home</a>
+  </div>
+
+  <main class="wrap">
+    <section class="panel">
+      <h1>2026 Bingo</h1>
+
+      <div class="board-frame">
+        <a href="../images/BINGO_WIN11.png" target="_blank" rel="noopener">
+          <img src="../images/BINGO_WIN11.png" alt="Final board for the 2026 Mantis Bingo event">
+        </a>
+      </div>
+
+      <div class="hint">Click the board to open the full-size image.</div>
+
+      <section class="teams-section" aria-labelledby="teams-heading">
+        <h2 class="teams-title" id="teams-heading">Teams</h2>
+        <div class="teams-grid">
+          <article class="roster-card">
+            <div class="roster-head sage">Muddogs</div>
+            <ul class="roster-list">
+              <li>Pond Scum</li>
+              <li>Shoulders</li>
+              <li>Meat jun</li>
+              <li>Big Baby Boy</li>
+              <li>Iron Vikings</li>
+              <li>Pyros</li>
+              <li>Reggie Tales</li>
+              <li>TFresh</li>
+              <li>Waves117</li>
+              <li>Cpt 1ns4an0</li>
+              <li>Vycra</li>
+              <li>Gary Salty</li>
+              <li>YeetMyLoad</li>
+              <li>Sha q</li>
+              <li>Gingerbihh</li>
+              <li>TheRealParbs</li>
+              <li>Durzohn</li>
+              <li>Meleikturtle</li>
+              <li>ChronicPurp</li>
+              <li>Ottertoebean</li>
+              <li>GhrimReapr</li>
+              <li>Third leg</li>
+              <li>Trippie Rett</li>
+            </ul>
+          </article>
+          <article class="roster-card">
+            <div class="roster-head moss">Off Each Other</div>
+            <ul class="roster-list">
+              <li>TheDog</li>
+              <li>Kyle Stanley</li>
+              <li>Cnyr</li>
+              <li>C D C D C D</li>
+              <li>Ie John Fux</li>
+              <li>Dhampir007</li>
+              <li>l3enjie</li>
+              <li>Iron Hogey</li>
+              <li>dudboy</li>
+              <li>rskru</li>
+              <li>P4pa Swag</li>
+              <li>Nutzach00</li>
+              <li>Wuze</li>
+              <li>Tacticaljokr</li>
+              <li>BIGCOKCOWBOY</li>
+              <li>ImFatMatt</li>
+              <li>Crispy12</li>
+              <li>Im Owned</li>
+              <li>23 Questions</li>
+              <li>Busta Beans</li>
+              <li>Juice Solo</li>
+              <li>Zodiac Zack</li>
+              <li>Vernonwormer</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+    </section>
+  </main>
+</body>
+</html>
