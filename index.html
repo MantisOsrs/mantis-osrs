@@ -3,1482 +3,378 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07100b">
-  <title>Mantis OSRS</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0a0e0b">
+  <title>Site Under Construction — Mantis OSRS</title>
   <style>
     :root{
-      --bg:#101912;
-      --panel:#18231b;
-      --panel-hover:#1e2c21;
-      --line:#394b3d;
+      color-scheme:dark;
+      --bg:#070a08;
+      --panel:#141d16;
+      --panel-soft:#101712;
+      --line:#35463a;
+      --line-soft:rgba(151,201,132,.16);
       --text:#eef4eb;
-      --muted:#a7b4a5;
-      --green:#86ca70;
-      --green-pale:#d3f3bd;
+      --muted:#a9b5a7;
+      --sage:#b9e7a5;
+      --glow:rgba(115,203,92,.17);
     }
 
     *{box-sizing:border-box}
 
+    html{min-height:100%}
+
     body{
       margin:0;
       min-height:100vh;
+      display:grid;
+      place-items:center;
+      overflow-x:hidden;
       color:var(--text);
-      background:
-        radial-gradient(circle at 50% 0%, rgba(99,165,79,.09), transparent 28rem),
-        linear-gradient(180deg,#050706 0%,#090c0a 42%,#0d120f 100%);
       font-family:Arial,Helvetica,sans-serif;
+      background:
+        radial-gradient(circle at 16% 20%,rgba(112,188,88,.12),transparent 25rem),
+        radial-gradient(circle at 84% 78%,rgba(173,224,148,.07),transparent 22rem),
+        linear-gradient(180deg,#050706 0%,#090c0a 45%,#0d120f 100%);
+      padding:24px;
     }
 
-    a{color:inherit}
-
-    .wrap{
-      width:min(980px,calc(100% - 28px));
-      margin:0 auto;
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      top:-20vh;
+      bottom:-20vh;
+      width:48px;
+      pointer-events:none;
+      filter:blur(9px);
+      opacity:.62;
+      background:linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(165,255,164,0) 12%,
+        rgba(165,255,164,.06) 28%,
+        rgba(120,255,143,.15) 42%,
+        rgba(226,255,232,.50) 50%,
+        rgba(120,255,143,.15) 58%,
+        rgba(165,255,164,.06) 72%,
+        rgba(165,255,164,0) 88%,
+        transparent 100%
+      );
+      animation:streakDrift 9s ease-in-out infinite;
     }
 
-    header{
-      min-height:64px;
-      display:flex;
+    body::before{left:7%}
+    body::after{right:7%;animation-delay:-3.4s;animation-duration:11s}
+
+    .shell{
+      position:relative;
+      isolation:isolate;
+      width:min(760px,100%);
+      padding:clamp(30px,6vw,58px);
+      border:1px solid var(--line);
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.018),transparent 42%),
+        linear-gradient(180deg,var(--panel) 0%,var(--panel-soft) 100%);
+      box-shadow:
+        0 26px 72px rgba(0,0,0,.40),
+        0 0 44px rgba(111,190,89,.055),
+        inset 0 0 0 1px rgba(194,230,181,.035);
+    }
+
+    .shell::before{
+      content:"";
+      position:absolute;
+      inset:9px;
+      z-index:-1;
+      border:1px solid var(--line-soft);
+      pointer-events:none;
+    }
+
+    .shell::after{
+      content:"";
+      position:absolute;
+      left:clamp(30px,6vw,58px);
+      right:clamp(30px,6vw,58px);
+      top:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,rgba(198,242,179,.52),transparent);
+      box-shadow:0 0 16px var(--glow);
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 184px;
       align-items:center;
-      justify-content:space-between;
-      gap:20px;
-      border-bottom:1px solid var(--line);
+      gap:clamp(30px,6vw,58px);
     }
 
-    .site-links{
-      display:flex;
-      align-items:center;
-      gap:18px;
-    }
-
-    .site-links a{
-      color:var(--muted);
-      text-decoration:none;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.62rem;
-      font-weight:800;
-      transition:color .18s ease;
-    }
-
-    .site-links a:hover{
-      color:var(--green-pale);
-    }
-
-    .brand{
-      text-decoration:none;
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      font-size:.75rem;
-      font-weight:800;
-    }
-
-    .brand span{
-      margin-left:.5rem;
-      color:var(--green-pale);
-      font-size:.58rem;
-    }
-
-    .hero{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:28px;
-      padding:46px 0 38px;
-      text-align:left;
-    }
-
-    .mantis{
-      width:130px;
-      flex:0 0 auto;
-      filter:drop-shadow(0 16px 24px rgba(0,0,0,.5));
-      animation:float 4.8s ease-in-out infinite;
-    }
-
-    .mantis .head{
-      transform-origin:50% 70%;
-      animation:tilt 4.8s ease-in-out infinite;
-    }
-
-    .mantis .eye{
-      animation:eye 2.4s ease-in-out infinite;
-    }
+    .copy{min-width:0}
 
     h1{
       margin:0;
+      max-width:520px;
       font-family:Georgia,"Times New Roman",serif;
-      font-size:clamp(4rem,10vw,7rem);
-      font-weight:400;
-      line-height:.8;
-      letter-spacing:-.08em;
+      font-size:clamp(2.15rem,7vw,4.55rem);
+      font-weight:600;
+      line-height:.96;
+      letter-spacing:-.045em;
+      text-wrap:balance;
     }
 
-    h1 small{
-      display:inline-block;
-      margin-left:.32em;
-      color:var(--green-pale);
+    .brand{
+      display:block;
+      margin-bottom:11px;
+      color:var(--sage);
       font-family:Arial,Helvetica,sans-serif;
-      font-size:.09em;
-      line-height:1;
-      letter-spacing:.42em;
+      font-size:clamp(.82rem,2vw,1.02rem);
+      font-weight:700;
+      letter-spacing:.22em;
+      line-height:1.2;
       text-transform:uppercase;
-      font-weight:900;
-      vertical-align:top;
-      transform:translateY(1.5em);
     }
 
-    main{
-      padding:10px 0 72px;
-    }
-
-    section{
-      margin-top:44px;
-    }
-
-    .section-title{
-      margin:0 0 14px;
-      font-size:.72rem;
-      text-transform:uppercase;
-      letter-spacing:.2em;
-      color:var(--green-pale);
-    }
-
-    .current-card,
-    .past-card{
-      border:1px solid var(--line);
-      background:linear-gradient(145deg,#1b281e,#17221a);
-    }
-
-    .current-card{
-      min-height:170px;
-      padding:28px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:24px;
-    }
-
-    .current-card h2,
-    .past-card h3{
-      margin:0;
-      font-family:Georgia,"Times New Roman",serif;
-      font-weight:400;
-      letter-spacing:-.04em;
-    }
-
-    .current-card h2{
-      font-size:clamp(2rem,5vw,3rem);
+    .message{
+      max-width:480px;
+      margin:24px 0 0;
+      color:var(--muted);
+      font-size:clamp(.96rem,2vw,1.06rem);
+      line-height:1.7;
     }
 
     .status{
-      color:var(--muted);
-      font-size:.78rem;
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      margin-top:28px;
+      padding:9px 12px;
+      border:1px solid rgba(145,196,127,.17);
+      background:rgba(5,9,6,.28);
+      color:#c9d5c6;
+      font-size:.72rem;
+      letter-spacing:.1em;
       text-transform:uppercase;
-      letter-spacing:.14em;
-      white-space:nowrap;
     }
 
-    .past-list{
-      width:50%;
+    .status-dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#9ed889;
+      box-shadow:0 0 10px rgba(158,216,137,.6);
+      animation:pulse 2.4s ease-in-out infinite;
+    }
+
+    .mantis-wrap{
+      position:relative;
       display:grid;
-      gap:12px;
+      place-items:center;
+      min-height:190px;
+      border-left:1px solid rgba(164,205,146,.16);
     }
 
-    .past-card{
-      min-height:112px;
-      padding:22px 24px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:24px;
-      transition:background .18s ease,border-color .18s ease;
-    }
-
-    .past-card:hover{
-      background:var(--panel-hover);
-      border-color:#59705d;
-    }
-
-    .past-card h3{
-      font-size:clamp(1.35rem,3.6vw,2rem);
-    }
-
-    .past-card.empty h3{
-      color:#566356;
-    }
-
-    .event-link{
-      flex:0 0 auto;
-      text-decoration:none;
-      color:var(--green-pale);
-      font-size:.7rem;
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-    }
-
-    .event-link::after{
-      content:" →";
-    }
-
-    footer{
-      border-top:1px solid var(--line);
-      padding:22px 0 32px;
-      color:#899887;
-      font-size:.58rem;
-      text-transform:uppercase;
-      letter-spacing:.2em;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-
-    .moderator-login{
-      padding:6px 10px;
-      border:1px solid var(--line);
-      color:#9baa98;
-      text-decoration:none;
-      font-size:.54rem;
-      letter-spacing:.14em;
-      transition:color .18s ease,border-color .18s ease,background .18s ease;
-    }
-
-    .moderator-login:hover{
-      color:var(--green-pale);
-      border-color:#607762;
-      background:rgba(255,255,255,.02);
-    }
-
-    @keyframes float{
-      0%,100%{transform:translateY(0) rotate(-1deg)}
-      50%{transform:translateY(-6px) rotate(1deg)}
-    }
-
-    @keyframes tilt{
-      0%,100%{transform:rotate(-2deg)}
-      50%{transform:rotate(3deg)}
-    }
-
-    @keyframes eye{
-      0%,100%{opacity:.7;filter:drop-shadow(0 0 3px #dcffa5)}
-      50%{opacity:1;filter:drop-shadow(0 0 8px #dcffa5)}
-    }
-
-    @media(max-width:760px){
-      .past-list{
-        width:100%;
-      }
-    }
-
-    @media(max-width:620px){
-      header{
-        padding:14px 0;
-        align-items:flex-start;
-        flex-direction:column;
-      }
-
-      .site-links{
-        width:100%;
-        justify-content:space-between;
-      }
-
-      .hero{
-        flex-direction:column;
-        text-align:center;
-        gap:8px;
-        padding-top:32px;
-      }
-
-      .mantis{width:112px}
-
-      .current-card,
-      .past-card{
-        align-items:flex-start;
-        flex-direction:column;
-      }
-
-      .past-card{
-        min-height:126px;
-      }
-
-      .event-link{
-        margin-top:auto;
-      }
-    }
-
-    @media(prefers-reduced-motion:reduce){
-      *,*::before,*::after{
-        animation:none!important;
-      }
-    }
-  
-    /* Homepage glow experiment — structure unchanged */
-    body {
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      pointer-events: none;
-      border-radius: 50%;
-      filter: blur(80px);
-      z-index: -1;
-    }
-
-    body::before {
-      width: 420px;
-      height: 420px;
-      left: -170px;
-      top: 180px;
-      background: rgba(111, 190, 89, .11);
-    }
-
-    body::after {
-      width: 360px;
-      height: 360px;
-      right: -150px;
-      top: 520px;
-      background: rgba(171, 224, 143, .07);
-    }
-
-    header {
-      position: relative;
-    }
-
-    header::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -1px;
-      height: 1px;
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(166, 225, 140, .42),
-        transparent
-      );
-    }
-
-    .brand,
-    .site-links a {
-      text-shadow: 0 0 18px rgba(166, 225, 140, .08);
-    }
-
-    .hero {
-      position: relative;
-      isolation: isolate;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      width: 380px;
-      height: 190px;
-      left: 50%;
-      top: 48%;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: radial-gradient(
-        ellipse,
-        rgba(128, 207, 101, .17),
-        rgba(128, 207, 101, .04) 48%,
-        transparent 72%
-      );
-      filter: blur(15px);
-      z-index: -1;
-      animation: heroGlow 5.4s ease-in-out infinite;
-    }
-
-    .mantis {
-      filter:
-        drop-shadow(0 16px 24px rgba(0,0,0,.45))
-        drop-shadow(0 0 16px rgba(143, 214, 113, .18));
-    }
-
-    h1 {
-      text-shadow:
-        0 2px 0 rgba(255,255,255,.025),
-        0 16px 42px rgba(0,0,0,.28);
-    }
-
-    h1 small {
-      text-shadow: 0 0 16px rgba(185, 236, 157, .22);
-    }
-
-    .section-title {
-      text-shadow: 0 0 14px rgba(190, 235, 165, .13);
-    }
-
-    .current-card,
-    .past-card {
-      position: relative;
-      overflow: hidden;
-      box-shadow:
-        0 12px 30px rgba(0,0,0,.13),
-        inset 0 1px 0 rgba(255,255,255,.025);
-    }
-
-    .current-card::before,
-    .past-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(
-          120deg,
-          rgba(255,255,255,.045),
-          transparent 34%
-        );
-    }
-
-    .current-card {
-      border-color: #4b6150;
-      box-shadow:
-        0 18px 42px rgba(0,0,0,.17),
-        0 0 36px rgba(108, 178, 89, .045),
-        inset 0 1px 0 rgba(255,255,255,.035);
-    }
-
-    .past-card {
-      transition:
-        transform .18s ease,
-        background .18s ease,
-        border-color .18s ease,
-        box-shadow .18s ease;
-    }
-
-    .past-card:hover {
-      transform: translateX(4px);
-      box-shadow:
-        0 13px 30px rgba(0,0,0,.18),
-        0 0 25px rgba(119, 196, 97, .07);
-    }
-
-    .event-link {
-      text-shadow: 0 0 14px rgba(190, 235, 165, .13);
-    }
-
-    .moderator-login {
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.012);
-    }
-
-    .moderator-login:hover {
-      box-shadow: 0 0 18px rgba(154, 211, 130, .08);
-    }
-
-    @keyframes heroGlow {
-      0%, 100% {
-        opacity: .7;
-        transform: translate(-50%, -50%) scale(.96);
-      }
-      50% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.05);
-      }
-    }
-
-    @media (max-width: 620px) {
-      body::before {
-        width: 300px;
-        height: 300px;
-        left: -170px;
-      }
-
-      body::after {
-        width: 260px;
-        height: 260px;
-        right: -170px;
-      }
-
-      .hero::before {
-        width: 290px;
-        height: 165px;
-      }
-
-      .past-card:hover {
-        transform: none;
-      }
-    }
-
-  
-    /* Replace circular glows with vertical streaks */
-    body::before,
-    body::after {
-      inset: auto;
-      background: none;
-    }
-
-    .hero::before {
-      width: 28px;
-      height: 350px;
-      left: 50%;
-      top: 50%;
-      border-radius: 0;
-      background:
-        linear-gradient(
-          180deg,
-          transparent 0%,
-          rgba(151, 224, 120, .02) 18%,
-          rgba(151, 224, 120, .12) 42%,
-          rgba(236, 255, 244, .44) 50%,
-          rgba(151, 224, 120, .12) 58%,
-          rgba(151, 224, 120, .02) 82%,
-          transparent 100%
-        );
-      filter: blur(8px);
-      animation: heroStreak 6s ease-in-out infinite;
-    }
-
-    @keyframes heroStreak {
-      0%, 100% {
-        opacity: .65;
-        transform: translate(-50%, -54%);
-      }
-      50% {
-        opacity: 1;
-        transform: translate(-50%, -46%);
-      }
-    }
-
-    /* Vertical ambient glow streaks */
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      top: -22vh;
-      bottom: -22vh;
-      width: 52px;
-      height: auto;
-      border-radius: 0;
-      pointer-events: none;
-      z-index: 0;
-      filter: blur(8px);
-      opacity: .82;
-      background:
-        linear-gradient(
-          180deg,
-          transparent 0%,
-          rgba(165, 255, 164, .00) 10%,
-          rgba(165, 255, 164, .08) 24%,
-          rgba(120, 255, 143, .20) 40%,
-          rgba(236, 255, 244, .72) 50%,
-          rgba(120, 255, 143, .20) 60%,
-          rgba(165, 255, 164, .08) 76%,
-          rgba(165, 255, 164, .00) 90%,
-          transparent 100%
-        );
-      animation: streakDrift 8s ease-in-out infinite;
-    }
-
-    body::before {
-      left: 8%;
-    }
-
-    body::after {
-      right: 8%;
-      width: 52px;
-      opacity: .82;
-      animation-delay: -3.2s;
-      animation-duration: 10s;
-    }
-
-    @keyframes streakDrift {
-      0%, 100% { transform: translateY(-7%); }
-      50% { transform: translateY(7%); }
-    }
-
-    @media (max-width: 700px) {
-      body::before {
-        left: -28px;
-        width: 38px;
-      }
-
-      body::after {
-        right: -24px;
-        width: 38px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      body::before,
-      body::after {
-        animation: none !important;
-      }
-    }
-
-  
-    /* glossy black sheen */
-    body {
-      position: relative;
-    }
-
-    body > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    body::selection {
-      background: rgba(170,255,164,.25);
-    }
-
-  
-  
-    .hero{
-      display:flex;
-      justify-content:center;
-      padding-top:20px;
-      padding-bottom:34px;
-    }
-
-    .hero-stage{
-      width:min(980px, 100%);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      position:relative;
-    }
-
-    .header-art{
-      width:min(780px, 100%);
-      display:flex;
-      justify-content:center;
-      align-items:flex-end;
-      margin-bottom:-34px;
-      position:relative;
-      z-index:3;
-      pointer-events:none;
-    }
-
-    .header-art img{
-      display:block;
-      width:100%;
-      max-width:780px;
-      height:auto;
-      object-fit:contain;
-      filter:
-        drop-shadow(0 16px 18px rgba(0,0,0,.22))
-        drop-shadow(0 0 20px rgba(170,255,164,.08));
-    }
-
-    .hero-title-row{
-      width:100%;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      gap:18px;
-      position:relative;
-      z-index:2;
-    }
-
-    .hero-copy{
-      display:flex;
-      align-items:flex-end;
-      gap:18px;
-    }
-
-    .mantis{
-      width:106px;
-      margin-bottom:10px;
-    }
-
-    h1{
-      margin:0;
-      line-height:.82;
-      position:relative;
-      z-index:1;
-    }
-
-    h1 small{
-      transform:translateY(1.28em);
-    }
-
-    @media(max-width:820px){
-      .header-art{
-        width:min(680px, 100%);
-        margin-bottom:-22px;
-      }
-
-      .hero-title-row{
-        flex-direction:row;
-        gap:12px;
-      }
-
-      .mantis{
-        width:82px;
-        margin-bottom:8px;
-      }
-    }
-
-    @media(max-width:620px){
-      .hero{
-        padding-top:14px;
-      }
-
-      .hero-title-row{
-        gap:10px;
-      }
-
-      .header-art{
-        margin-bottom:-16px;
-      }
-
-      .mantis{
-        width:68px;
-        margin-bottom:6px;
-      }
-
-      h1{
-        font-size:clamp(3.4rem, 17vw, 5.4rem);
-      }
-    }
-
-  
-    /* Header refinement: cleaner cutout, no mantis icon, tighter stacking */
-    .hero{
-      display:flex;
-      justify-content:center;
-      padding-top:4px;
-      padding-bottom:22px;
-    }
-
-    .hero-stage{
-      width:min(980px, 100%);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      position:relative;
-      transform:translateY(-8px);
-    }
-
-    .header-art{
-      width:min(760px, 100%);
-      display:flex;
-      justify-content:center;
-      align-items:flex-end;
-      margin-bottom:-22px;
-      position:relative;
-      z-index:3;
-      pointer-events:none;
-    }
-
-    .header-art img{
-      display:block;
-      width:100%;
-      max-width:760px;
-      height:auto;
-      object-fit:contain;
-      filter:
-        drop-shadow(0 10px 16px rgba(0,0,0,.20))
-        drop-shadow(0 0 16px rgba(170,255,164,.06));
-    }
-
-    .hero-title-row{
-      width:100%;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      position:relative;
-      z-index:2;
-    }
-
-    .hero-copy{
-      display:flex;
-      align-items:flex-end;
-      gap:0;
-    }
-
-    .hero-copy .mantis{
-      display:none !important;
-    }
-
-    h1{
-      margin:0;
-      line-height:.82;
-      position:relative;
-      z-index:1;
-      transform:translateY(-2px);
-    }
-
-    h1 small{
-      transform:translateY(1.18em);
-    }
-
-    @media(max-width:820px){
-      .hero{
-        padding-top:0;
-        padding-bottom:18px;
-      }
-
-      .hero-stage{
-        transform:translateY(-6px);
-      }
-
-      .header-art{
-        width:min(660px, 100%);
-        margin-bottom:-16px;
-      }
-    }
-
-    @media(max-width:620px){
-      .hero{
-        padding-top:0;
-        padding-bottom:14px;
-      }
-
-      .hero-stage{
-        transform:translateY(-4px);
-      }
-
-      .header-art{
-        width:min(620px, 100%);
-        margin-bottom:-12px;
-      }
-
-      h1{
-        font-size:clamp(3.6rem, 17vw, 5.4rem);
-      }
-    }
-
-  
-    /* Subtle paper-flake texture across the homepage */
-    .page-flakes{
-      position:fixed;
-      inset:0;
-      z-index:0;
-      pointer-events:none;
-      opacity:.22;
-      background-image:
-        radial-gradient(circle, rgba(255,255,255,.62) 0 1px, transparent 1.4px),
-        radial-gradient(circle, rgba(255,255,255,.42) 0 .8px, transparent 1.25px),
-        radial-gradient(circle, rgba(255,255,255,.28) 0 .7px, transparent 1.1px);
-      background-size:
-        83px 97px,
-        127px 139px,
-        181px 163px;
-      background-position:
-        13px 21px,
-        47px 69px,
-        91px 37px;
-      mix-blend-mode:screen;
-    }
-
-    header,
-    .hero,
-    main,
-    footer{
-      position:relative;
-      z-index:1;
-    }
-
-    /* Thin glowing line beneath the characters */
-    .header-art::after{
+    .mantis-wrap::before,
+    .mantis-wrap::after{
       content:"";
       position:absolute;
-      left:15%;
-      right:15%;
-      bottom:1px;
-      height:1px;
-      background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(121,218,98,.72) 16%,
-        rgba(210,255,190,.96) 50%,
-        rgba(121,218,98,.72) 84%,
-        transparent
-      );
-      box-shadow:
-        0 0 6px rgba(121,218,98,.38),
-        0 0 13px rgba(121,218,98,.16);
-      z-index:4;
+      left:-1px;
+      width:1px;
+      height:34px;
+      background:linear-gradient(transparent,rgba(204,239,190,.70),transparent);
+      box-shadow:0 0 12px rgba(127,203,105,.17);
     }
 
-    @media(max-width:620px){
-      .page-flakes{
-        opacity:.17;
-      }
+    .mantis-wrap::before{top:0}
+    .mantis-wrap::after{bottom:0}
 
-      .header-art::after{
-        left:10%;
-        right:10%;
-      }
-    }
-
-  
-    .past-card{
-      position:relative;
-    }
-
-    .event-date{
-      position:absolute;
-      top:12px;
-      left:14px;
-      color:#92a08f;
-      font-size:10px;
-      font-weight:700;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      pointer-events:none;
-    }
-
-    .past-card h3{
-      margin-top:14px;
-    }
-
-    .current-mantis{
-      display:flex;
-      justify-content:center;
-      margin:4px 0 12px;
-      opacity:.95;
-    }
-
-    .current-mantis svg{
-      width:72px;
-      height:72px;
+    .mantis{
+      width:166px;
+      height:166px;
       overflow:visible;
-      filter:drop-shadow(0 4px 10px rgba(0,0,0,.22));
+      transform:translateY(8px);
+      filter:drop-shadow(0 9px 15px rgba(0,0,0,.34));
     }
 
-    .current-mantis .mantis-bob{
-      animation:mantisBob 3.2s ease-in-out infinite;
+    .mantis-bob{
+      animation:mantisBob 3.1s ease-in-out infinite;
+      transform-box:fill-box;
       transform-origin:center;
     }
 
-    .current-mantis .mantis-eye{
-      animation:mantisBlink 5.5s infinite;
+    .mantis-eye{
+      animation:mantisBlink 5.4s infinite;
+      transform-box:fill-box;
       transform-origin:center;
+    }
+
+    .party-hat{
+      animation:hatBounce 3.1s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:center bottom;
+    }
+
+    .hammer-arm{
+      animation:hammerSwing 2.15s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:18% 82%;
+    }
+
+    @keyframes streakDrift{
+      0%,100%{transform:translateY(-7%)}
+      50%{transform:translateY(7%)}
+    }
+
+    @keyframes pulse{
+      0%,100%{opacity:.65;transform:scale(.88)}
+      50%{opacity:1;transform:scale(1.08)}
     }
 
     @keyframes mantisBob{
-      0%,100%{ transform:translateY(0px); }
-      50%{ transform:translateY(-4px); }
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-4px)}
     }
 
     @keyframes mantisBlink{
-      0%, 46%, 52%, 100%{ transform:scaleY(1); }
-      48%, 50%{ transform:scaleY(.12); }
+      0%,45%,51%,100%{transform:scaleY(1)}
+      47%,49%{transform:scaleY(.12)}
     }
 
-  
-    .current-status{
-      flex:0 0 auto;
-      min-width:118px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:5px;
+    @keyframes hatBounce{
+      0%,100%{transform:rotate(-1.5deg) translateY(0)}
+      50%{transform:rotate(1.5deg) translateY(-1.5px)}
     }
 
-    .current-mantis{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:82px;
-      height:82px;
-      margin:0;
-      opacity:.96;
+    @keyframes hammerSwing{
+      0%,100%{transform:rotate(-9deg)}
+      45%{transform:rotate(15deg)}
+      62%{transform:rotate(8deg)}
     }
 
-    .current-mantis svg{
-      display:block;
-      width:82px;
-      height:82px;
-      overflow:visible;
-      filter:drop-shadow(0 5px 11px rgba(0,0,0,.24));
-    }
-
-    .current-mantis .mantis-bob{
-      animation:currentMantisBob 3.2s ease-in-out infinite;
-      transform-box:fill-box;
-      transform-origin:center;
-    }
-
-    .current-mantis .mantis-eye{
-      animation:currentMantisBlink 5.5s infinite;
-      transform-box:fill-box;
-      transform-origin:center;
-    }
-
-    @keyframes currentMantisBob{
-      0%,100%{ transform:translateY(0); }
-      50%{ transform:translateY(-5px); }
-    }
-
-    @keyframes currentMantisBlink{
-      0%,46%,52%,100%{ transform:scaleY(1); }
-      48%,50%{ transform:scaleY(.12); }
-    }
-
-    @media(max-width:620px){
-      .current-card{
-        flex-direction:column;
-        text-align:center;
+    @media (max-width:650px){
+      body{padding:14px}
+      .shell{padding:36px 30px 32px}
+      .shell::before{inset:7px}
+      .layout{grid-template-columns:1fr;gap:30px}
+      .mantis-wrap{
+        min-height:142px;
+        border-left:0;
+        border-top:1px solid rgba(164,205,146,.16);
       }
-
-      .current-status{
-        min-width:0;
+      .mantis-wrap::before,
+      .mantis-wrap::after{
+        top:-1px;
+        bottom:auto;
+        width:34px;
+        height:1px;
+        background:linear-gradient(90deg,transparent,rgba(204,239,190,.70),transparent);
       }
+      .mantis-wrap::before{left:0}
+      .mantis-wrap::after{left:auto;right:0}
+      .mantis-wrap{min-height:154px}
+      .mantis{width:138px;height:138px;transform:translateY(7px)}
     }
 
-  
-    /* Tile Wars link: VIEW beside BOARD / & / REPLAY */
-    .tile-wars-link{
-      display:inline-grid;
-      grid-template-columns:auto auto;
-      grid-template-rows:repeat(3,auto);
-      column-gap:.58em;
-      align-items:center;
-      line-height:1.05;
-      text-align:left;
+    @media (max-width:390px){
+      .shell{padding:32px 24px 28px}
     }
 
-    .tile-wars-link::after{
-      content:none;
+    @media (prefers-reduced-motion:reduce){
+      body::before,
+      body::after,
+      .status-dot,
+      .mantis-bob,
+      .mantis-eye,
+      .party-hat,
+      .hammer-arm{animation:none!important}
     }
-
-    .tile-wars-link .tw-view{
-      grid-column:1;
-      grid-row:1 / 4;
-      align-self:center;
-    }
-
-    .tile-wars-link .tw-board,
-    .tile-wars-link .tw-amp,
-    .tile-wars-link .tw-replay{
-      grid-column:2;
-      display:block;
-    }
-
-    .tile-wars-link .tw-board{ grid-row:1; }
-    .tile-wars-link .tw-amp{ grid-row:2; }
-    .tile-wars-link .tw-replay{ grid-row:3; }
-
-  
-    /* Refined Tile Wars event link */
-    .past-card .event-link{
-      width:116px;
-    }
-
-    .tile-wars-link{
-      display:inline-grid;
-      grid-template-columns:auto minmax(44px,auto) auto;
-      grid-template-rows:repeat(3,auto);
-      column-gap:.42em;
-      row-gap:.04em;
-      align-items:baseline;
-      justify-content:start;
-      line-height:1.02;
-      text-align:left;
-    }
-
-    .tile-wars-link::after{
-      content:none;
-    }
-
-    .tile-wars-link .tw-view{
-      grid-column:1;
-      grid-row:1;
-      align-self:baseline;
-    }
-
-    .tile-wars-link .tw-board{
-      grid-column:2;
-      grid-row:1;
-      justify-self:center;
-    }
-
-    .tile-wars-link .tw-arrow{
-      grid-column:3;
-      grid-row:1;
-      align-self:baseline;
-      justify-self:start;
-      letter-spacing:0;
-    }
-
-    .tile-wars-link .tw-amp{
-      grid-column:2;
-      grid-row:2;
-      justify-self:center;
-      opacity:.82;
-    }
-
-    .tile-wars-link .tw-replay{
-      grid-column:2;
-      grid-row:3;
-      justify-self:center;
-    }
-
-  
-    /* Standard event links restored; Tile Wars keeps a matching custom stack */
-    .past-card .event-link{
-      width:auto;
-    }
-
-    .tile-wars-link{
-      display:inline-grid;
-      grid-template-columns:auto auto auto;
-      grid-template-rows:auto auto auto;
-      column-gap:.42em;
-      row-gap:.02em;
-      align-items:center;
-      justify-content:start;
-      min-width:116px;
-      line-height:1.02;
-      text-align:left;
-    }
-
-    .tile-wars-link::after{
-      content:none;
-    }
-
-    .tile-wars-link .tw-board{
-      grid-column:2;
-      grid-row:1;
-      justify-self:center;
-    }
-
-    .tile-wars-link .tw-view{
-      grid-column:1;
-      grid-row:2;
-      justify-self:start;
-      align-self:center;
-    }
-
-    .tile-wars-link .tw-amp{
-      grid-column:2;
-      grid-row:2;
-      justify-self:center;
-      align-self:center;
-      opacity:.86;
-    }
-
-    .tile-wars-link .tw-arrow{
-      grid-column:3;
-      grid-row:2;
-      justify-self:start;
-      align-self:center;
-      letter-spacing:0;
-    }
-
-    .tile-wars-link .tw-replay{
-      grid-column:2;
-      grid-row:3;
-      justify-self:center;
-    }
-
-  
-    /* V31 — separate Tile Wars board and replay links */
-    .tile-wars-actions{
-      flex:0 0 auto;
-      display:grid;
-      gap:8px;
-      justify-items:start;
-    }
-
-  
-    /* V35 — welcome panel */
-    .welcome-panel{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) auto;
-      gap:26px;
-      align-items:center;
-      padding:28px 30px;
-      border:1px solid var(--line);
-      background:
-        linear-gradient(125deg,rgba(255,255,255,.035),transparent 38%),
-        linear-gradient(145deg,#1b281e,#151f18);
-      box-shadow:
-        0 16px 38px rgba(0,0,0,.16),
-        inset 0 1px 0 rgba(255,255,255,.025);
-    }
-
-    .welcome-copy h2{
-      margin:0 0 9px;
-      font-family:Georgia,"Times New Roman",serif;
-      font-size:clamp(2rem,5vw,3rem);
-      font-weight:400;
-      letter-spacing:-.045em;
-    }
-
-    .welcome-copy p{
-      max-width:690px;
-      margin:0;
-      color:var(--muted);
-      font-size:.96rem;
-      line-height:1.72;
-    }
-
-    .welcome-discord-link{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      min-height:46px;
-      padding:0 18px;
-      border:1px solid #607762;
-      color:#efffe5;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.01)),
-        #26372a;
-      text-decoration:none;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.66rem;
-      font-weight:900;
-      box-shadow:
-        0 10px 24px rgba(0,0,0,.16),
-        inset 0 1px 0 rgba(255,255,255,.045);
-      transition:
-        transform .18s ease,
-        border-color .18s ease,
-        background .18s ease;
-    }
-
-    .welcome-discord-link:hover{
-      transform:translateY(-2px);
-      border-color:#8ca68d;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.015)),
-        #304434;
-    }
-
-    .welcome-discord-link svg{
-      width:19px;
-      height:19px;
-      flex:0 0 auto;
-      fill:currentColor;
-    }
-
-    .welcome-discord-link .link-arrow{
-      margin-left:1px;
-      font-size:.95rem;
-      letter-spacing:0;
-    }
-
-    @media(max-width:700px){
-      .welcome-panel{
-        grid-template-columns:1fr;
-      }
-
-      .welcome-discord-link{
-        justify-self:start;
-      }
-    }
-
-    @media(max-width:520px){
-      .welcome-discord-link{
-        width:100%;
-      }
-    }
-
-  
-    /* V36 — framed home mark and divided top links */
-    .brand{
-      display:inline-flex;
-      align-items:center;
-      min-height:34px;
-      padding:8px 11px;
-      border:1px solid rgba(134,202,112,.58);
-      box-shadow:
-        0 0 10px rgba(121,218,98,.07),
-        inset 0 0 10px rgba(121,218,98,.025);
-    }
-
-    .site-links{
-      gap:0;
-    }
-
-    .site-links a + a{
-      position:relative;
-      margin-left:18px;
-      padding-left:18px;
-    }
-
-    .site-links a + a::before{
-      content:"";
-      position:absolute;
-      left:0;
-      top:50%;
-      width:1px;
-      height:15px;
-      transform:translateY(-50%);
-      background:rgba(134,202,112,.62);
-      box-shadow:0 0 7px rgba(121,218,98,.15);
-    }
-
-    @media(max-width:620px){
-      .site-links{
-        justify-content:flex-start;
-      }
-    }
-
   </style>
 </head>
 <body>
-  <div class="page-flakes" aria-hidden="true"></div>
-  <header class="wrap">
-    <a class="brand" href="index.html">Mantis <span>OSRS</span></a>
-
-    <nav class="site-links" aria-label="Clan links">
-      <a href="about.html">About Us</a>
-
-      <a href="https://discord.gg/YaPqtQWQ7N"
-         target="_blank"
-         rel="noopener noreferrer">Discord</a>
-
-      <a href="https://wiseoldman.net/groups/6808"
-         target="_blank"
-         rel="noopener noreferrer">Wise Old Man</a>
-    </nav>
-  </header>
-
-  <div class="wrap hero">
-    <div class="hero-stage">
-      <div class="header-art" aria-label="Mantis clan lineup artwork">
-        <img src="images/header-lineup-cutout.png" alt="Hand-drawn lineup of Mantis clan characters">
-      </div>
-
-      <div class="hero-title-row">
-        <div class="hero-copy">
-          <h1>Mantis<small>OSRS</small></h1>
+  <main class="shell" aria-labelledby="maintenance-title">
+    <div class="layout">
+      <section class="copy">
+        <h1 id="maintenance-title">
+          <span class="brand">Mantis OSRS</span>
+          Site Under Construction
+        </h1>
+        <p class="message">We’re making improvements to the site and will be back soon.</p>
+        <div class="status" aria-label="Website maintenance is in progress">
+          <span class="status-dot" aria-hidden="true"></span>
+          Work in progress
         </div>
+      </section>
+
+      <div class="mantis-wrap" role="img" aria-label="Animated mantis wearing a blue partyhat and holding a hammer">
+        <svg class="mantis" viewBox="0 0 220 220" overflow="visible" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="mantisBody" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d7ffb8"/>
+              <stop offset=".45" stop-color="#7dca63"/>
+              <stop offset="1" stop-color="#2f6f38"/>
+            </linearGradient>
+            <linearGradient id="mantisDark" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6eb958"/>
+              <stop offset="1" stop-color="#17361f"/>
+            </linearGradient>
+            <linearGradient id="hatBlue" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#607cff"/>
+              <stop offset=".42" stop-color="#173fd4"/>
+              <stop offset="1" stop-color="#07146d"/>
+            </linearGradient>
+            <linearGradient id="hatBlueDark" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#244adf"/>
+              <stop offset="1" stop-color="#060c4b"/>
+            </linearGradient>
+            <linearGradient id="hammerMetal" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d8d6d4"/>
+              <stop offset=".45" stop-color="#8d898a"/>
+              <stop offset="1" stop-color="#4a474b"/>
+            </linearGradient>
+            <linearGradient id="hammerWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8a5b1f"/>
+              <stop offset=".5" stop-color="#5e370d"/>
+              <stop offset="1" stop-color="#321b06"/>
+            </linearGradient>
+          </defs>
+
+          <g class="mantis-bob" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M96 45 C80 25 62 17 42 21 C60 25 72 31 80 41" stroke="#75bf5d" stroke-width="4"/>
+            <path d="M124 45 C140 25 158 17 178 21 C160 25 148 31 140 41" stroke="#75bf5d" stroke-width="4"/>
+
+            <path d="M94 89 C73 96 59 111 50 130 C43 145 30 152 17 147 M50 130 L32 120 L21 103 M33 120 L20 136" stroke="url(#mantisBody)" stroke-width="8"/>
+
+            <g class="hammer-arm">
+              <path d="M126 89 C147 96 162 110 172 127 C180 140 190 145 200 139" stroke="url(#mantisBody)" stroke-width="8"/>
+              <g transform="rotate(42 184 108)">
+                <rect x="176.5" y="105" width="9" height="43" rx="4.5" fill="url(#hammerWood)" stroke="#2c1806" stroke-width="2"/>
+                <path d="M179 108 L183 108 L183 145 L179 145 Z" fill="#a36e2a" opacity=".42"/>
+                <path d="M158 96 L196 96 L204 104 L196 114 L158 114 L151 106 Z" fill="url(#hammerMetal)" stroke="#353338" stroke-width="3"/>
+                <path d="M159 99 L191 99" stroke="#eeeae7" stroke-width="2" opacity=".55"/>
+                <path d="M196 98 L201 104 L195 111" fill="none" stroke="#68646a" stroke-width="2"/>
+              </g>
+            </g>
+
+            <path d="M108 63 C96 84 92 109 95 135 C97 156 101 176 110 199 C119 176 123 156 125 135 C128 109 124 84 112 63 Z" fill="url(#mantisBody)" stroke="#8bd373" stroke-width="4"/>
+
+            <g>
+              <path d="M110 65 C95 60 87 48 91 34 C96 19 124 19 129 34 C133 48 125 60 110 65 Z" fill="url(#mantisDark)" stroke="#91d879" stroke-width="4"/>
+              <ellipse class="mantis-eye" cx="98" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
+              <ellipse class="mantis-eye" cx="122" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
+              <path d="M103 54 Q110 59 117 54" stroke="#16361e" stroke-width="3"/>
+            </g>
+
+            <g class="party-hat">
+              <path d="M88 21 L94 -6 L105 10 L113 -13 L121 9 L133 -7 L138 22 Q113 30 88 21 Z" fill="url(#hatBlue)" stroke="#758cff" stroke-width="3"/>
+              <path d="M89 21 Q113 31 137 22 L136 28 Q113 36 90 27 Z" fill="url(#hatBlueDark)" stroke="#0a217f" stroke-width="2.5"/>
+              <path d="M91 22 Q113 29 136 22" stroke="#8aa0ff" stroke-width="2.5" opacity=".8"/>
+            </g>
+
+            <path d="M98 133 C83 144 73 163 64 191" stroke="#448f42" stroke-width="7"/>
+            <path d="M122 133 C137 144 147 163 156 191" stroke="#448f42" stroke-width="7"/>
+          </g>
+        </svg>
       </div>
     </div>
-  </div>
-
-  <main class="wrap">
-
-    <section class="welcome-panel" aria-labelledby="welcome-heading">
-      <div class="welcome-copy">
-        <h2 id="welcome-heading">Welcome to Mantis</h2>
-        <p>Mantis is an Old School RuneScape clan built around community, competition, and a friendly welcoming environment.</p>
-      </div>
-
-      <a class="welcome-discord-link"
-         href="https://discord.gg/YaPqtQWQ7N"
-         target="_blank"
-         rel="noopener noreferrer"
-         aria-label="Join Mantis on Discord">
-        <svg viewBox="0 0 127.14 96.36" aria-hidden="true" focusable="false">
-          <path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0 105.89 105.89 0 0 0 19.39 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-9.05 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 9 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.11ZM42.45 65.69C36.18 65.69 31 59.93 31 52.86s5-12.84 11.43-12.84S54 45.84 53.89 52.86c0 7.07-5.08 12.83-11.44 12.83Zm42.24 0c-6.28 0-11.44-5.76-11.44-12.83S78.23 40 84.69 40s11.54 5.82 11.43 12.84c0 7.09-5.05 12.85-11.43 12.85Z"/>
-        </svg>
-        <span>Join Mantis</span>
-        <span class="link-arrow" aria-hidden="true">→</span>
-      </a>
-    </section>
-
-    <section>
-      <h2 class="section-title">Current event</h2>
-      <div class="current-card">
-        <h2>No active event</h2>
-        <div class="current-status">
-          <div class="current-mantis" aria-hidden="true">
-            <svg viewBox="0 0 220 220">
-              <defs>
-                <linearGradient id="eventMantisBody" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#d7ffb8"/>
-                  <stop offset=".45" stop-color="#7dca63"/>
-                  <stop offset="1" stop-color="#2f6f38"/>
-                </linearGradient>
-                <linearGradient id="eventMantisDark" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#6eb958"/>
-                  <stop offset="1" stop-color="#17361f"/>
-                </linearGradient>
-              </defs>
-
-              <g class="mantis-bob" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M96 40 C80 20 62 12 42 16 C60 20 72 26 80 36"
-                      stroke="#75bf5d" stroke-width="4"/>
-                <path d="M124 40 C140 20 158 12 178 16 C160 20 148 26 140 36"
-                      stroke="#75bf5d" stroke-width="4"/>
-
-                <path d="M94 84 C74 92 60 106 50 126 C43 141 29 149 16 143
-                         M50 126 L31 116 L20 98 M32 116 L19 132"
-                      stroke="url(#eventMantisBody)" stroke-width="8"/>
-                <path d="M126 84 C146 92 160 106 170 126 C177 141 191 149 204 143
-                         M170 126 L189 116 L200 98 M188 116 L201 132"
-                      stroke="url(#eventMantisBody)" stroke-width="8"/>
-
-                <path d="M108 58 C96 79 92 104 95 130 C97 151 101 171 110 194
-                         C119 171 123 151 125 130 C128 104 124 79 112 58 Z"
-                      fill="url(#eventMantisBody)" stroke="#8bd373" stroke-width="4"/>
-
-                <g>
-                  <path d="M110 60 C95 55 87 43 91 29 C96 14 124 14 129 29
-                           C133 43 125 55 110 60 Z"
-                        fill="url(#eventMantisDark)" stroke="#91d879" stroke-width="4"/>
-                  <ellipse class="mantis-eye" cx="98" cy="35" rx="8" ry="6"
-                           fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
-                  <ellipse class="mantis-eye" cx="122" cy="35" rx="8" ry="6"
-                           fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
-                  <path d="M103 49 Q110 54 117 49" stroke="#16361e" stroke-width="3"/>
-                </g>
-
-                <path d="M98 128 C83 139 73 158 64 186"
-                      stroke="#448f42" stroke-width="7"/>
-                <path d="M122 128 C137 139 147 158 156 186"
-                      stroke="#448f42" stroke-width="7"/>
-              </g>
-            </svg>
-          </div>
-          <div class="status">Coming soon</div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2 class="section-title">Past events</h2>
-      <div class="past-list">
-        <article class="past-card">
-          <div class="event-date">March 2026</div>
-          <h3>Tile Wars</h3>
-          <div class="tile-wars-actions" aria-label="Tile Wars pages">
-            <a class="event-link" href="events/tile-wars.html">View board</a>
-            <a class="event-link" href="events/tile-wars-replay.html">View replay</a>
-          </div>
-        </article>
-
-        <article class="past-card">
-          <div class="event-date">January 2026</div>
-          <h3>Bingo</h3>
-          <a class="event-link" href="events/2026-bingo.html">View board</a>
-        </article>
-
-        <article class="past-card">
-          <div class="event-date">August 2025</div>
-          <h3>Tile Race</h3>
-          <a class="event-link" href="events/2025-tile-race.html">View board</a>
-        </article>
-
-        <article class="past-card">
-          <div class="event-date">February 2025</div>
-          <h3>Chutes &amp; Ladders</h3>
-          <a class="event-link" href="events/2025-chutes-ladders.html">View board</a>
-        </article>
-      </div>
-    </section>
   </main>
-
-  <footer class="wrap">
-    <span>Mantis OSRS</span>
-    <a class="moderator-login" href="admin.html">Admin</a>
-  </footer>
-  <script>
-    document.querySelectorAll('[href="#"]').forEach((link) => {
-      link.addEventListener("click", (event) => event.preventDefault());
-    });
-  </script>
 </body>
 </html>
-
-<style>
-  .hero::before {
-    display: none !important;
-  }
-</style>

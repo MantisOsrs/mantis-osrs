@@ -3,511 +3,378 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2025 Chutes &amp; Ladders — Mantis OSRS</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0a0e0b">
+  <title>Site Under Construction — Mantis OSRS</title>
   <style>
-    :root {
-      --bg:#dfe8dc;
-      --paper:#edf3ea;
-      --ink:#1c2a20;
-      --muted:#5f7063;
-      --line:#aebcab;
-      --panel:#f8fbf6;
-      --shadow:0 10px 26px rgba(35,55,39,.10);
-      --green:#4c8f52;
+    :root{
+      color-scheme:dark;
+      --bg:#070a08;
+      --panel:#141d16;
+      --panel-soft:#101712;
+      --line:#35463a;
+      --line-soft:rgba(151,201,132,.16);
+      --text:#eef4eb;
+      --muted:#a9b5a7;
+      --sage:#b9e7a5;
+      --glow:rgba(115,203,92,.17);
     }
 
-    * { box-sizing:border-box; }
+    *{box-sizing:border-box}
 
-    body {
+    html{min-height:100%}
+
+    body{
       margin:0;
       min-height:100vh;
-      color:var(--ink);
+      display:grid;
+      place-items:center;
+      overflow-x:hidden;
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
       background:
-        radial-gradient(circle at top left,#f0f5ed 0,#e2ebe0 42%,#d5e0d2 100%);
-      font:14px/1.35 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+        radial-gradient(circle at 16% 20%,rgba(112,188,88,.12),transparent 25rem),
+        radial-gradient(circle at 84% 78%,rgba(173,224,148,.07),transparent 22rem),
+        linear-gradient(180deg,#050706 0%,#090c0a 45%,#0d120f 100%);
+      padding:24px;
     }
 
-    .site-home-bar {
-      width:min(1480px,calc(100% - 24px));
-      margin:12px auto 0;
+    body::before,
+    body::after{
+      content:"";
+      position:fixed;
+      top:-20vh;
+      bottom:-20vh;
+      width:48px;
+      pointer-events:none;
+      filter:blur(9px);
+      opacity:.62;
+      background:linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(165,255,164,0) 12%,
+        rgba(165,255,164,.06) 28%,
+        rgba(120,255,143,.15) 42%,
+        rgba(226,255,232,.50) 50%,
+        rgba(120,255,143,.15) 58%,
+        rgba(165,255,164,.06) 72%,
+        rgba(165,255,164,0) 88%,
+        transparent 100%
+      );
+      animation:streakDrift 9s ease-in-out infinite;
     }
 
-    .site-home-link {
+    body::before{left:7%}
+    body::after{right:7%;animation-delay:-3.4s;animation-duration:11s}
+
+    .shell{
+      position:relative;
+      isolation:isolate;
+      width:min(760px,100%);
+      padding:clamp(30px,6vw,58px);
+      border:1px solid var(--line);
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.018),transparent 42%),
+        linear-gradient(180deg,var(--panel) 0%,var(--panel-soft) 100%);
+      box-shadow:
+        0 26px 72px rgba(0,0,0,.40),
+        0 0 44px rgba(111,190,89,.055),
+        inset 0 0 0 1px rgba(194,230,181,.035);
+    }
+
+    .shell::before{
+      content:"";
+      position:absolute;
+      inset:9px;
+      z-index:-1;
+      border:1px solid var(--line-soft);
+      pointer-events:none;
+    }
+
+    .shell::after{
+      content:"";
+      position:absolute;
+      left:clamp(30px,6vw,58px);
+      right:clamp(30px,6vw,58px);
+      top:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,rgba(198,242,179,.52),transparent);
+      box-shadow:0 0 16px var(--glow);
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 184px;
+      align-items:center;
+      gap:clamp(30px,6vw,58px);
+    }
+
+    .copy{min-width:0}
+
+    h1{
+      margin:0;
+      max-width:520px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(2.15rem,7vw,4.55rem);
+      font-weight:600;
+      line-height:.96;
+      letter-spacing:-.045em;
+      text-wrap:balance;
+    }
+
+    .brand{
+      display:block;
+      margin-bottom:11px;
+      color:var(--sage);
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:clamp(.82rem,2vw,1.02rem);
+      font-weight:700;
+      letter-spacing:.22em;
+      line-height:1.2;
+      text-transform:uppercase;
+    }
+
+    .message{
+      max-width:480px;
+      margin:24px 0 0;
+      color:var(--muted);
+      font-size:clamp(.96rem,2vw,1.06rem);
+      line-height:1.7;
+    }
+
+    .status{
       display:inline-flex;
       align-items:center;
-      min-height:38px;
-      padding:0 14px;
-      border:1px solid #9db69d;
-      border-radius:999px;
-      color:#315b36;
-      background:rgba(248,251,246,.97);
-      box-shadow:0 5px 16px rgba(0,0,0,.08);
-      text-decoration:none;
-      font-weight:700;
+      gap:9px;
+      margin-top:28px;
+      padding:9px 12px;
+      border:1px solid rgba(145,196,127,.17);
+      background:rgba(5,9,6,.28);
+      color:#c9d5c6;
+      font-size:.72rem;
+      letter-spacing:.1em;
+      text-transform:uppercase;
     }
 
-    .site-home-link:hover {
-      background:#ffffff;
+    .status-dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#9ed889;
+      box-shadow:0 0 10px rgba(158,216,137,.6);
+      animation:pulse 2.4s ease-in-out infinite;
     }
 
-    .wrap {
-      width:min(1480px,calc(100% - 24px));
-      margin:0 auto;
-      padding:18px 0 28px;
-    }
-
-    .panel {
-      padding:14px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:var(--panel);
-      box-shadow:var(--shadow);
-    }
-
-    h1 {
-      margin:0 0 12px;
-      font-size:22px;
-      line-height:1.2;
-      letter-spacing:.2px;
-    }
-
-    .board-frame {
-      width:100%;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      overflow:hidden;
-      border:1px solid #9eae9c;
-      border-radius:12px;
-      background:#c5d2c2;
-      padding:8px;
-    }
-
-    .board-frame a {
-      display:flex;
-      width:100%;
-      justify-content:center;
-      align-items:center;
-      text-decoration:none;
-    }
-
-    img {
-      display:block;
-      width:100%;
-      height:auto;
-      max-width:100%;
-      max-height:calc(100vh - 150px);
-      object-fit:contain;
-    }
-
-    .hint {
-      margin:9px 2px 0;
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    @media(max-width:640px) {
-      .wrap {
-        padding-top:12px;
-      }
-
-      .panel {
-        padding:10px;
-        border-radius:12px;
-      }
-
-      h1 {
-        font-size:20px;
-      }
-
-      .board-frame {
-        padding:4px;
-        border-radius:9px;
-      }
-
-      img {
-        max-height:none;
-      }
-    }
-  
-    /* Ambient Mantis glow — structure unchanged */
-    body {
-      position: relative;
-      overflow-x: hidden;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(113, 188, 92, .13), transparent 24rem),
-        radial-gradient(circle at 88% 68%, rgba(173, 224, 148, .09), transparent 22rem),
-        radial-gradient(circle at top left, #f0f5ed 0, #e2ebe0 42%, #d5e0d2 100%);
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      width: 360px;
-      height: 360px;
-      left: -150px;
-      top: 170px;
-      border-radius: 50%;
-      background: rgba(111, 190, 89, .08);
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    header,
-    main,
-    footer,
-    .site-home-bar,
-    .wrap {
-      position: relative;
-      z-index: 1;
-    }
-
-    .panel,
-    .board-frame {
-      box-shadow:
-        0 14px 34px rgba(35, 55, 39, .12),
-        inset 0 1px 0 rgba(255,255,255,.45);
-    }
-
-    .site-home-link {
-      box-shadow:
-        0 8px 22px rgba(35,55,39,.10),
-        0 0 18px rgba(116,185,95,.05);
-    }
-
-  
-    /* Match the Mantis homepage palette */
-    :root {
-      --bg:#101912;
-      --panel:#18231b;
-      --line:#394b3d;
-      --text:#eef4eb;
-      --muted:#a7b4a5;
-      --green-pale:#d3f3bd;
-    }
-
-    body {
-      color:var(--text);
-      background:
-        linear-gradient(180deg,#050706 0%,#090c0a 42%,#0d120f 100%);
-      overflow-x:hidden;
-    }
-
-    .site-home-link {
-      color:var(--green-pale);
-      background:rgba(24,35,27,.96);
-      border-color:#536a57;
-      box-shadow:
-        0 10px 26px rgba(0,0,0,.20),
-        inset 0 1px 0 rgba(255,255,255,.025);
-    }
-
-    .site-home-link:hover {
-      background:#1e2c21;
-    }
-
-    .panel {
-      color:var(--text);
-      background:
-        linear-gradient(145deg,#1b281e,#17221a);
-      border-color:#445947;
-      box-shadow:
-        0 18px 42px rgba(0,0,0,.18),
-        inset 0 1px 0 rgba(255,255,255,.03);
-    }
-
-    .board-frame {
-      background:#101912;
-      border-color:#526655;
-      box-shadow:
-        0 14px 34px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.025);
-    }
-
-    h1 {
-      color:var(--text);
-      text-shadow:0 14px 32px rgba(0,0,0,.24);
-    }
-
-    .hint {
-      color:var(--muted);
-    }
-
-
-    body::before,
-    body::after {
-      inset:auto;
-      width:auto;
-      height:auto;
-      border-radius:0;
-      background:none;
-      filter:none;
-      opacity:1;
-    }
-
-
-    /* Vertical ambient glow streaks */
-    body::before,
-    body::after {
-      content: "";
-      position: fixed;
-      top: -22vh;
-      bottom: -22vh;
-      width: 52px;
-      height: auto;
-      border-radius: 0;
-      pointer-events: none;
-      z-index: 0;
-      filter: blur(8px);
-      opacity: .82;
-      background:
-        linear-gradient(
-          180deg,
-          transparent 0%,
-          rgba(165, 255, 164, .00) 10%,
-          rgba(165, 255, 164, .08) 24%,
-          rgba(120, 255, 143, .20) 40%,
-          rgba(236, 255, 244, .72) 50%,
-          rgba(120, 255, 143, .20) 60%,
-          rgba(165, 255, 164, .08) 76%,
-          rgba(165, 255, 164, .00) 90%,
-          transparent 100%
-        );
-      animation: streakDrift 8s ease-in-out infinite;
-    }
-
-    body::before {
-      left: 8%;
-    }
-
-    body::after {
-      right: 8%;
-      width: 52px;
-      opacity: .82;
-      animation-delay: -3.2s;
-      animation-duration: 10s;
-    }
-
-    @keyframes streakDrift {
-      0%, 100% { transform: translateY(-7%); }
-      50% { transform: translateY(7%); }
-    }
-
-    @media (max-width: 700px) {
-      body::before {
-        left: -28px;
-        width: 38px;
-      }
-
-      body::after {
-        right: -24px;
-        width: 38px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      body::before,
-      body::after {
-        animation: none !important;
-      }
-    }
-
-  
-    /* glossy black sheen */
-    body {
-      position: relative;
-    }
-
-    body > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    body::selection {
-      background: rgba(170,255,164,.25);
-    }
-
-  
-    /* Team rosters — styled like the replay team cards */
-    .teams-section {
-      margin-top:24px;
-    }
-
-    .teams-title {
-      margin:0 0 12px;
-      color:var(--text);
-      font-size:17px;
-      line-height:1.2;
-      letter-spacing:.2px;
-    }
-
-    .teams-grid {
+    .mantis-wrap{
+      position:relative;
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
-      align-items:start;
+      place-items:center;
+      min-height:190px;
+      border-left:1px solid rgba(164,205,146,.16);
     }
 
-    .roster-card {
-      overflow:hidden;
-      border:1px solid #c9c3b4;
-      border-radius:14px;
-      color:#1f2328;
-      background:#fffdf8;
-      box-shadow:
-        0 10px 24px rgba(0,0,0,.12),
-        inset 0 1px 0 rgba(255,255,255,.55);
+    .mantis-wrap::before,
+    .mantis-wrap::after{
+      content:"";
+      position:absolute;
+      left:-1px;
+      width:1px;
+      height:34px;
+      background:linear-gradient(transparent,rgba(204,239,190,.70),transparent);
+      box-shadow:0 0 12px rgba(127,203,105,.17);
     }
 
-    .roster-head {
-      padding:10px 12px;
-      font-weight:800;
-      font-size:14px;
-      line-height:1.2;
+    .mantis-wrap::before{top:0}
+    .mantis-wrap::after{bottom:0}
+
+    .mantis{
+      width:166px;
+      height:166px;
+      overflow:visible;
+      transform:translateY(8px);
+      filter:drop-shadow(0 9px 15px rgba(0,0,0,.34));
     }
 
-    .roster-head.sage   { background:#d9edcf; }
-    .roster-head.moss   { background:#cce1bf; }
-    .roster-head.red    { background:#f2d0cf; }
-    .roster-head.green  { background:#d9edcf; }
-    .roster-head.blue   { background:#d6e4f8; }
-    .roster-head.yellow { background:#f7ebbd; }
-    .roster-head.purple { background:#ead8e8; }
-    .roster-head.gray   { background:#e5e5e5; }
-
-    .roster-list {
-      margin:0;
-      padding:0;
-      list-style:none;
+    .mantis-bob{
+      animation:mantisBob 3.1s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:center;
     }
 
-    .roster-list li {
-      padding:7px 11px;
-      border-top:1px solid #ebe5d6;
-      font-size:13px;
-      line-height:1.25;
+    .mantis-eye{
+      animation:mantisBlink 5.4s infinite;
+      transform-box:fill-box;
+      transform-origin:center;
     }
 
-    @media(max-width:640px) {
-      .teams-section {
-        margin-top:18px;
+    .party-hat{
+      animation:hatBounce 3.1s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:center bottom;
+    }
+
+    .hammer-arm{
+      animation:hammerSwing 2.15s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:18% 82%;
+    }
+
+    @keyframes streakDrift{
+      0%,100%{transform:translateY(-7%)}
+      50%{transform:translateY(7%)}
+    }
+
+    @keyframes pulse{
+      0%,100%{opacity:.65;transform:scale(.88)}
+      50%{opacity:1;transform:scale(1.08)}
+    }
+
+    @keyframes mantisBob{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-4px)}
+    }
+
+    @keyframes mantisBlink{
+      0%,45%,51%,100%{transform:scaleY(1)}
+      47%,49%{transform:scaleY(.12)}
+    }
+
+    @keyframes hatBounce{
+      0%,100%{transform:rotate(-1.5deg) translateY(0)}
+      50%{transform:rotate(1.5deg) translateY(-1.5px)}
+    }
+
+    @keyframes hammerSwing{
+      0%,100%{transform:rotate(-9deg)}
+      45%{transform:rotate(15deg)}
+      62%{transform:rotate(8deg)}
+    }
+
+    @media (max-width:650px){
+      body{padding:14px}
+      .shell{padding:36px 30px 32px}
+      .shell::before{inset:7px}
+      .layout{grid-template-columns:1fr;gap:30px}
+      .mantis-wrap{
+        min-height:142px;
+        border-left:0;
+        border-top:1px solid rgba(164,205,146,.16);
       }
-
-      .teams-grid {
-        grid-template-columns:1fr;
+      .mantis-wrap::before,
+      .mantis-wrap::after{
+        top:-1px;
+        bottom:auto;
+        width:34px;
+        height:1px;
+        background:linear-gradient(90deg,transparent,rgba(204,239,190,.70),transparent);
       }
-
-      .roster-card {
-        border-radius:12px;
-      }
+      .mantis-wrap::before{left:0}
+      .mantis-wrap::after{left:auto;right:0}
+      .mantis-wrap{min-height:154px}
+      .mantis{width:138px;height:138px;transform:translateY(7px)}
     }
 
-  
-    /* Dark roster-list refinement */
-    .roster-card{
-      border-color:#3c4b3f;
-      color:#eef4eb;
-      background:#121915;
-      box-shadow:
-        0 10px 24px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.025);
+    @media (max-width:390px){
+      .shell{padding:32px 24px 28px}
     }
 
-    .roster-head{
-      color:#172019;
+    @media (prefers-reduced-motion:reduce){
+      body::before,
+      body::after,
+      .status-dot,
+      .mantis-bob,
+      .mantis-eye,
+      .party-hat,
+      .hammer-arm{animation:none!important}
     }
-
-    .roster-list{
-      color:#eef4eb;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0)),
-        #121915;
-    }
-
-    .roster-list li{
-      color:#e8efe6;
-      border-top-color:#2d3930;
-    }
-
-    .roster-list li:nth-child(even){
-      background:rgba(255,255,255,.018);
-    }
-
   </style>
 </head>
 <body>
-  <div class="site-home-bar">
-    <a class="site-home-link" href="../index.html">← Mantis Home</a>
-  </div>
-
-  <main class="wrap">
-    <section class="panel">
-      <h1>2025 Chutes &amp; Ladders</h1>
-
-      <div class="board-frame">
-        <a href="../images/event_board1.png" target="_blank" rel="noopener">
-          <img src="../images/event_board1.png" alt="Final board for the 2025 Mantis Chutes and Ladders event">
-        </a>
-      </div>
-
-      <div class="hint">Click the board to open the full-size image.</div>
-
-      <section class="teams-section" aria-labelledby="teams-heading">
-        <h2 class="teams-title" id="teams-heading">Teams</h2>
-        <div class="teams-grid">
-          <article class="roster-card">
-            <div class="roster-head gray">Armadyl’s Avians</div>
-            <ul class="roster-list">
-              <li>Boob nut</li>
-              <li>John Fux</li>
-              <li>brgan (meta zoo)</li>
-              <li>reggietales</li>
-              <li>parberdafall</li>
-              <li>Kuja the iii</li>
-              <li>evilwilson</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head blue">Saradomin’s Sentinels</div>
-            <ul class="roster-list">
-              <li>Kyle stanley</li>
-              <li>bosspross</li>
-              <li>C D C D C D</li>
-              <li>dhampir007</li>
-              <li>iclimaxxed</li>
-              <li>tacticaljokr</li>
-              <li>gary salty</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head green">Guthix Guardians</div>
-            <ul class="roster-list">
-              <li>thedog</li>
-              <li>beefy turd</li>
-              <li>meat jun</li>
-              <li>taebodhi</li>
-              <li>wuze</li>
-              <li>hittmann</li>
-              <li>zodiaczack</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head red">Zamorak’s Zealots</div>
-            <ul class="roster-list">
-              <li>pyros</li>
-              <li>Canyon Ranger</li>
-              <li>big baby boy</li>
-              <li>l3enjie</li>
-              <li>TFresh</li>
-              <li>hogeybadger</li>
-              <li>imfatmatt</li>
-            </ul>
-          </article>
+  <main class="shell" aria-labelledby="maintenance-title">
+    <div class="layout">
+      <section class="copy">
+        <h1 id="maintenance-title">
+          <span class="brand">Mantis OSRS</span>
+          Site Under Construction
+        </h1>
+        <p class="message">We’re making improvements to the site and will be back soon.</p>
+        <div class="status" aria-label="Website maintenance is in progress">
+          <span class="status-dot" aria-hidden="true"></span>
+          Work in progress
         </div>
       </section>
 
-    </section>
+      <div class="mantis-wrap" role="img" aria-label="Animated mantis wearing a blue partyhat and holding a hammer">
+        <svg class="mantis" viewBox="0 0 220 220" overflow="visible" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="mantisBody" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d7ffb8"/>
+              <stop offset=".45" stop-color="#7dca63"/>
+              <stop offset="1" stop-color="#2f6f38"/>
+            </linearGradient>
+            <linearGradient id="mantisDark" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6eb958"/>
+              <stop offset="1" stop-color="#17361f"/>
+            </linearGradient>
+            <linearGradient id="hatBlue" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#607cff"/>
+              <stop offset=".42" stop-color="#173fd4"/>
+              <stop offset="1" stop-color="#07146d"/>
+            </linearGradient>
+            <linearGradient id="hatBlueDark" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#244adf"/>
+              <stop offset="1" stop-color="#060c4b"/>
+            </linearGradient>
+            <linearGradient id="hammerMetal" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d8d6d4"/>
+              <stop offset=".45" stop-color="#8d898a"/>
+              <stop offset="1" stop-color="#4a474b"/>
+            </linearGradient>
+            <linearGradient id="hammerWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8a5b1f"/>
+              <stop offset=".5" stop-color="#5e370d"/>
+              <stop offset="1" stop-color="#321b06"/>
+            </linearGradient>
+          </defs>
+
+          <g class="mantis-bob" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M96 45 C80 25 62 17 42 21 C60 25 72 31 80 41" stroke="#75bf5d" stroke-width="4"/>
+            <path d="M124 45 C140 25 158 17 178 21 C160 25 148 31 140 41" stroke="#75bf5d" stroke-width="4"/>
+
+            <path d="M94 89 C73 96 59 111 50 130 C43 145 30 152 17 147 M50 130 L32 120 L21 103 M33 120 L20 136" stroke="url(#mantisBody)" stroke-width="8"/>
+
+            <g class="hammer-arm">
+              <path d="M126 89 C147 96 162 110 172 127 C180 140 190 145 200 139" stroke="url(#mantisBody)" stroke-width="8"/>
+              <g transform="rotate(42 184 108)">
+                <rect x="176.5" y="105" width="9" height="43" rx="4.5" fill="url(#hammerWood)" stroke="#2c1806" stroke-width="2"/>
+                <path d="M179 108 L183 108 L183 145 L179 145 Z" fill="#a36e2a" opacity=".42"/>
+                <path d="M158 96 L196 96 L204 104 L196 114 L158 114 L151 106 Z" fill="url(#hammerMetal)" stroke="#353338" stroke-width="3"/>
+                <path d="M159 99 L191 99" stroke="#eeeae7" stroke-width="2" opacity=".55"/>
+                <path d="M196 98 L201 104 L195 111" fill="none" stroke="#68646a" stroke-width="2"/>
+              </g>
+            </g>
+
+            <path d="M108 63 C96 84 92 109 95 135 C97 156 101 176 110 199 C119 176 123 156 125 135 C128 109 124 84 112 63 Z" fill="url(#mantisBody)" stroke="#8bd373" stroke-width="4"/>
+
+            <g>
+              <path d="M110 65 C95 60 87 48 91 34 C96 19 124 19 129 34 C133 48 125 60 110 65 Z" fill="url(#mantisDark)" stroke="#91d879" stroke-width="4"/>
+              <ellipse class="mantis-eye" cx="98" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
+              <ellipse class="mantis-eye" cx="122" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
+              <path d="M103 54 Q110 59 117 54" stroke="#16361e" stroke-width="3"/>
+            </g>
+
+            <g class="party-hat">
+              <path d="M88 21 L94 -6 L105 10 L113 -13 L121 9 L133 -7 L138 22 Q113 30 88 21 Z" fill="url(#hatBlue)" stroke="#758cff" stroke-width="3"/>
+              <path d="M89 21 Q113 31 137 22 L136 28 Q113 36 90 27 Z" fill="url(#hatBlueDark)" stroke="#0a217f" stroke-width="2.5"/>
+              <path d="M91 22 Q113 29 136 22" stroke="#8aa0ff" stroke-width="2.5" opacity=".8"/>
+            </g>
+
+            <path d="M98 133 C83 144 73 163 64 191" stroke="#448f42" stroke-width="7"/>
+            <path d="M122 133 C137 144 147 163 156 191" stroke="#448f42" stroke-width="7"/>
+          </g>
+        </svg>
+      </div>
+    </div>
   </main>
 </body>
 </html>

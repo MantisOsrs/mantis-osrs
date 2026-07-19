@@ -1,1629 +1,380 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>2026 Mantis Tile Wars Board</title>
-<style>
-  :root {
-    --bg: #f3f0e7;
-    --paper: #faf8f2;
-    --ink: #1f2328;
-    --muted: #6b7280;
-    --line: #c9c3b4;
-    --panel: #fffdf7;
-    --shadow: 0 10px 24px rgba(0,0,0,.08);
-    --red: #d9534f;
-    --yellow: #e0b92f;
-    --green: #2ea043;
-    --none: #ffffff;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background:
-      radial-gradient(circle at top left, #f7f4ec 0, #f3f0e7 40%, #ece6d8 100%);
-    color: var(--ink);
-    font: 14px/1.35 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  }
-  .wrap { max-width: 1540px; margin: 0 auto; padding: 18px; }
-  .top {
-    display: grid;
-    grid-template-columns: minmax(760px, 1fr) 360px;
-    gap: 18px;
-    align-items: start;
-  }
-  .panel {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-  }
-  .board-panel { padding: 14px; position: relative; overflow: hidden; }
-  .board-header {
-    display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-bottom:10px;
-  }
-  .title {
-    font-weight:800; font-size:22px; letter-spacing:.2px;
-  }
-  .subtitle { color: var(--muted); font-size: 12px; }
-  .board {
-    display:grid;
-    grid-template-columns: repeat(8, minmax(88px, 1fr));
-    gap: 8px;
-    background: #d6d0c0;
-    padding: 8px;
-    border-radius: 16px;
-    border: 1px solid #bdb39c;
-  }
-  .tile {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    border: 2px solid #9b927d;
-    border-radius: 10px;
-    background: var(--none);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding: 8px 6px;
-    font-weight: 700;
-    line-height: 1.08;
-    font-size: 12px;
-    color: #1a1a1a;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.5);
-    transition: transform .12s ease, box-shadow .12s ease, background-color .18s linear, border-color .18s linear;
-    word-break: break-word;
-  }
-  .tile.red { background: color-mix(in srgb, var(--red) 70%, white); border-color: #8f2f2c; }
-  .tile.yellow { background: color-mix(in srgb, var(--yellow) 72%, white); border-color: #90720b; }
-  .tile.green { background: color-mix(in srgb, var(--green) 70%, white); border-color: #226f31; }
-  .tile.none { background: #fffefb; }
-  .tile.active {
-    transform: translateY(-2px) scale(1.012);
-    box-shadow: 0 0 0 3px rgba(31,35,40,.15), 0 12px 20px rgba(0,0,0,.12);
-  }
-  .tile small {
-    display:block; font-size:11px; color:#333; opacity:.8; margin-top:4px;
-  }
-  .tile-badge {
-    position:absolute;
-    top:5px;
-    right:5px;
-    min-width:20px;
-    height:20px;
-    padding:0 6px;
-    border-radius:999px;
-    background:rgba(255,255,255,.96);
-    border:1px solid rgba(31,35,40,.16);
-    color:#1f2328;
-    font-size:11px;
-    font-weight:800;
-    line-height:18px;
-    text-align:center;
-    box-shadow:0 1px 2px rgba(0,0,0,.08);
-    opacity:0;
-    transform:scale(.9);
-    transition:opacity .12s ease, transform .12s ease;
-    pointer-events:none;
-  }
-  .tile-badge.show {
-    opacity:1;
-    transform:scale(1);
-  }
-  .banner {
-    position:absolute; left:18px; right:18px; top:56px;
-    padding: 12px 14px;
-    border-radius: 14px;
-    color: #fff;
-    font-weight: 700;
-    box-shadow: 0 12px 24px rgba(0,0,0,.18);
-    opacity: 0; pointer-events:none; transform: translateY(-8px);
-    transition: opacity .22s ease, transform .22s ease;
-    z-index: 5;
-  }
-  .banner.show { opacity: 1; transform: translateY(0); }
-  .banner.red { background: linear-gradient(90deg, #b53f3c, #d9534f); }
-  .banner.yellow { background: linear-gradient(90deg, #a88413, #d9b12d); color:#201a00; }
-  .banner.green { background: linear-gradient(90deg, #247736, #2ea043); }
-  .banner .kicker { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; opacity: .9; }
-  .banner .main { font-size: 17px; margin-top: 2px; }
-  .banner .sub { font-size: 12px; margin-top: 3px; opacity: .95; font-weight: 600; }
-  .leaders {
-    display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px;
-  }
-  .team-card { border:1px solid var(--line); border-radius: 14px; overflow:hidden; background:#fffdf8; }
-  .team-head { padding:10px 12px; font-weight:800; }
-  .team-head.red { background: color-mix(in srgb, var(--red) 18%, white); }
-  .team-head.yellow { background: color-mix(in srgb, var(--yellow) 28%, white); }
-  .team-head.green { background: color-mix(in srgb, var(--green) 18%, white); }
-  table { width:100%; border-collapse:collapse; }
-  th, td { padding:6px 10px; border-top:1px solid #ebe5d6; font-size:12px; }
-  th { text-align:left; color:#615948; font-weight:700; }
-  td.score { width:48px; text-align:right; font-variant-numeric: tabular-nums; font-weight:700; }
-  .sidebar { padding: 14px; display:grid; gap: 12px; }
-  .controls { display:grid; gap:10px; }
-  .btns { display:grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap:8px; }
-  .btns button { width:100%; }
-  button {
-    border:1px solid #bdb39c; background:#fff; color:#1f2328;
-    padding:9px 12px; border-radius:10px; font-weight:700; cursor:pointer;
-  }
-  button:hover { background:#f6f2e7; }
-  .range-row { display:grid; gap:6px; }
-  input[type="range"] { width:100%; }
-  .count-grid { display:grid; gap:10px; }
-  .count-card {
-    border:1px solid var(--line); border-radius:12px; padding:10px; background:#fffef9;
-  }
-  .count-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-weight:700; }
-  .bar {
-    width:100%; height:10px; border-radius:999px; background:#ece7d8; overflow:hidden;
-  }
-  .fill { height:100%; width:0%; transition: width .12s linear; }
-  .fill.red { background: var(--red); }
-  .fill.yellow { background: var(--yellow); }
-  .fill.green { background: var(--green); }
-  .tiny { color: var(--muted); font-size:12px; }
-  .status { padding: 12px; border:1px solid var(--line); border-radius:12px; background:#fffef9; }
-  .status strong { display:block; margin-bottom:4px; }
-  .event-log { border:1px solid var(--line); border-radius:12px; background:#fffef9; overflow:hidden; }
-  .event-log h3, .powers h3 { margin:0; padding:10px 12px; font-size:13px; border-bottom:1px solid #ebe5d6; background:#fbf8ef; }
-  .log-items { max-height: 260px; overflow:auto; padding: 8px 10px; display:grid; gap:8px; }
-  .log-item { font-size:12px; border-left: 4px solid #c8c1af; padding: 4px 8px; background:#fff; border-radius: 6px; }
-  .log-item.red { border-color: var(--red); }
-  .log-item.yellow { border-color: var(--yellow); }
-  .log-item.green { border-color: var(--green); }
-  .log-item.meta { border-color: #8c95a6; }
-  .powers { border:1px solid var(--line); border-radius:12px; background:#fffef9; overflow:hidden; }
-  .power-items { padding:8px 10px; display:grid; gap:8px; }
-  .power-item { font-size:12px; padding:8px 10px; border-radius:8px; background:#fff; border-left:4px solid #c8c1af; }
-  .power-item.red { border-color: var(--red); }
-  .power-item.yellow { border-color: var(--yellow); }
-  .power-item.green { border-color: var(--green); }
-
-  .log-item.current { background:#e5e7eb; border-color:#9aa3af; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
-  .active-powers { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px; margin: 10px 0 12px; }
-  .active-powers:empty { display:none; }
-  .active-power-card {
-    border:1px solid var(--line); border-radius:12px; background:rgba(255,253,247,.98);
-    box-shadow: var(--shadow); padding:10px 12px;
-  }
-  .active-power-card.red { border-left:6px solid var(--red); }
-  .active-power-card.yellow { border-left:6px solid var(--yellow); }
-  .active-power-card.green { border-left:6px solid var(--green); }
-  .active-power-title { font-weight:800; margin-bottom:4px; }
-  .active-power-sub { font-size:12px; color:var(--muted); margin-top:4px; }
-  .current-move { margin-top:10px; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:#f3f4f6; }
-  .legend { display:flex; gap:10px; flex-wrap:wrap; }
-  .pill { border:1px solid var(--line); border-radius:999px; padding:4px 8px; background:#fff; font-size:12px; }
-  @media (max-width: 1200px) {
-    .top { grid-template-columns: 1fr; }
-  }
-
-  .player-name-btn {
-    background: none;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    color: inherit;
-    cursor: pointer;
-    text-align: left;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .player-name-btn:hover { opacity: .78; }
-
-  .player-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, .45);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 1000;
-  }
-  .player-modal-backdrop.show { display: flex; }
-
-  .player-modal {
-    width: min(760px, 92vw);
-    max-height: 82vh;
-    overflow: hidden;
-    border-radius: 18px;
-    border: 1px solid #d8deea;
-    background: #ffffff;
-    box-shadow: 0 24px 60px rgba(15, 23, 42, .20);
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-  }
-  .player-modal-head {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 16px 18px 12px;
-    border-bottom: 1px solid #ebe5d6;
-    background: #fbf8ef;
-  }
-  .player-modal-title {
-    font-size: 18px;
-    font-weight: 800;
-    line-height: 1.2;
-  }
-  .player-modal-sub {
-    margin-top: 4px;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .player-modal-close {
-    border: 1px solid #bdb39c;
-    background: #fff;
-    color: #1f2328;
-    padding: 7px 11px;
-    border-radius: 10px;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .player-modal-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    padding: 10px 18px;
-    border-bottom: 1px solid #ebe5d6;
-    background: #fffef9;
-    font-size: 13px;
-  }
-  .player-modal-list {
-    overflow: auto;
-    padding: 12px 18px 18px;
-    display: grid;
-    gap: 8px;
-    background: #ffffff;
-  }
-  .player-modal-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    border: 1px solid #ebe5d6;
-    border-radius: 10px;
-    background: #fffef9;
-    padding: 8px 10px;
-    font-size: 13px;
-  }
-  .player-modal-move {
-    color: var(--muted);
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-  }
-  .player-modal-empty {
-    color: var(--muted);
-    font-size: 13px;
-    padding: 6px 2px;
-  }
-
-  .player-name-btn { touch-action: manipulation; }
-
-  /* Responsive layout: desktop unchanged, stack and enlarge on smaller screens */
-  @media (max-width: 1180px) {
-    .top { grid-template-columns: 1fr; }
-    .sidebar {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      align-items: start;
-      gap: 12px;
-    }
-    .controls, .count-grid, .status, .current-move, .event-log, .powers { min-width: 0; }
-    .event-log, .powers { grid-column: 1 / -1; }
-  }
-
-  @media (max-width: 900px) {
-    .wrap { padding: 12px; }
-    .board-header { flex-direction: column; align-items: stretch; gap: 8px; }
-    .legend { gap: 8px; }
-    .board {
-      grid-template-columns: repeat(8, minmax(0, 1fr));
-      gap: 6px;
-      padding: 6px;
-    }
-    .tile {
-      font-size: 10px;
-      padding: 6px 4px;
-      border-radius: 8px;
-    }
-    .tile-badge {
-      top: 4px;
-      right: 4px;
-      min-width: 18px;
-      height: 18px;
-      line-height: 16px;
-      font-size: 10px;
-      padding: 0 5px;
-    }
-    .leaders { grid-template-columns: 1fr; }
-    .sidebar { grid-template-columns: 1fr; }
-    .btns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .btns button { min-height: 42px; }
-    .range-row label { font-size: 14px; }
-    input[type="range"] { height: 28px; }
-    .count-grid { grid-template-columns: 1fr; }
-    .status, .current-move, .event-log, .powers, .team-card, .count-card { border-radius: 12px; }
-    .log-items { max-height: 220px; }
-    .active-powers { grid-template-columns: 1fr; }
-    .active-power-card { padding: 10px; }
-    .current-move { font-size: 12px; }
-    .player-modal {
-      width: min(92vw, 760px);
-      max-height: 86vh;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .title { font-size: 20px; }
-    .subtitle { font-size: 11px; }
-    .pill { font-size: 11px; padding: 4px 7px; }
-    .board {
-      gap: 4px;
-      padding: 4px;
-      border-radius: 12px;
-    }
-    .tile {
-      font-size: 9px;
-      line-height: 1.02;
-      padding: 5px 3px;
-      border-width: 1px;
-    }
-    .tile-badge {
-      top: 3px;
-      right: 3px;
-      min-width: 16px;
-      height: 16px;
-      line-height: 14px;
-      font-size: 9px;
-      padding: 0 4px;
-    }
-    .btns { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-    button {
-      padding: 11px 10px;
-      font-size: 13px;
-    }
-    .count-top { font-size: 13px; }
-    .event-log h3, .powers h3, .team-head { font-size: 12px; }
-    th, td { padding: 6px 8px; font-size: 11px; }
-    .log-item, .power-item, .active-power-sub { font-size: 11px; }
-    .player-modal-head { padding: 14px 14px 10px; }
-    .player-modal-stats { padding: 8px 14px; font-size: 12px; }
-    .player-modal-list { padding: 10px 14px 14px; }
-    .player-modal-row { font-size: 12px; }
-  }
-
-
-  @media (max-width: 1180px) {
-    .top {
-      display: grid;
-      grid-template-columns: 1fr;
-    }
-    .sidebar {
-      display: contents;
-    }
-    .controls { grid-row: 1; }
-    .board-panel { grid-row: 2; }
-    .count-grid { grid-row: 3; }
-    #statusBox { grid-row: 4; }
-    #currentMove { grid-row: 5; }
-    .event-log { grid-row: 6; }
-    .event-log + .powers { grid-row: 7; }
-    .event-log + .powers + .powers { grid-row: 8; }
-  }
-
-
-
-  /* Site navigation added for the Mantis homepage. */
-  .site-home-bar {
-    width: min(1480px, calc(100% - 24px));
-    margin: 12px auto 0;
-    position: relative;
-    z-index: 100;
-  }
-  .site-home-link {
-    display: inline-flex;
-    align-items: center;
-    min-height: 38px;
-    padding: 0 14px;
-    border: 1px solid rgba(46, 160, 67, .3);
-    border-radius: 999px;
-    color: #245f2e;
-    background: rgba(255, 253, 247, .94);
-    box-shadow: 0 5px 16px rgba(0,0,0,.08);
-    text-decoration: none;
-    font: 700 13px/1 system-ui, sans-serif;
-  }
-  .site-home-link:hover { background: #ffffff; }
-
-
-  /* Pale Mantis event theme — appearance only */
-  :root {
-    --bg: #dfe8dc;
-    --paper: #edf3ea;
-    --ink: #1c2a20;
-    --muted: #5f7063;
-    --line: #aebcab;
-    --panel: #f8fbf6;
-    --shadow: 0 10px 26px rgba(35, 55, 39, .10);
-    --red: #cf5a56;
-    --yellow: #d5ae31;
-    --green: #4caa59;
-    --none: #fffef9;
-  }
-
-  body {
-    background:
-      radial-gradient(circle at top left, #f0f5ed 0, #e2ebe0 42%, #d5e0d2 100%);
-    color: var(--ink);
-  }
-
-  .panel,
-  .team-card,
-  .count-card,
-  .status,
-  .current-move,
-  .event-log,
-  .powers,
-  .active-power-card,
-  .player-modal {
-    border-color: var(--line);
-    background: rgba(248, 251, 246, .98);
-    box-shadow: var(--shadow);
-  }
-
-  .board {
-    background: #c5d2c2;
-    border-color: #9eae9c;
-  }
-
-  .tile {
-    color: #18221b;
-    border-color: #8b9b89;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.62);
-  }
-
-  .tile.none {
-    background: #fffef9;
-  }
-
-  .tile.red {
-    background: color-mix(in srgb, var(--red) 61%, white);
-    border-color: #9d4440;
-  }
-
-  .tile.yellow {
-    background: color-mix(in srgb, var(--yellow) 58%, white);
-    border-color: #927511;
-  }
-
-  .tile.green {
-    background: color-mix(in srgb, var(--green) 58%, white);
-    border-color: #2d7d39;
-  }
-
-  .tile small {
-    color: #344039;
-  }
-
-  .team-card {
-    background: #fbfdf9;
-  }
-
-  .team-head.red {
-    background: color-mix(in srgb, var(--red) 16%, white);
-  }
-
-  .team-head.yellow {
-    background: color-mix(in srgb, var(--yellow) 22%, white);
-  }
-
-  .team-head.green {
-    background: color-mix(in srgb, var(--green) 16%, white);
-  }
-
-  th, td {
-    border-top-color: #dbe4d9;
-  }
-
-  th {
-    color: #56665a;
-  }
-
-  button,
-  .player-modal-close {
-    color: #213026;
-    background: #f9fcf7;
-    border-color: #9ead9b;
-  }
-
-  button:hover,
-  .player-modal-close:hover {
-    background: #eef5eb;
-  }
-
-  input[type="range"] {
-    accent-color: #5b9b58;
-  }
-
-  .count-card,
-  .status,
-  .event-log,
-  .powers,
-  .active-power-card {
-    background: #fbfdf9;
-  }
-
-  .bar {
-    background: #d7e0d4;
-  }
-
-  .event-log h3,
-  .powers h3 {
-    color: #334c37;
-    background: #edf4ea;
-    border-bottom-color: #d6e0d3;
-  }
-
-  .log-items,
-  .power-items,
-  .player-modal-list {
-    background: #f8fbf6;
-  }
-
-  .log-item,
-  .power-item,
-  .player-modal-row {
-    background: #ffffff;
-    border-color: #d7e1d5;
-  }
-
-  .log-item.current {
-    background: #dfeadd;
-    border-color: #759374;
-  }
-
-  .current-move,
-  .player-modal-stats {
-    background: #edf4eb;
-    border-color: #d4dfd2;
-  }
-
-  .pill {
-    background: #f9fcf7;
-    border-color: #acbaaa;
-  }
-
-  .site-home-link {
-    color: #315b36;
-    background: rgba(248, 251, 246, .97);
-    border-color: #9db69d;
-  }
-
-  .site-home-link:hover {
-    background: #ffffff;
-  }
-
-  .player-modal-backdrop {
-    background: rgba(29, 43, 32, .55);
-  }
-
-
-  /* Background glow only — content panels stay white */
-  body {
-    position: relative;
-    overflow-x: hidden;
-    background:
-      radial-gradient(circle at 10% 16%, rgba(106, 184, 88, .15), transparent 25rem),
-      radial-gradient(circle at 91% 70%, rgba(173, 224, 148, .10), transparent 24rem),
-      linear-gradient(180deg, #dce8da 0%, #d2dfcf 100%);
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    width: 430px;
-    height: 430px;
-    left: -190px;
-    top: 190px;
-    border-radius: 50%;
-    background: rgba(113, 190, 92, .09);
-    filter: blur(90px);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .site-home-bar,
-  .wrap,
-  .player-modal-backdrop {
-    position: relative;
-    z-index: 1;
-  }
-
-  .panel,
-  .team-card,
-  .count-card,
-  .status,
-  .current-move,
-  .event-log,
-  .powers,
-  .active-power-card,
-  .player-modal,
-  .log-items,
-  .power-items,
-  .player-modal-list,
-  .player-modal-head,
-  .player-modal-stats {
-    background: #ffffff !important;
-  }
-
-  .board-panel,
-  .sidebar {
-    background: #ffffff !important;
-  }
-
-  .event-log h3,
-  .powers h3,
-  .current-move,
-  .player-modal-stats {
-    background: #f4f7f2 !important;
-  }
-
-  .log-item,
-  .power-item,
-  .player-modal-row,
-  button,
-  .player-modal-close,
-  .pill {
-    background: #ffffff !important;
-  }
-
-  .log-item.current {
-    background: #e7f0e4 !important;
-  }
-
-  .panel,
-  .team-card,
-  .count-card,
-  .status,
-  .current-move,
-  .event-log,
-  .powers,
-  .active-power-card {
-    box-shadow:
-      0 12px 28px rgba(35,55,39,.10),
-      inset 0 1px 0 rgba(255,255,255,.7);
-  }
-
-
-  /* Dark Mantis outer theme; white replay content */
-  body {
-    color:#1c2a20;
-    background:
-      linear-gradient(180deg,#050706 0%,#090c0a 42%,#0d120f 100%);
-    overflow-x:hidden;
-  }
-
-  body::before,
-  body::after {
-    inset:auto;
-    width:auto;
-    height:auto;
-    border-radius:0;
-    background:none;
-    filter:none;
-    opacity:1;
-  }
-
-  .site-home-link {
-    color:#d3f3bd;
-    background:rgba(24,35,27,.96);
-    border-color:#536a57;
-    box-shadow:
-      0 10px 26px rgba(0,0,0,.20),
-      inset 0 1px 0 rgba(255,255,255,.025);
-  }
-
-  .site-home-link:hover {
-    background:#1e2c21;
-  }
-
-  .panel,
-  .board-panel,
-  .sidebar,
-  .team-card,
-  .count-card,
-  .status,
-  .current-move,
-  .event-log,
-  .powers,
-  .active-power-card,
-  .player-modal,
-  .log-items,
-  .power-items,
-  .player-modal-list,
-  .player-modal-head,
-  .player-modal-stats,
-  .log-item,
-  .power-item,
-  .player-modal-row,
-  button,
-  .player-modal-close,
-  .pill {
-    background:#ffffff !important;
-  }
-
-  .event-log h3,
-  .powers h3,
-  .current-move,
-  .player-modal-stats {
-    background:#f4f7f2 !important;
-  }
-
-  .log-item.current {
-    background:#e7f0e4 !important;
-  }
-
-  .panel,
-  .team-card,
-  .count-card,
-  .status,
-  .current-move,
-  .event-log,
-  .powers,
-  .active-power-card {
-    box-shadow:
-      0 14px 32px rgba(0,0,0,.18),
-      inset 0 1px 0 rgba(255,255,255,.72);
-  }
-
-
-  /* Vertical ambient glow streaks */
-  body::before,
-  body::after {
-    content: "";
-    position: fixed;
-    top: -22vh;
-    bottom: -22vh;
-    width: 52px;
-    height: auto;
-    border-radius: 0;
-    pointer-events: none;
-    z-index: 0;
-    filter: blur(8px);
-    opacity: .82;
-    background:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(142, 214, 112, .04) 16%,
-      rgba(142, 214, 112, .22) 42%,
-      rgba(195, 239, 168, .10) 60%,
-      transparent 84%
-    );
-    animation: streakDrift 8s ease-in-out infinite;
-  }
-
-  body::before {
-    left: 8%;
-  }
-
-  body::after {
-    right: 8%;
-    width: 34px;
-    opacity: .58;
-    animation-delay: -3.2s;
-    animation-duration: 10s;
-  }
-
-  @keyframes streakDrift {
-    0%, 100% { transform: translateY(-7%); }
-    50% { transform: translateY(7%); }
-  }
-
-  @media (max-width: 700px) {
-    body::before {
-    left: -28px;
-    width: 38px;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0a0e0b">
+  <title>Site Under Construction — Mantis OSRS</title>
+  <style>
+    :root{
+      color-scheme:dark;
+      --bg:#070a08;
+      --panel:#141d16;
+      --panel-soft:#101712;
+      --line:#35463a;
+      --line-soft:rgba(151,201,132,.16);
+      --text:#eef4eb;
+      --muted:#a9b5a7;
+      --sage:#b9e7a5;
+      --glow:rgba(115,203,92,.17);
     }
 
-    body::after {
-    right: -24px;
-    width: 26px;
-    }
-  }
+    *{box-sizing:border-box}
 
-  @media (prefers-reduced-motion: reduce) {
+    html{min-height:100%}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      overflow-x:hidden;
+      color:var(--text);
+      font-family:Arial,Helvetica,sans-serif;
+      background:
+        radial-gradient(circle at 16% 20%,rgba(112,188,88,.12),transparent 25rem),
+        radial-gradient(circle at 84% 78%,rgba(173,224,148,.07),transparent 22rem),
+        linear-gradient(180deg,#050706 0%,#090c0a 45%,#0d120f 100%);
+      padding:24px;
+    }
+
     body::before,
-    body::after {
-    animation: none !important;
-    }
-  }
-
-
-    /* glossy black sheen */
-    body {
-      position: relative;
-    }
-
-    body > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    body::selection {
-      background: rgba(170,255,164,.25);
-    }
-
-  
-  /* Original Tile Wars board preview above the interactive replay */
-  .original-board-panel {
-    width:min(980px,100%);
-    margin:0 auto;
-    padding:14px;
-    background:#fffdf7;
-    border:1px solid #c9c3b4;
-    border-radius:16px;
-    box-shadow:0 14px 34px rgba(0,0,0,.18);
-  }
-
-  .original-board-title {
-    margin:0 0 10px;
-    color:#1f2328;
-    font-size:18px;
-    font-weight:800;
-    letter-spacing:.2px;
-  }
-
-  .original-board-frame {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
-    padding:8px;
-    border:1px solid #bdb39c;
-    border-radius:14px;
-    background:#ece6d8;
-  }
-
-  .original-board-frame a {
-    display:flex;
-    justify-content:center;
-    width:100%;
-  }
-
-  .original-board-frame img {
-    display:block;
-    width:min(900px,100%);
-    height:auto;
-    object-fit:contain;
-  }
-
-  .original-board-hint {
-    margin:8px 2px 0;
-    color:#6b7280;
-    font-size:12px;
-  }
-
-  .board-replay-divider {
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:62px;
-    color:#d3f3bd;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:34px;
-    line-height:1;
-    text-shadow:
-      0 0 7px rgba(121,218,98,.35),
-      0 0 18px rgba(121,218,98,.14);
-  }
-
-  @media(max-width:700px) {
-    .original-board-panel {
-      padding:10px;
-      border-radius:13px;
+    body::after{
+      content:"";
+      position:fixed;
+      top:-20vh;
+      bottom:-20vh;
+      width:48px;
+      pointer-events:none;
+      filter:blur(9px);
+      opacity:.62;
+      background:linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(165,255,164,0) 12%,
+        rgba(165,255,164,.06) 28%,
+        rgba(120,255,143,.15) 42%,
+        rgba(226,255,232,.50) 50%,
+        rgba(120,255,143,.15) 58%,
+        rgba(165,255,164,.06) 72%,
+        rgba(165,255,164,0) 88%,
+        transparent 100%
+      );
+      animation:streakDrift 9s ease-in-out infinite;
     }
 
-    .original-board-frame {
-      padding:4px;
-      border-radius:10px;
+    body::before{left:7%}
+    body::after{right:7%;animation-delay:-3.4s;animation-duration:11s}
+
+    .shell{
+      position:relative;
+      isolation:isolate;
+      width:min(760px,100%);
+      padding:clamp(30px,6vw,58px);
+      border:1px solid var(--line);
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.018),transparent 42%),
+        linear-gradient(180deg,var(--panel) 0%,var(--panel-soft) 100%);
+      box-shadow:
+        0 26px 72px rgba(0,0,0,.40),
+        0 0 44px rgba(111,190,89,.055),
+        inset 0 0 0 1px rgba(194,230,181,.035);
     }
 
-    .original-board-title {
-      font-size:16px;
+    .shell::before{
+      content:"";
+      position:absolute;
+      inset:9px;
+      z-index:-1;
+      border:1px solid var(--line-soft);
+      pointer-events:none;
     }
 
-    .board-replay-divider {
-      min-height:48px;
-      font-size:29px;
+    .shell::after{
+      content:"";
+      position:absolute;
+      left:clamp(30px,6vw,58px);
+      right:clamp(30px,6vw,58px);
+      top:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,rgba(198,242,179,.52),transparent);
+      box-shadow:0 0 16px var(--glow);
     }
-  }
 
-
-  /* Thin separation between the original board and replay */
-  .board-replay-separator{
-    width:min(820px,82%);
-    height:1px;
-    margin:16px auto 17px;
-    background:linear-gradient(
-      90deg,
-      transparent,
-      rgba(121,218,98,.42) 15%,
-      rgba(210,255,190,.92) 50%,
-      rgba(121,218,98,.42) 85%,
-      transparent
-    );
-    box-shadow:
-      0 0 6px rgba(121,218,98,.27),
-      0 0 14px rgba(121,218,98,.10);
-  }
-
-  /* Dark outer Tile Wars surfaces; light nested information bubbles */
-  .original-board-panel{
-    color:#eef4eb;
-    background:
-      linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0)),
-      #151e18 !important;
-    border-color:#3b4c3f;
-    box-shadow:
-      0 16px 36px rgba(0,0,0,.25),
-      inset 0 1px 0 rgba(255,255,255,.025);
-  }
-
-  .original-board-title{
-    color:#eef4eb;
-  }
-
-  .original-board-hint{
-    color:#a7b4a5;
-  }
-
-  .original-board-frame{
-    background:#0f1612;
-    border-color:#405144;
-  }
-
-  .panel.board-panel,
-  .panel.sidebar{
-    color:#eef4eb;
-    background:
-      linear-gradient(180deg,rgba(255,255,255,.018),rgba(255,255,255,0)),
-      #151e18 !important;
-    border-color:#3b4c3f;
-    box-shadow:
-      0 16px 36px rgba(0,0,0,.25),
-      inset 0 1px 0 rgba(255,255,255,.025);
-  }
-
-  .board-header .title{
-    color:#f0f5ee;
-  }
-
-  .board-header .subtitle{
-    color:#a7b4a5;
-  }
-
-  /* Controls become a light inner information bubble */
-  .controls{
-    padding:12px;
-    color:#1c2a20;
-    background:#ffffff;
-    border:1px solid #aebcab;
-    border-radius:12px;
-    box-shadow:
-      0 10px 24px rgba(0,0,0,.12),
-      inset 0 1px 0 rgba(255,255,255,.72);
-  }
-
-  .controls .tiny{
-    color:#5f7063;
-  }
-
-  /* Preserve all nested replay information bubbles as light surfaces */
-  .board,
-  .team-card,
-  .count-card,
-  .status,
-  .current-move,
-  .event-log,
-  .powers,
-  .active-power-card,
-  .pill,
-  .log-item,
-  .power-item,
-  .player-modal,
-  .player-modal-head,
-  .player-modal-stats,
-  .player-modal-list,
-  .player-modal-row,
-  button,
-  .player-modal-close{
-    color:#1c2a20;
-  }
-
-  @media(max-width:1180px){
-    .controls{
-      border-radius:12px;
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 184px;
+      align-items:center;
+      gap:clamp(30px,6vw,58px);
     }
-  }
 
-  @media(max-width:700px){
-    .board-replay-separator{
-      width:76%;
-      margin:12px auto 13px;
+    .copy{min-width:0}
+
+    h1{
+      margin:0;
+      max-width:520px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(2.15rem,7vw,4.55rem);
+      font-weight:600;
+      line-height:.96;
+      letter-spacing:-.045em;
+      text-wrap:balance;
     }
-  }
 
-
-  /* V29 — softer dark-mode information surfaces */
-  :root{
-    --ink:#e5ebe6;
-    --muted:#aab7ad;
-    --line:#4a5c4f;
-    --panel:#27322b;
-    --paper:#303c34;
-    --none:#2f3a32;
-  }
-
-  .controls,
-  .team-card,
-  .count-card,
-  .status,
-  .event-log,
-  .powers,
-  .active-power-card,
-  .player-modal{
-    color:#e5ebe6;
-    background:#27322b !important;
-    border-color:#4a5c4f;
-    box-shadow:
-      0 12px 28px rgba(0,0,0,.20),
-      inset 0 1px 0 rgba(255,255,255,.035);
-  }
-
-  .controls{
-    border:1px solid #4a5c4f;
-  }
-
-  .log-items,
-  .power-items,
-  .player-modal-list{
-    color:#e5ebe6;
-    background:#202923 !important;
-  }
-
-  .player-modal-head{
-    color:#e5ebe6;
-    background:#27322b !important;
-    border-color:#4a5c4f;
-  }
-
-  .event-log h3,
-  .powers h3,
-  .current-move,
-  .player-modal-stats{
-    color:#e5ebe6;
-    background:#303c34 !important;
-    border-color:#4a5c4f;
-  }
-
-  .log-item,
-  .power-item,
-  .player-modal-row{
-    color:#e5ebe6;
-    background:#303c34 !important;
-    border-color:#4a5c4f;
-  }
-
-  .log-item.current{
-    color:#f0f5f1;
-    background:#3a4a3f !important;
-    border-color:#789079;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);
-  }
-
-  button,
-  .player-modal-close,
-  .pill{
-    color:#e5ebe6;
-    background:#303c34 !important;
-    border-color:#526557;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
-  }
-
-  button:hover,
-  .player-modal-close:hover{
-    color:#f4f7f4;
-    background:#39483e !important;
-  }
-
-  .player-name-btn{
-    color:inherit;
-    background:transparent !important;
-    border:0 !important;
-    box-shadow:none !important;
-  }
-
-  .tiny,
-  .controls .tiny,
-  .active-power-sub,
-  .player-modal-sub{
-    color:#aab7ad;
-  }
-
-  th{
-    color:#aab7ad;
-  }
-
-  th,
-  td{
-    border-top-color:#3b4a40;
-  }
-
-  .team-head{
-    color:#edf2ee;
-    border-bottom:1px solid #4a5c4f;
-  }
-
-  .team-head.red{
-    background:color-mix(in srgb,var(--red) 31%,#27322b);
-  }
-
-  .team-head.yellow{
-    color:#f4efcf;
-    background:color-mix(in srgb,var(--yellow) 31%,#27322b);
-  }
-
-  .team-head.green{
-    background:color-mix(in srgb,var(--green) 31%,#27322b);
-  }
-
-  .board{
-    background:#202923 !important;
-    border-color:#4a5c4f;
-  }
-
-  .tile{
-    color:#edf2ee;
-    border-color:#596b5c;
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,.035),
-      0 2px 5px rgba(0,0,0,.13);
-  }
-
-  .tile.none{
-    background:#2f3a32;
-  }
-
-  .tile.red{
-    color:#fff3f2;
-    background:color-mix(in srgb,var(--red) 52%,#2f3a32);
-    border-color:#a8514e;
-  }
-
-  .tile.yellow{
-    color:#fff7d8;
-    background:color-mix(in srgb,var(--yellow) 50%,#2f3a32);
-    border-color:#a3862c;
-  }
-
-  .tile.green{
-    color:#efffed;
-    background:color-mix(in srgb,var(--green) 50%,#2f3a32);
-    border-color:#438f4d;
-  }
-
-  .tile small{
-    color:#c5d0c7;
-  }
-
-  .bar{
-    background:#1b231e;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.025);
-  }
-
-  input[type="range"]{
-    accent-color:#91c77d;
-  }
-
-  .player-modal-backdrop{
-    background:rgba(3,7,4,.76);
-  }
-
-  .log-items,
-  .power-items,
-  .player-modal-list{
-    scrollbar-color:#526557 #202923;
-  }
-
-
-  /* V30 — keep player details modal centered in the viewport */
-  .player-modal-backdrop{
-    position:fixed !important;
-    inset:0 !important;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:1000;
-    padding:20px;
-    overflow:auto;
-  }
-
-  .player-modal-backdrop.show{
-    display:flex;
-  }
-
-  .player-modal{
-    margin:auto;
-    max-height:calc(100vh - 40px);
-    overflow:auto;
-  }
-
-
-
-  /* V31 board-only page */
-  .board-scoreboard-panel{
-    width:min(1180px,100%);
-    margin:0 auto;
-    padding:14px;
-  }
-
-  .board-scoreboard-panel .board-header{
-    align-items:flex-start;
-    margin-bottom:0;
-  }
-
-  .board-scoreboard-panel .leaders{
-    margin-top:14px;
-  }
-
-  .scoreboard-help{
-    max-width:720px;
-  }
-
-  .board-page-nav{
-    display:flex;
-    justify-content:center;
-    margin:16px 0 0;
-  }
-
-  .board-page-nav a{
-    color:#d3f3bd;
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:.11em;
-    text-decoration:none;
-    text-transform:uppercase;
-  }
-
-  .board-page-nav a::after{
-    content:" →";
-  }
-
-  .board-page-nav a:hover{
-    color:#f0ffe6;
-  }
-
-  @media(max-width:900px){
-    .board-scoreboard-panel .leaders{
-      grid-template-columns:1fr;
+    .brand{
+      display:block;
+      margin-bottom:11px;
+      color:var(--sage);
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:clamp(.82rem,2vw,1.02rem);
+      font-weight:700;
+      letter-spacing:.22em;
+      line-height:1.2;
+      text-transform:uppercase;
     }
-  }
 
-</style>
+    .message{
+      max-width:480px;
+      margin:24px 0 0;
+      color:var(--muted);
+      font-size:clamp(.96rem,2vw,1.06rem);
+      line-height:1.7;
+    }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      margin-top:28px;
+      padding:9px 12px;
+      border:1px solid rgba(145,196,127,.17);
+      background:rgba(5,9,6,.28);
+      color:#c9d5c6;
+      font-size:.72rem;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+
+    .status-dot{
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:#9ed889;
+      box-shadow:0 0 10px rgba(158,216,137,.6);
+      animation:pulse 2.4s ease-in-out infinite;
+    }
+
+    .mantis-wrap{
+      position:relative;
+      display:grid;
+      place-items:center;
+      min-height:190px;
+      border-left:1px solid rgba(164,205,146,.16);
+    }
+
+    .mantis-wrap::before,
+    .mantis-wrap::after{
+      content:"";
+      position:absolute;
+      left:-1px;
+      width:1px;
+      height:34px;
+      background:linear-gradient(transparent,rgba(204,239,190,.70),transparent);
+      box-shadow:0 0 12px rgba(127,203,105,.17);
+    }
+
+    .mantis-wrap::before{top:0}
+    .mantis-wrap::after{bottom:0}
+
+    .mantis{
+      width:166px;
+      height:166px;
+      overflow:visible;
+      transform:translateY(8px);
+      filter:drop-shadow(0 9px 15px rgba(0,0,0,.34));
+    }
+
+    .mantis-bob{
+      animation:mantisBob 3.1s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:center;
+    }
+
+    .mantis-eye{
+      animation:mantisBlink 5.4s infinite;
+      transform-box:fill-box;
+      transform-origin:center;
+    }
+
+    .party-hat{
+      animation:hatBounce 3.1s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:center bottom;
+    }
+
+    .hammer-arm{
+      animation:hammerSwing 2.15s ease-in-out infinite;
+      transform-box:fill-box;
+      transform-origin:18% 82%;
+    }
+
+    @keyframes streakDrift{
+      0%,100%{transform:translateY(-7%)}
+      50%{transform:translateY(7%)}
+    }
+
+    @keyframes pulse{
+      0%,100%{opacity:.65;transform:scale(.88)}
+      50%{opacity:1;transform:scale(1.08)}
+    }
+
+    @keyframes mantisBob{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-4px)}
+    }
+
+    @keyframes mantisBlink{
+      0%,45%,51%,100%{transform:scaleY(1)}
+      47%,49%{transform:scaleY(.12)}
+    }
+
+    @keyframes hatBounce{
+      0%,100%{transform:rotate(-1.5deg) translateY(0)}
+      50%{transform:rotate(1.5deg) translateY(-1.5px)}
+    }
+
+    @keyframes hammerSwing{
+      0%,100%{transform:rotate(-9deg)}
+      45%{transform:rotate(15deg)}
+      62%{transform:rotate(8deg)}
+    }
+
+    @media (max-width:650px){
+      body{padding:14px}
+      .shell{padding:36px 30px 32px}
+      .shell::before{inset:7px}
+      .layout{grid-template-columns:1fr;gap:30px}
+      .mantis-wrap{
+        min-height:142px;
+        border-left:0;
+        border-top:1px solid rgba(164,205,146,.16);
+      }
+      .mantis-wrap::before,
+      .mantis-wrap::after{
+        top:-1px;
+        bottom:auto;
+        width:34px;
+        height:1px;
+        background:linear-gradient(90deg,transparent,rgba(204,239,190,.70),transparent);
+      }
+      .mantis-wrap::before{left:0}
+      .mantis-wrap::after{left:auto;right:0}
+      .mantis-wrap{min-height:154px}
+      .mantis{width:138px;height:138px;transform:translateY(7px)}
+    }
+
+    @media (max-width:390px){
+      .shell{padding:32px 24px 28px}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      body::before,
+      body::after,
+      .status-dot,
+      .mantis-bob,
+      .mantis-eye,
+      .party-hat,
+      .hammer-arm{animation:none!important}
+    }
+  </style>
 </head>
 <body>
-<div class="site-home-bar"><a class="site-home-link" href="../index.html">← Mantis Home</a></div>
-<div class="wrap">
-  <section class="original-board-panel" aria-labelledby="original-board-heading">
-    <h1 class="original-board-title" id="original-board-heading">2026 Mantis Tile Wars</h1>
-    <div class="original-board-frame">
-      <a href="../images/tile-wars-board.png" target="_blank" rel="noopener">
-        <img src="../images/tile-wars-board.png" alt="Original Mantis Tile Wars board and final placements">
-      </a>
-    </div>
-    <div class="original-board-hint">Click the board to open the full-size image.</div>
-  </section>
-
-  <div class="board-replay-separator" aria-hidden="true"></div>
-
-  <section class="panel board-panel board-scoreboard-panel" aria-labelledby="scoreboard-heading">
-    <div class="board-header">
-      <div>
-        <div class="title" id="scoreboard-heading">Final Scoreboard</div>
-        <div class="subtitle scoreboard-help">Select a player to view every drop they received throughout the event.</div>
-      </div>
-    </div>
-
-    <div class="leaders">
-      <div class="team-card">
-        <div class="team-head red">Red leaderboard</div>
-        <table>
-          <thead><tr><th>Player</th><th class="score">Score</th></tr></thead>
-          <tbody>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Vycra">Vycra</button></td>
-                <td class="score">44</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Pond Scum">Pond Scum</button></td>
-                <td class="score">37</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="John Fux">John Fux</button></td>
-                <td class="score">29</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="rskru">rskru</button></td>
-                <td class="score">27</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="YeetMyLoad">YeetMyLoad</button></td>
-                <td class="score">21</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="meat bum">meat bum</button></td>
-                <td class="score">19</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Sha q">Sha q</button></td>
-                <td class="score">9</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Gary Salty">Gary Salty</button></td>
-                <td class="score">3</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="nutzach00">nutzach00</button></td>
-                <td class="score">3</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Tacticaljokr">Tacticaljokr</button></td>
-                <td class="score">3</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="merekat101">merekat101</button></td>
-                <td class="score">2</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="team-card">
-        <div class="team-head yellow">Yellow leaderboard</div>
-        <table>
-          <thead><tr><th>Player</th><th class="score">Score</th></tr></thead>
-          <tbody>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="KrystalOS">KrystalOS</button></td>
-                <td class="score">46</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="TFresh">TFresh</button></td>
-                <td class="score">44</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="The Antidote">The Antidote</button></td>
-                <td class="score">28</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Third Leg">Third Leg</button></td>
-                <td class="score">28</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="cpt_Ins4no">cpt_Ins4no</button></td>
-                <td class="score">13</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="JVHN SUMMIT">JVHN SUMMIT</button></td>
-                <td class="score">12</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Wuze">Wuze</button></td>
-                <td class="score">6</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="GIMSaintDrip">GIMSaintDrip</button></td>
-                <td class="score">5</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Dhampir007">Dhampir007</button></td>
-                <td class="score">4</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Mantiss">Mantiss</button></td>
-                <td class="score">3</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="CringusKhan">CringusKhan</button></td>
-                <td class="score">1</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Juice Solo">Juice Solo</button></td>
-                <td class="score">0</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="team-card">
-        <div class="team-head green">Green leaderboard</div>
-        <table>
-          <thead><tr><th>Player</th><th class="score">Score</th></tr></thead>
-          <tbody>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Big Baby Boy">Big Baby Boy</button></td>
-                <td class="score">22</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Yawp">Yawp</button></td>
-                <td class="score">20</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="IronVikings">IronVikings</button></td>
-                <td class="score">19</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Busta Beans">Busta Beans</button></td>
-                <td class="score">18</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Pyros">Pyros</button></td>
-                <td class="score">14</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Ottertoebean">Ottertoebean</button></td>
-                <td class="score">8</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="C D C D C D">C D C D C D</button></td>
-                <td class="score">7</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="ImFatMatt">ImFatMatt</button></td>
-                <td class="score">1</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="P4pa Swag">P4pa Swag</button></td>
-                <td class="score">1</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="GingerBihh">GingerBihh</button></td>
-                <td class="score">0</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="xxsnoop">xxsnoop</button></td>
-                <td class="score">0</td>
-              </tr>
-              <tr>
-                <td><button type="button" class="player-name-btn" data-player="Zodiac Zack">Zodiac Zack</button></td>
-                <td class="score">0</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="board-page-nav">
-      <a href="tile-wars-replay.html">View replay</a>
-    </div>
-  </section>
-</div>
-
-<script>
-
-const PLAYER_DROP_DATA = {"Pond Scum":{"team":"red","drops":[{"moveNumber":12,"tile":"1 Barrows Piece"},{"moveNumber":59,"tile":"1 Odium Shard 3"},{"moveNumber":82,"tile":"1 Abyssal Whip"},{"moveNumber":84,"tile":"1 Dark Bow"},{"moveNumber":85,"tile":"Any DK Ring"},{"moveNumber":88,"tile":"1 Fedora"},{"moveNumber":94,"tile":"1 Fedora"},{"moveNumber":96,"tile":"1 Nightmare Unique"},{"moveNumber":132,"tile":"1 Crystal Armour Seed"},{"moveNumber":158,"tile":"Any DK Ring"},{"moveNumber":165,"tile":"1 Barrows Piece"},{"moveNumber":170,"tile":"1 Perilous Moon Piece"},{"moveNumber":174,"tile":"1 Fedora"},{"moveNumber":175,"tile":"1 Barrows Piece"},{"moveNumber":217,"tile":"1 Unsired"},{"moveNumber":218,"tile":"1 Abyssal Whip"},{"moveNumber":222,"tile":"1 Cerberus Crystal"},{"moveNumber":230,"tile":"1 Zenyte Shard"},{"moveNumber":233,"tile":"1 Doom Unique"},{"moveNumber":240,"tile":"1 Doom Unique"},{"moveNumber":243,"tile":"1 Champion Scroll"},{"moveNumber":252,"tile":"1 Cerberus Crystal"},{"moveNumber":273,"tile":"1 Bandos Unique"},{"moveNumber":293,"tile":"1 Doom Unique"},{"moveNumber":296,"tile":"1 Sara Unique"},{"moveNumber":351,"tile":"1 Barrows Piece"},{"moveNumber":353,"tile":"1 Strange old lockpick"},{"moveNumber":376,"tile":"1 Zammy Unique"},{"moveNumber":424,"tile":"1 Strange old lockpick"},{"moveNumber":432,"tile":"1 Fedora"},{"moveNumber":487,"tile":"1 Chromium Ingot"},{"moveNumber":505,"tile":"1 Blood Shard"},{"moveNumber":507,"tile":"1 Mask Of Ranul"},{"moveNumber":510,"tile":"1 Fedora"},{"moveNumber":521,"tile":"1 Unsired"},{"moveNumber":522,"tile":"Any DK Ring"},{"moveNumber":524,"tile":"1 Perilous Moon Piece"}]},"Sha q":{"team":"red","drops":[{"moveNumber":24,"tile":"Any Pet"},{"moveNumber":125,"tile":"1 Chromium Ingot"},{"moveNumber":157,"tile":"1 Yama Unique"},{"moveNumber":267,"tile":"1 Abyssal Whip"},{"moveNumber":277,"tile":"1 Unsired"},{"moveNumber":279,"tile":"1 Abyssal Whip"},{"moveNumber":291,"tile":"Belle's Folly"},{"moveNumber":305,"tile":"Any Pet"},{"moveNumber":446,"tile":"1 Drake Claw or Tooth"}]},"John Fux":{"team":"red","drops":[{"moveNumber":14,"tile":"1 Smoke Battlestaff"},{"moveNumber":34,"tile":"Any DK Ring"},{"moveNumber":43,"tile":"1 Strange old lockpick"},{"moveNumber":45,"tile":"Any Pet"},{"moveNumber":54,"tile":"1 Doom Unique"},{"moveNumber":70,"tile":"1 Blood Shard"},{"moveNumber":120,"tile":"1 Bottled Storm"},{"moveNumber":153,"tile":"1 Unsired"},{"moveNumber":163,"tile":"1 Abyssal Whip"},{"moveNumber":179,"tile":"1 Fangs of Venenatis"},{"moveNumber":197,"tile":"1 Sarachnis Cudgel"},{"moveNumber":206,"tile":"1 Perilous Moon Piece"},{"moveNumber":229,"tile":"1 Bandos Unique"},{"moveNumber":237,"tile":"1 Strange old lockpick"},{"moveNumber":241,"tile":"Any DK Ring"},{"moveNumber":244,"tile":"1 Sara Unique"},{"moveNumber":257,"tile":"1 Granite Hammer"},{"moveNumber":335,"tile":"1 Mask Of Ranul"},{"moveNumber":340,"tile":"1 Glacial Temotli"},{"moveNumber":423,"tile":"Belle's Folly"},{"moveNumber":427,"tile":"Any Pet"},{"moveNumber":443,"tile":"1 KBD Heads"},{"moveNumber":478,"tile":"1 Virtus Piece"},{"moveNumber":488,"tile":"1 Zulrah Unique"},{"moveNumber":493,"tile":"1 Dragon Chainbody"},{"moveNumber":500,"tile":"1 Cerberus Crystal"},{"moveNumber":504,"tile":"1 Cerberus Crystal"},{"moveNumber":512,"tile":"Any Pet"},{"moveNumber":523,"tile":"1 Sarachnis Cudgel"}]},"meat bum":{"team":"red","drops":[{"moveNumber":9,"tile":"1 Abyssal Whip"},{"moveNumber":89,"tile":"Belle's Folly"},{"moveNumber":95,"tile":"1 Superior Unique"},{"moveNumber":198,"tile":"Any Raid Purple"},{"moveNumber":249,"tile":"1 Unsired"},{"moveNumber":250,"tile":"1 Vorkath Head"},{"moveNumber":302,"tile":"1 Barrows Piece"},{"moveNumber":356,"tile":"Any DK Ring"},{"moveNumber":367,"tile":"Any DK Ring"},{"moveNumber":372,"tile":"Any DK Ring"},{"moveNumber":375,"tile":"Any DK Ring"},{"moveNumber":426,"tile":"1 Doom Unique"},{"moveNumber":450,"tile":"Any DK Ring"},{"moveNumber":468,"tile":"1 Champion Scroll"},{"moveNumber":477,"tile":"1 Crystal Armour Seed"},{"moveNumber":484,"tile":"Any DK Ring"},{"moveNumber":509,"tile":"Any DK Ring"},{"moveNumber":525,"tile":"1 Zulrah Unique"},{"moveNumber":531,"tile":"1 Horn Of Plenty"}]},"Tacticaljokr":{"team":"red","drops":[{"moveNumber":60,"tile":"1 Glacial Temotli"},{"moveNumber":455,"tile":"1 Barrows Piece"},{"moveNumber":457,"tile":"1 Fedora"}]},"Gary Salty":{"team":"red","drops":[{"moveNumber":23,"tile":"Any Pet"},{"moveNumber":139,"tile":"1 Zulrah Unique"},{"moveNumber":453,"tile":"1 Fedora"}]},"YeetMyLoad":{"team":"red","drops":[{"moveNumber":18,"tile":"1 Venator Shard"},{"moveNumber":38,"tile":"1 Barrows Piece"},{"moveNumber":47,"tile":"1 Kraken Tentacle"},{"moveNumber":113,"tile":"1 Kraken Tentacle"},{"moveNumber":121,"tile":"1 Barrows Piece"},{"moveNumber":152,"tile":"1 Abyssal Whip"},{"moveNumber":155,"tile":"Any Pet"},{"moveNumber":162,"tile":"1 Spirit Shield or Sigil"},{"moveNumber":181,"tile":"1 KBD Heads"},{"moveNumber":182,"tile":"1 Superior Unique"},{"moveNumber":234,"tile":"1 Kraken Tentacle"},{"moveNumber":288,"tile":"1 Tormented Synapse"},{"moveNumber":317,"tile":"1 Abyssal Whip"},{"moveNumber":327,"tile":"1 Glacial Temotli"},{"moveNumber":400,"tile":"1 Abyssal Whip"},{"moveNumber":406,"tile":"Any Boss Jar"},{"moveNumber":490,"tile":"1 Perilous Moon Piece"},{"moveNumber":491,"tile":"1 Barrows Piece"},{"moveNumber":495,"tile":"1 Glacial Temotli"},{"moveNumber":499,"tile":"1 Twinflame Piece"},{"moveNumber":527,"tile":"1 Abyssal Whip"}]},"nutzach00":{"team":"red","drops":[{"moveNumber":164,"tile":"1 Vorkath Head"},{"moveNumber":187,"tile":"1 Vorkath Head"},{"moveNumber":494,"tile":"Any God Mitre"}]},"Vycra":{"team":"red","drops":[{"moveNumber":1,"tile":"Any Rune God Armour Piece"},{"moveNumber":22,"tile":"1 Zammy Unique"},{"moveNumber":30,"tile":"1 Zulrah Unique"},{"moveNumber":31,"tile":"1 Barrows Piece"},{"moveNumber":39,"tile":"1 Sarachnis Cudgel"},{"moveNumber":62,"tile":"1 Vorkath Head"},{"moveNumber":72,"tile":"1 Broken dragon hook"},{"moveNumber":106,"tile":"1 Abyssal Whip"},{"moveNumber":115,"tile":"1 Bandos Unique"},{"moveNumber":129,"tile":"1 Hueycoatl Hide"},{"moveNumber":160,"tile":"1 Zenyte Shard"},{"moveNumber":166,"tile":"1 Glacial Temotli"},{"moveNumber":172,"tile":"1 Twinflame Piece"},{"moveNumber":177,"tile":"1 Strange old lockpick"},{"moveNumber":178,"tile":"1 Mask Of Ranul"},{"moveNumber":204,"tile":"1 Dragon Chainbody"},{"moveNumber":211,"tile":"1 Drake Claw or Tooth"},{"moveNumber":214,"tile":"1 Granite Longsword"},{"moveNumber":216,"tile":"1 Glacial Temotli"},{"moveNumber":235,"tile":"1 Zammy Unique"},{"moveNumber":245,"tile":"1 Perilous Moon Piece"},{"moveNumber":266,"tile":"1 Glacial Temotli"},{"moveNumber":282,"tile":"Any DK Ring"},{"moveNumber":284,"tile":"1 Zulrah Unique"},{"moveNumber":306,"tile":"1 Unsired"},{"moveNumber":307,"tile":"1 Abyssal Whip"},{"moveNumber":309,"tile":"1 Granite Longsword"},{"moveNumber":320,"tile":"Any DK Ring"},{"moveNumber":328,"tile":"1 Dragon Chainbody"},{"moveNumber":330,"tile":"1 Unsired"},{"moveNumber":331,"tile":"1 Vorkath Head"},{"moveNumber":350,"tile":"1 Barrows Piece"},{"moveNumber":355,"tile":"1 Glacial Temotli"},{"moveNumber":357,"tile":"1 Barrows Piece"},{"moveNumber":365,"tile":"1 Glacial Temotli"},{"moveNumber":419,"tile":"1 Glacial Temotli"},{"moveNumber":422,"tile":"1 Dark Bow"},{"moveNumber":436,"tile":"1 Unsired"},{"moveNumber":448,"tile":"1 Tormented Synapse"},{"moveNumber":469,"tile":"1 Glacial Temotli"},{"moveNumber":517,"tile":"1 Strange old lockpick"},{"moveNumber":528,"tile":"1 Bottled Storm"},{"moveNumber":529,"tile":"Any Rune God Armour Piece"},{"moveNumber":532,"tile":"Any Rune God Armour Piece"}]},"rskru":{"team":"red","drops":[{"moveNumber":25,"tile":"1 Arma Unique"},{"moveNumber":108,"tile":"1 Hydra Leather"},{"moveNumber":110,"tile":"1 Arma Unique"},{"moveNumber":111,"tile":"Any DK Ring"},{"moveNumber":116,"tile":"1 Nox. Hally Piece"},{"moveNumber":176,"tile":"Any DK Ring"},{"moveNumber":199,"tile":"Any DK Ring"},{"moveNumber":201,"tile":"1 KBD Heads"},{"moveNumber":207,"tile":"1 Nox. Hally Piece"},{"moveNumber":269,"tile":"1 Arma Unique"},{"moveNumber":272,"tile":"1 Sara Unique"},{"moveNumber":290,"tile":"1 Zammy Unique"},{"moveNumber":341,"tile":"1 Arma Unique"},{"moveNumber":380,"tile":"1 Zammy Unique"},{"moveNumber":381,"tile":"1 Sara Unique"},{"moveNumber":397,"tile":"1 Sara Unique"},{"moveNumber":399,"tile":"Any DK Ring"},{"moveNumber":430,"tile":"1 Zammy Unique"},{"moveNumber":438,"tile":"1 Sara Unique"},{"moveNumber":442,"tile":"1 Zulrah Unique"},{"moveNumber":460,"tile":"1 Sara Unique"},{"moveNumber":461,"tile":"1 Bandos Unique"},{"moveNumber":462,"tile":"1 Dark Bow"},{"moveNumber":466,"tile":"1 Zammy Unique"},{"moveNumber":472,"tile":"1 Sara Unique"},{"moveNumber":473,"tile":"1 Arma Unique"},{"moveNumber":513,"tile":"1 Bandos Unique"}]},"merekat101":{"team":"red","drops":[{"moveNumber":287,"tile":"1 Hueycoatl Hide"},{"moveNumber":483,"tile":"1 Vorkath Head"}]},"The Antidote":{"team":"yellow","drops":[{"moveNumber":7,"tile":"1 Tormented Synapse"},{"moveNumber":11,"tile":"Any DK Ring"},{"moveNumber":52,"tile":"1 Hueycoatl Hide"},{"moveNumber":78,"tile":"Any DK Ring"},{"moveNumber":86,"tile":"1 Twinflame Piece"},{"moveNumber":87,"tile":"Any Raid Purple"},{"moveNumber":99,"tile":"1 Vorkath Head"},{"moveNumber":114,"tile":"Any DK Ring"},{"moveNumber":118,"tile":"1 Unsired"},{"moveNumber":150,"tile":"Any Raid Purple"},{"moveNumber":154,"tile":"1 Zammy Unique"},{"moveNumber":190,"tile":"Any Rune God Armour Piece"},{"moveNumber":283,"tile":"Any Pet"},{"moveNumber":304,"tile":"1 Unsired"},{"moveNumber":316,"tile":"1 Crystal Armour Seed"},{"moveNumber":318,"tile":"1 Unsired"},{"moveNumber":325,"tile":"1 Twinflame Piece"},{"moveNumber":332,"tile":"1 Bandos Unique"},{"moveNumber":339,"tile":"1 Glacial Temotli"},{"moveNumber":345,"tile":"1 Vorkath Head"},{"moveNumber":348,"tile":"Any DK Ring"},{"moveNumber":382,"tile":"1 Zenyte Shard"},{"moveNumber":383,"tile":"1 Sara Unique"},{"moveNumber":402,"tile":"1 Doom Unique"},{"moveNumber":431,"tile":"Belle's Folly"},{"moveNumber":433,"tile":"1 Sara Unique"},{"moveNumber":439,"tile":"1 Strange old lockpick"},{"moveNumber":486,"tile":"1 Yama Unique"}]},"KrystalOS":{"team":"yellow","drops":[{"moveNumber":19,"tile":"1 Yama Unique"},{"moveNumber":40,"tile":"1 Glacial Temotli"},{"moveNumber":50,"tile":"1 Barrows Piece"},{"moveNumber":76,"tile":"1 Abyssal Whip"},{"moveNumber":77,"tile":"1 Granite Hammer"},{"moveNumber":93,"tile":"Any DK Ring"},{"moveNumber":98,"tile":"1 Abyssal Whip"},{"moveNumber":112,"tile":"Any Rune God Armour Piece"},{"moveNumber":117,"tile":"1 Abyssal Whip"},{"moveNumber":127,"tile":"1 Bandos Unique"},{"moveNumber":130,"tile":"1 Hueycoatl Hide"},{"moveNumber":156,"tile":"1 Abyssal Whip"},{"moveNumber":183,"tile":"1 Abyssal Whip"},{"moveNumber":185,"tile":"1 Mask Of Ranul"},{"moveNumber":193,"tile":"1 Sarachnis Cudgel"},{"moveNumber":205,"tile":"Any Pet"},{"moveNumber":209,"tile":"1 Barrows Piece"},{"moveNumber":210,"tile":"1 Dark Bow"},{"moveNumber":221,"tile":"1 Zammy Unique"},{"moveNumber":227,"tile":"1 Unsired"},{"moveNumber":228,"tile":"1 Abyssal Whip"},{"moveNumber":231,"tile":"1 Cerberus Crystal"},{"moveNumber":246,"tile":"1 Perilous Moon Piece"},{"moveNumber":255,"tile":"1 Revenant Weapon"},{"moveNumber":258,"tile":"1 Champion Scroll"},{"moveNumber":260,"tile":"1 Horn Of Plenty"},{"moveNumber":270,"tile":"1 Unsired"},{"moveNumber":271,"tile":"1 Abyssal Whip"},{"moveNumber":292,"tile":"1 Abyssal Whip"},{"moveNumber":300,"tile":"1 Drake Claw or Tooth"},{"moveNumber":313,"tile":"1 Abyssal Whip"},{"moveNumber":315,"tile":"1 Zammy Unique"},{"moveNumber":321,"tile":"1 Barrows Piece"},{"moveNumber":323,"tile":"1 Glacial Temotli"},{"moveNumber":326,"tile":"1 Hueycoatl Hide"},{"moveNumber":338,"tile":"1 Arma Unique"},{"moveNumber":344,"tile":"1 Abyssal Whip"},{"moveNumber":373,"tile":"Any Pet"},{"moveNumber":374,"tile":"Any DK Ring"},{"moveNumber":418,"tile":"1 Abyssal Whip"},{"moveNumber":429,"tile":"1 Glacial Temotli"},{"moveNumber":437,"tile":"1 Smoke Battlestaff"},{"moveNumber":441,"tile":"1 Barrows Piece"},{"moveNumber":479,"tile":"1 Unsired"},{"moveNumber":482,"tile":"Any DK Ring"},{"moveNumber":503,"tile":"1 Cerberus Crystal"}]},"cpt_Ins4no":{"team":"yellow","drops":[{"moveNumber":17,"tile":"1 Barrows Piece"},{"moveNumber":143,"tile":"1 Blood Shard"},{"moveNumber":145,"tile":"1 Glacial Temotli"},{"moveNumber":232,"tile":"1 Bottled Storm"},{"moveNumber":254,"tile":"1 Barrows Piece"},{"moveNumber":289,"tile":"1 Broken dragon hook"},{"moveNumber":361,"tile":"1 Blood Shard"},{"moveNumber":366,"tile":"1 Dark Bow"},{"moveNumber":458,"tile":"1 Dark Bow"},{"moveNumber":475,"tile":"1 Zulrah Unique"},{"moveNumber":480,"tile":"1 Dark Bow"},{"moveNumber":481,"tile":"1 Glacial Temotli"},{"moveNumber":489,"tile":"1 Blood Shard"}]},"GIMSaintDrip":{"team":"yellow","drops":[{"moveNumber":53,"tile":"1 Cerberus Crystal"},{"moveNumber":79,"tile":"1 Zammy Unique"},{"moveNumber":428,"tile":"1 Zammy Unique"},{"moveNumber":445,"tile":"1 Chromium Ingot"},{"moveNumber":497,"tile":"1 Barrows Piece"}]},"TFresh":{"team":"yellow","drops":[{"moveNumber":2,"tile":"1 Fedora"},{"moveNumber":37,"tile":"1 Barrows Piece"},{"moveNumber":42,"tile":"1 Dark Bow"},{"moveNumber":81,"tile":"1 Unsired"},{"moveNumber":90,"tile":"1 Dark Bow"},{"moveNumber":91,"tile":"1 Fedora"},{"moveNumber":92,"tile":"1 Barrows Piece"},{"moveNumber":100,"tile":"1 Bandos Unique"},{"moveNumber":109,"tile":"1 Strange old lockpick"},{"moveNumber":122,"tile":"Belle's Folly"},{"moveNumber":124,"tile":"1 Fedora"},{"moveNumber":126,"tile":"1 Barrows Piece"},{"moveNumber":131,"tile":"1 Perilous Moon Piece"},{"moveNumber":135,"tile":"1 Dragon Chainbody"},{"moveNumber":137,"tile":"Any Boss Jar"},{"moveNumber":167,"tile":"1 Barrows Piece"},{"moveNumber":180,"tile":"1 Unsired"},{"moveNumber":220,"tile":"1 Vorkath Head"},{"moveNumber":238,"tile":"1 Cerberus Crystal"},{"moveNumber":239,"tile":"1 Fedora"},{"moveNumber":256,"tile":"1 Zammy Unique"},{"moveNumber":259,"tile":"1 Bandos Unique"},{"moveNumber":261,"tile":"1 Sara Unique"},{"moveNumber":263,"tile":"1 Arma Unique"},{"moveNumber":276,"tile":"1 Dragon Chainbody"},{"moveNumber":280,"tile":"1 Sara Unique"},{"moveNumber":281,"tile":"1 KBD Heads"},{"moveNumber":312,"tile":"1 Sara Unique"},{"moveNumber":336,"tile":"1 Mask Of Ranul"},{"moveNumber":349,"tile":"1 Glacial Temotli"},{"moveNumber":358,"tile":"1 Glacial Temotli"},{"moveNumber":359,"tile":"Any DK Ring"},{"moveNumber":371,"tile":"1 Bandos Unique"},{"moveNumber":379,"tile":"1 Cerberus Crystal"},{"moveNumber":434,"tile":"1 Fedora"},{"moveNumber":452,"tile":"1 Sara Unique"},{"moveNumber":454,"tile":"1 Zenyte Shard"},{"moveNumber":456,"tile":"1 Fedora"},{"moveNumber":464,"tile":"1 Zammy Unique"},{"moveNumber":465,"tile":"1 Sara Unique"},{"moveNumber":471,"tile":"1 Bandos Unique"},{"moveNumber":474,"tile":"1 Dragon Chainbody"},{"moveNumber":526,"tile":"1 Bandos Unique"},{"moveNumber":530,"tile":"Any Rune God Armour Piece"}]},"Wuze":{"team":"yellow","drops":[{"moveNumber":196,"tile":"Any DK Ring"},{"moveNumber":444,"tile":"Any DK Ring"},{"moveNumber":451,"tile":"1 KBD Heads"},{"moveNumber":501,"tile":"Any Pet"},{"moveNumber":515,"tile":"1 Champion Scroll"},{"moveNumber":519,"tile":"1 Abyssal Whip"}]},"Third Leg":{"team":"yellow","drops":[{"moveNumber":10,"tile":"Any Pet"},{"moveNumber":15,"tile":"Any Pet"},{"moveNumber":28,"tile":"1 Champion Scroll"},{"moveNumber":29,"tile":"1 Sara Unique"},{"moveNumber":41,"tile":"Any Rune God Armour Piece"},{"moveNumber":48,"tile":"Any Rune God Armour Piece"},{"moveNumber":51,"tile":"Any God Mitre"},{"moveNumber":63,"tile":"Any Pet"},{"moveNumber":80,"tile":"Any Pet"},{"moveNumber":83,"tile":"1 Arma Unique"},{"moveNumber":140,"tile":"1 Basilisk Jaw"},{"moveNumber":144,"tile":"1 Superior Unique"},{"moveNumber":215,"tile":"1 Sara Unique"},{"moveNumber":225,"tile":"Any Boss Jar"},{"moveNumber":274,"tile":"Any Boss Jar"},{"moveNumber":298,"tile":"Any DK Ring"},{"moveNumber":319,"tile":"Belle's Folly"},{"moveNumber":324,"tile":"1 Superior Unique"},{"moveNumber":363,"tile":"1 Barrows Piece"},{"moveNumber":364,"tile":"1 Sara Unique"},{"moveNumber":368,"tile":"Any DK Ring"},{"moveNumber":369,"tile":"1 Glacial Temotli"},{"moveNumber":384,"tile":"1 Zulrah Unique"},{"moveNumber":470,"tile":"1 Arma Unique"},{"moveNumber":476,"tile":"1 Fedora"},{"moveNumber":485,"tile":"1 Sarachnis Cudgel"},{"moveNumber":498,"tile":"1 Zulrah Unique"},{"moveNumber":514,"tile":"1 Venator Shard"}]},"JVHN SUMMIT":{"team":"yellow","drops":[{"moveNumber":4,"tile":"1 Tormented Synapse"},{"moveNumber":49,"tile":"1 Vorkath Head"},{"moveNumber":189,"tile":"1 Perilous Moon Piece"},{"moveNumber":192,"tile":"1 Zenyte Shard"},{"moveNumber":195,"tile":"1 Barrows Piece"},{"moveNumber":370,"tile":"1 Tormented Synapse"},{"moveNumber":420,"tile":"1 Barrows Piece"},{"moveNumber":463,"tile":"1 Perilous Moon Piece"},{"moveNumber":467,"tile":"1 Barrows Piece"},{"moveNumber":516,"tile":"1 Perilous Moon Piece"},{"moveNumber":518,"tile":"Any DK Ring"},{"moveNumber":520,"tile":"1 Vorkath Head"}]},"Mantiss":{"team":"yellow","drops":[{"moveNumber":21,"tile":"1 KBD Heads"},{"moveNumber":33,"tile":"1 KBD Heads"},{"moveNumber":73,"tile":"1 Odium Shard 3"}]},"Dhampir007":{"team":"yellow","drops":[{"moveNumber":299,"tile":"1 Vorkath Head"},{"moveNumber":392,"tile":"Any DK Ring"},{"moveNumber":459,"tile":"1 Vorkath Head"},{"moveNumber":496,"tile":"Any DK Ring"}]},"Juice Solo":{"team":"yellow","drops":[]},"CringusKhan":{"team":"yellow","drops":[{"moveNumber":378,"tile":"1 Twinflame Piece"}]},"Pyros":{"team":"green","drops":[{"moveNumber":44,"tile":"Any Rune God Armour Piece"},{"moveNumber":61,"tile":"1 Zenyte Shard"},{"moveNumber":168,"tile":"1 Vorkath Head"},{"moveNumber":248,"tile":"Any Pet"},{"moveNumber":253,"tile":"1 Zulrah Unique"},{"moveNumber":275,"tile":"1 Vorkath Head"},{"moveNumber":294,"tile":"1 Sarachnis Cudgel"},{"moveNumber":297,"tile":"1 Bandos Unique"},{"moveNumber":303,"tile":"1 Sara Unique"},{"moveNumber":308,"tile":"1 Vorkath Head"},{"moveNumber":329,"tile":"1 Dark Bow"},{"moveNumber":347,"tile":"1 Twinflame Piece"},{"moveNumber":354,"tile":"1 Bandos Unique"},{"moveNumber":407,"tile":"1 Chromium Ingot"}]},"Yawp":{"team":"green","drops":[{"moveNumber":35,"tile":"1 Colosseum Unique"},{"moveNumber":46,"tile":"1 Nex Unique"},{"moveNumber":74,"tile":"1 Granite Longsword"},{"moveNumber":133,"tile":"1 Nox. Hally Piece"},{"moveNumber":141,"tile":"Any Pet"},{"moveNumber":149,"tile":"Any Raid Purple"},{"moveNumber":184,"tile":"1 Zammy Unique"},{"moveNumber":191,"tile":"Any Raid Purple"},{"moveNumber":212,"tile":"1 Glacial Temotli"},{"moveNumber":223,"tile":"1 Barrows Piece"},{"moveNumber":262,"tile":"1 Zammy Unique"},{"moveNumber":264,"tile":"1 Glacial Temotli"},{"moveNumber":285,"tile":"1 Drake Claw or Tooth"},{"moveNumber":286,"tile":"1 Granite Longsword"},{"moveNumber":311,"tile":"1 Zammy Unique"},{"moveNumber":322,"tile":"1 Glacial Temotli"},{"moveNumber":333,"tile":"1 Unsired"},{"moveNumber":334,"tile":"Any Pet"},{"moveNumber":404,"tile":"1 Abyssal Whip"},{"moveNumber":425,"tile":"1 Zenyte Shard"}]},"Big Baby Boy":{"team":"green","drops":[{"moveNumber":36,"tile":"1 Fedora"},{"moveNumber":69,"tile":"1 Mask Of Ranul"},{"moveNumber":102,"tile":"1 Dark Bow"},{"moveNumber":134,"tile":"1 Twinflame Piece"},{"moveNumber":147,"tile":"1 Bandos Unique"},{"moveNumber":151,"tile":"1 Sara Unique"},{"moveNumber":169,"tile":"1 Perilous Moon Piece"},{"moveNumber":171,"tile":"Any Rune God Armour Piece"},{"moveNumber":173,"tile":"1 Barrows Piece"},{"moveNumber":186,"tile":"1 Sarachnis Cudgel"},{"moveNumber":202,"tile":"1 Barrows Piece"},{"moveNumber":203,"tile":"1 Perilous Moon Piece"},{"moveNumber":224,"tile":"Any DK Ring"},{"moveNumber":265,"tile":"Any DK Ring"},{"moveNumber":278,"tile":"1 Doom Unique"},{"moveNumber":310,"tile":"1 Doom Unique"},{"moveNumber":337,"tile":"1 Claws Of Callisto"},{"moveNumber":346,"tile":"Any DK Ring"},{"moveNumber":360,"tile":"1 Sara Unique"},{"moveNumber":435,"tile":"1 Nightmare Unique"},{"moveNumber":508,"tile":"1 Doom Unique"},{"moveNumber":511,"tile":"1 Bandos Unique"}]},"C D C D C D":{"team":"green","drops":[{"moveNumber":101,"tile":"1 Virtus Piece"},{"moveNumber":123,"tile":"1 Zulrah Unique"},{"moveNumber":194,"tile":"Any Pet"},{"moveNumber":200,"tile":"1 Strange old lockpick"},{"moveNumber":251,"tile":"1 Strange old lockpick"},{"moveNumber":502,"tile":"1 Strange old lockpick"},{"moveNumber":506,"tile":"Any DK Ring"}]},"ImFatMatt":{"team":"green","drops":[{"moveNumber":219,"tile":"1 Perilous Moon Piece"}]},"Busta Beans":{"team":"green","drops":[{"moveNumber":16,"tile":"1 Barrows Piece"},{"moveNumber":26,"tile":"1 Unsired"},{"moveNumber":27,"tile":"Any Pet"},{"moveNumber":32,"tile":"1 Abyssal Whip"},{"moveNumber":71,"tile":"1 Dragon Chainbody"},{"moveNumber":104,"tile":"Any Rune God Armour Piece"},{"moveNumber":105,"tile":"1 Zammy Unique"},{"moveNumber":107,"tile":"1 Drake Claw or Tooth"},{"moveNumber":128,"tile":"1 Kraken Tentacle"},{"moveNumber":136,"tile":"1 Unsired"},{"moveNumber":138,"tile":"Any Boss Jar"},{"moveNumber":159,"tile":"1 Cerberus Crystal"},{"moveNumber":236,"tile":"1 Cerberus Crystal"},{"moveNumber":242,"tile":"1 Cerberus Crystal"},{"moveNumber":268,"tile":"1 Cerberus Crystal"},{"moveNumber":295,"tile":"1 Zulrah Unique"},{"moveNumber":352,"tile":"1 Zammy Unique"},{"moveNumber":398,"tile":"1 Zammy Unique"}]},"Ottertoebean":{"team":"green","drops":[{"moveNumber":3,"tile":"1 Fedora"},{"moveNumber":13,"tile":"1 Perilous Moon Piece"},{"moveNumber":64,"tile":"1 Perilous Moon Piece"},{"moveNumber":68,"tile":"1 Barrows Piece"},{"moveNumber":97,"tile":"1 Fedora"},{"moveNumber":103,"tile":"1 Barrows Piece"},{"moveNumber":440,"tile":"1 Barrows Piece"},{"moveNumber":449,"tile":"1 Barrows Piece"}]},"P4pa Swag":{"team":"green","drops":[{"moveNumber":492,"tile":"1 Abyssal Whip"}]},"IronVikings":{"team":"green","drops":[{"moveNumber":20,"tile":"Any Pet"},{"moveNumber":75,"tile":"1 Kraken Tentacle"},{"moveNumber":119,"tile":"1 Horn Of Plenty"},{"moveNumber":142,"tile":"1 Revenant Weapon"},{"moveNumber":146,"tile":"1 Blood Shard"},{"moveNumber":148,"tile":"1 KBD Heads"},{"moveNumber":161,"tile":"Any DK Ring"},{"moveNumber":188,"tile":"1 KBD Heads"},{"moveNumber":208,"tile":"1 Dark Bow"},{"moveNumber":213,"tile":"Any Raid Purple"},{"moveNumber":226,"tile":"Any Pet"},{"moveNumber":247,"tile":"1 Kraken Tentacle"},{"moveNumber":301,"tile":"1 Arma Unique"},{"moveNumber":314,"tile":"1 Barrows Piece"},{"moveNumber":362,"tile":"1 Blood Shard"},{"moveNumber":390,"tile":"1 Perilous Moon Piece"},{"moveNumber":401,"tile":"1 Vorkath Head"},{"moveNumber":421,"tile":"1 Champion Scroll"},{"moveNumber":447,"tile":"1 Yama Unique"}]},"GingerBihh":{"team":"green","drops":[]},"Zodiac Zack":{"team":"green","drops":[]},"xxsnoop":{"team":"green","drops":[]}};
-
-let modalPlayer = null;
-let playerModalEls = null;
-
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[char]));
-}
-
-function ensurePlayerModal() {
-  if (playerModalEls) return playerModalEls;
-
-  const backdrop = document.createElement("div");
-  backdrop.className = "player-modal-backdrop";
-  backdrop.setAttribute("aria-hidden", "true");
-  backdrop.innerHTML = `
-    <div class="player-modal" role="dialog" aria-modal="true" aria-labelledby="playerModalTitle">
-      <div class="player-modal-head">
-        <div>
-          <div id="playerModalTitle" class="player-modal-title">Player</div>
-          <div id="playerModalSub" class="player-modal-sub">Drops received during the event</div>
+  <main class="shell" aria-labelledby="maintenance-title">
+    <div class="layout">
+      <section class="copy">
+        <h1 id="maintenance-title">
+          <span class="brand">Mantis OSRS</span>
+          Site Under Construction
+        </h1>
+        <p class="message">We’re making improvements to the site and will be back soon.</p>
+        <div class="status" aria-label="Website maintenance is in progress">
+          <span class="status-dot" aria-hidden="true"></span>
+          Work in progress
         </div>
-        <button id="playerModalClose" class="player-modal-close" type="button">Close</button>
+      </section>
+
+      <div class="mantis-wrap" role="img" aria-label="Animated mantis wearing a blue partyhat and holding a hammer">
+        <svg class="mantis" viewBox="0 0 220 220" overflow="visible" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="mantisBody" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d7ffb8"/>
+              <stop offset=".45" stop-color="#7dca63"/>
+              <stop offset="1" stop-color="#2f6f38"/>
+            </linearGradient>
+            <linearGradient id="mantisDark" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#6eb958"/>
+              <stop offset="1" stop-color="#17361f"/>
+            </linearGradient>
+            <linearGradient id="hatBlue" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#607cff"/>
+              <stop offset=".42" stop-color="#173fd4"/>
+              <stop offset="1" stop-color="#07146d"/>
+            </linearGradient>
+            <linearGradient id="hatBlueDark" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#244adf"/>
+              <stop offset="1" stop-color="#060c4b"/>
+            </linearGradient>
+            <linearGradient id="hammerMetal" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d8d6d4"/>
+              <stop offset=".45" stop-color="#8d898a"/>
+              <stop offset="1" stop-color="#4a474b"/>
+            </linearGradient>
+            <linearGradient id="hammerWood" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#8a5b1f"/>
+              <stop offset=".5" stop-color="#5e370d"/>
+              <stop offset="1" stop-color="#321b06"/>
+            </linearGradient>
+          </defs>
+
+          <g class="mantis-bob" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M96 45 C80 25 62 17 42 21 C60 25 72 31 80 41" stroke="#75bf5d" stroke-width="4"/>
+            <path d="M124 45 C140 25 158 17 178 21 C160 25 148 31 140 41" stroke="#75bf5d" stroke-width="4"/>
+
+            <path d="M94 89 C73 96 59 111 50 130 C43 145 30 152 17 147 M50 130 L32 120 L21 103 M33 120 L20 136" stroke="url(#mantisBody)" stroke-width="8"/>
+
+            <g class="hammer-arm">
+              <path d="M126 89 C147 96 162 110 172 127 C180 140 190 145 200 139" stroke="url(#mantisBody)" stroke-width="8"/>
+              <g transform="rotate(42 184 108)">
+                <rect x="176.5" y="105" width="9" height="43" rx="4.5" fill="url(#hammerWood)" stroke="#2c1806" stroke-width="2"/>
+                <path d="M179 108 L183 108 L183 145 L179 145 Z" fill="#a36e2a" opacity=".42"/>
+                <path d="M158 96 L196 96 L204 104 L196 114 L158 114 L151 106 Z" fill="url(#hammerMetal)" stroke="#353338" stroke-width="3"/>
+                <path d="M159 99 L191 99" stroke="#eeeae7" stroke-width="2" opacity=".55"/>
+                <path d="M196 98 L201 104 L195 111" fill="none" stroke="#68646a" stroke-width="2"/>
+              </g>
+            </g>
+
+            <path d="M108 63 C96 84 92 109 95 135 C97 156 101 176 110 199 C119 176 123 156 125 135 C128 109 124 84 112 63 Z" fill="url(#mantisBody)" stroke="#8bd373" stroke-width="4"/>
+
+            <g>
+              <path d="M110 65 C95 60 87 48 91 34 C96 19 124 19 129 34 C133 48 125 60 110 65 Z" fill="url(#mantisDark)" stroke="#91d879" stroke-width="4"/>
+              <ellipse class="mantis-eye" cx="98" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
+              <ellipse class="mantis-eye" cx="122" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
+              <path d="M103 54 Q110 59 117 54" stroke="#16361e" stroke-width="3"/>
+            </g>
+
+            <g class="party-hat">
+              <path d="M88 21 L94 -6 L105 10 L113 -13 L121 9 L133 -7 L138 22 Q113 30 88 21 Z" fill="url(#hatBlue)" stroke="#758cff" stroke-width="3"/>
+              <path d="M89 21 Q113 31 137 22 L136 28 Q113 36 90 27 Z" fill="url(#hatBlueDark)" stroke="#0a217f" stroke-width="2.5"/>
+              <path d="M91 22 Q113 29 136 22" stroke="#8aa0ff" stroke-width="2.5" opacity=".8"/>
+            </g>
+
+            <path d="M98 133 C83 144 73 163 64 191" stroke="#448f42" stroke-width="7"/>
+            <path d="M122 133 C137 144 147 163 156 191" stroke="#448f42" stroke-width="7"/>
+          </g>
+        </svg>
       </div>
-      <div id="playerModalStats" class="player-modal-stats"></div>
-      <div id="playerModalList" class="player-modal-list"></div>
     </div>
-  `;
-  document.body.appendChild(backdrop);
-
-  const elements = {
-    backdrop,
-    title: backdrop.querySelector("#playerModalTitle"),
-    sub: backdrop.querySelector("#playerModalSub"),
-    stats: backdrop.querySelector("#playerModalStats"),
-    list: backdrop.querySelector("#playerModalList"),
-    close: backdrop.querySelector("#playerModalClose")
-  };
-
-  elements.close.addEventListener("click", closePlayerModal);
-  backdrop.addEventListener("click", event => {
-    if (event.target === backdrop) closePlayerModal();
-  });
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && modalPlayer) closePlayerModal();
-  });
-
-  playerModalEls = elements;
-  return elements;
-}
-
-function renderPlayerModal() {
-  if (!modalPlayer) return;
-
-  const elements = ensurePlayerModal();
-  const record = PLAYER_DROP_DATA[modalPlayer];
-  const team = record ? record.team : "unknown";
-  const drops = record ? record.drops : [];
-  const teamLabel = team.charAt(0).toUpperCase() + team.slice(1);
-
-  elements.title.textContent = modalPlayer;
-  elements.sub.textContent = `${teamLabel} team · all drops received during the event`;
-  elements.stats.innerHTML = `<div><strong>Total drops:</strong> ${drops.length}</div>`;
-
-  if (!drops.length) {
-    elements.list.innerHTML = `<div class="player-modal-empty">No recorded drops during the event.</div>`;
-    return;
-  }
-
-  elements.list.innerHTML = drops.map((drop, index) => `
-    <div class="player-modal-row">
-      <div><strong>${index + 1}.</strong> ${escapeHtml(drop.tile)}</div>
-      <div class="player-modal-move">Move ${drop.moveNumber}</div>
-    </div>
-  `).join("");
-}
-
-function openPlayerModal(player) {
-  if (!PLAYER_DROP_DATA[player]) return;
-  modalPlayer = player;
-  const elements = ensurePlayerModal();
-  renderPlayerModal();
-  elements.backdrop.classList.add("show");
-  elements.backdrop.setAttribute("aria-hidden", "false");
-  elements.close.focus();
-}
-
-function closePlayerModal() {
-  modalPlayer = null;
-  if (!playerModalEls) return;
-  playerModalEls.backdrop.classList.remove("show");
-  playerModalEls.backdrop.setAttribute("aria-hidden", "true");
-}
-
-document.addEventListener("click", event => {
-  const button = event.target.closest(".player-name-btn");
-  if (!button) return;
-  openPlayerModal(button.dataset.player);
-});
-
-</script>
+  </main>
 </body>
 </html>
