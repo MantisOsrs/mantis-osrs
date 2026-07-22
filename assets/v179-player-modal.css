@@ -1,0 +1,73 @@
+/* Mantis OSRS v1.79 — keep player drop dialogs clear of the sticky navigation. */
+
+/* Desktop/tablet: reserve the navigation row above the dialog. */
+.player-modal-backdrop{
+  z-index:10000!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  padding:76px 20px 20px!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+}
+
+.player-modal{
+  width:min(760px,92vw)!important;
+  max-height:calc(100vh - 96px)!important;
+  max-height:calc(100dvh - 96px)!important;
+  margin:0 auto!important;
+  display:grid!important;
+  grid-template-rows:auto auto minmax(0,1fr)!important;
+  overflow:hidden!important;
+}
+
+.player-modal-head,
+.player-modal-stats{
+  flex:0 0 auto;
+}
+
+.player-modal-list{
+  min-height:0!important;
+  overflow:auto!important;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* The dialog must remain above the sticky site navigation in every stacking context. */
+.player-modal-backdrop.show{
+  z-index:10000!important;
+}
+
+@media(max-width:680px){
+  /* The compact navigation wraps onto a second row. */
+  .player-modal-backdrop{
+    padding:102px 10px 12px!important;
+  }
+  .player-modal{
+    width:min(760px,calc(100vw - 20px))!important;
+    max-height:calc(100vh - 114px)!important;
+    max-height:calc(100dvh - 114px)!important;
+  }
+}
+
+@media(max-width:430px){
+  /* The page label creates an additional navigation row on narrow phones. */
+  .player-modal-backdrop{
+    padding-top:136px!important;
+  }
+  .player-modal{
+    max-height:calc(100vh - 148px)!important;
+    max-height:calc(100dvh - 148px)!important;
+  }
+}
+
+@media(max-height:560px) and (min-width:681px){
+  /* Short landscape screens still retain a clear gap below the navigation. */
+  .player-modal-backdrop{
+    padding-top:66px!important;
+    padding-bottom:10px!important;
+  }
+  .player-modal{
+    max-height:calc(100vh - 76px)!important;
+    max-height:calc(100dvh - 76px)!important;
+  }
+}
