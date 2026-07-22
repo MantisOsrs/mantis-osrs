@@ -1,0 +1,88 @@
+/* Mantis OSRS v1.71 — Bingo rules, shared section typography, and restrained homepage frame polish. */
+
+/* Use the experimental serif identity for Final Board without changing existing sizing. */
+body.v170-event-polish .event-section-title{
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-weight:500!important;
+}
+
+/* Match the Tile Wars replay action to the Final Scoreboard heading typography and size. */
+body.v170-event-polish .board-page-nav a{
+  display:inline-flex;
+  align-items:center;
+  gap:.38em;
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-size:17px!important;
+  font-weight:500!important;
+  letter-spacing:-.01em!important;
+  text-transform:uppercase!important;
+}
+body.v170-event-polish .board-page-nav a::after{
+  content:none!important;
+}
+body.v170-event-polish .v171-replay-arrow{
+  flex:0 0 auto;
+  font-size:1em;
+  line-height:1;
+}
+
+/* Welcome panel: clean interior, restrained glow in the double-frame channel. */
+body.v160-home .welcome-panel{
+  overflow:hidden;
+  box-shadow:
+    0 16px 38px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.03)!important;
+}
+body.v160-home .welcome-panel::after{
+  border-color:rgba(157,216,135,.13)!important;
+  box-shadow:0 0 13px rgba(121,218,98,.09)!important;
+}
+body.v160-home .welcome-copy h2{
+  text-shadow:none!important;
+}
+body.v160-home .welcome-heading-row::after{
+  box-shadow:none!important;
+}
+
+/* Clipped-ring accent matching the restrained event-header ornament. */
+body.v160-home .v171-welcome-ornament{
+  position:absolute!important;
+  z-index:0!important;
+  top:-58px;
+  right:-53px;
+  width:178px;
+  height:178px;
+  pointer-events:none;
+  opacity:.70;
+}
+body.v160-home .v171-welcome-ornament::before{
+  content:"";
+  position:absolute;
+  inset:38px;
+  border:1px solid rgba(151,207,126,.15);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 22px rgba(151,207,126,.026),
+    0 0 0 44px rgba(151,207,126,.018);
+}
+body.v160-home .v171-welcome-ornament::after{
+  content:"";
+  position:absolute;
+  right:48px;
+  top:91px;
+  width:76px;
+  height:1px;
+  transform:rotate(-43deg);
+  transform-origin:right center;
+  background:linear-gradient(90deg,transparent,rgba(151,207,126,.18));
+}
+
+@media(max-width:760px){
+  body.v160-home .v171-welcome-ornament{
+    top:-48px;
+    right:-58px;
+    width:150px;
+    height:150px;
+    opacity:.56;
+  }
+}

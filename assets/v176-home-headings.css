@@ -1,0 +1,68 @@
+/* Mantis OSRS v1.76 — balanced short rules around homepage section headings. */
+
+body.v160-home main > section > .section-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:max-content;
+  max-width:100%;
+  margin-bottom:20px;
+  padding-bottom:0;
+  color:#e8f0e5;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.08rem;
+  font-weight:500;
+  line-height:1.15;
+  letter-spacing:.105em;
+  text-shadow:
+    0 0 10px rgba(190,235,165,.17),
+    0 1px 0 rgba(0,0,0,.55);
+}
+
+body.v160-home main > section > .section-title > span{
+  position:relative;
+  flex:0 0 auto;
+  display:inline-block;
+  white-space:nowrap;
+}
+
+body.v160-home main > section > .section-title::before,
+body.v160-home main > section > .section-title::after{
+  content:"";
+  flex:0 0 54px;
+  width:54px;
+  height:1px;
+  box-shadow:0 0 8px rgba(121,218,98,.08);
+}
+
+body.v160-home main > section > .section-title::before{
+  background:linear-gradient(90deg,transparent,rgba(134,202,112,.45));
+}
+
+body.v160-home main > section > .section-title::after{
+  background:linear-gradient(90deg,rgba(134,202,112,.45),transparent);
+}
+
+/* Explicitly remove the v1.75 swooping underline. */
+body.v160-home main > section > .section-title > span::after{
+  content:none;
+  display:none;
+}
+
+@media(max-width:620px){
+  body.v160-home main > section > .section-title{
+    gap:9px;
+    margin-bottom:17px;
+    font-size:.97rem;
+    letter-spacing:.09em;
+    text-shadow:
+      0 0 8px rgba(190,235,165,.14),
+      0 1px 0 rgba(0,0,0,.5);
+  }
+
+  body.v160-home main > section > .section-title::before,
+  body.v160-home main > section > .section-title::after{
+    flex-basis:36px;
+    width:36px;
+  }
+}

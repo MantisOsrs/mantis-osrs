@@ -1,0 +1,42 @@
+/* Mantis OSRS v1.74 — compact homepage section-heading treatment. */
+
+body.v160-home main > section > .section-title{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  width:max-content;
+  max-width:100%;
+  margin-bottom:18px;
+  color:#e6ede3;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.05rem;
+  font-weight:500;
+  line-height:1.15;
+  letter-spacing:.105em;
+  text-shadow:none;
+}
+
+body.v160-home main > section > .section-title::after{
+  content:"";
+  flex:0 0 68px;
+  width:68px;
+  height:7px;
+  background:
+    radial-gradient(circle at right center,rgba(174,225,151,.72) 0 2px,transparent 2.5px),
+    linear-gradient(90deg,rgba(134,202,112,.50) 0,rgba(134,202,112,.26) 78%,transparent 78%);
+  filter:drop-shadow(0 0 3px rgba(121,218,98,.07));
+}
+
+@media(max-width:620px){
+  body.v160-home main > section > .section-title{
+    gap:10px;
+    margin-bottom:15px;
+    font-size:.94rem;
+    letter-spacing:.09em;
+  }
+
+  body.v160-home main > section > .section-title::after{
+    flex-basis:48px;
+    width:48px;
+  }
+}

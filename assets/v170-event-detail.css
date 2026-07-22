@@ -1,0 +1,222 @@
+/* Mantis OSRS v1.70 — event identity, rules, and restrained header-frame polish. */
+
+/* Current-page context beside the existing home/brand button. */
+body.v170-event-polish .v170-nav-context{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+}
+body.v170-event-polish .v170-page-label{
+  min-width:0;
+  padding:4px 0 4px 14px;
+  border-left:1px solid rgba(134,202,112,.34);
+  line-height:1;
+}
+body.v170-event-polish .v170-page-label span,
+body.v170-event-polish .v170-page-label strong{
+  display:block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+body.v170-event-polish .v170-page-label span{
+  color:#718076;
+  font:800 .52rem/1 Arial,Helvetica,sans-serif;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+body.v170-event-polish .v170-page-label strong{
+  margin-top:5px;
+  color:#dce8d7;
+  font:800 .62rem/1 Arial,Helvetica,sans-serif;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+
+/* Match the homepage archive-label typography while retaining header placement. */
+body.v170-event-polish .event-page-date{
+  color:#a7b9a3!important;
+  font:700 10px/1.15 Arial,Helvetica,sans-serif!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase!important;
+}
+
+/* Experimental serif identity, with stable-page sizing left untouched. */
+body.v170-event-polish .event-page-header h1,
+body.v170-event-polish .event-page-header .original-board-title{
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-weight:500!important;
+  letter-spacing:-.025em!important;
+}
+body.v170-event-polish .board-scoreboard-panel .teams-title{
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-weight:500!important;
+  letter-spacing:-.01em!important;
+}
+
+/* Clean header interior; glow is confined to the narrow double-frame channel. */
+body.v170-event-polish.v161-event-page .event-page-header{
+  background:linear-gradient(145deg,#151d17,#101610 72%)!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.19)!important;
+}
+body.v170-event-polish.v161-event-page .event-page-header::before{
+  inset:8px!important;
+  border:1px solid rgba(157,216,135,.14)!important;
+  background:transparent!important;
+  box-shadow:0 0 13px rgba(121,218,98,.10)!important;
+}
+
+/* Simple clipped-ring ornament inspired by the experimental manifesto panel. */
+body.v170-event-polish .v170-header-ornament{
+  position:absolute!important;
+  z-index:0!important;
+  top:-58px;
+  right:-53px;
+  width:178px;
+  height:178px;
+  pointer-events:none;
+  opacity:.72;
+}
+body.v170-event-polish .v170-header-ornament::before{
+  content:"";
+  position:absolute;
+  inset:38px;
+  border:1px solid rgba(151,207,126,.15);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 22px rgba(151,207,126,.026),
+    0 0 0 44px rgba(151,207,126,.018);
+}
+body.v170-event-polish .v170-header-ornament::after{
+  content:"";
+  position:absolute;
+  right:48px;
+  top:91px;
+  width:76px;
+  height:1px;
+  transform:rotate(-43deg);
+  transform-origin:right center;
+  background:linear-gradient(90deg,transparent,rgba(151,207,126,.18));
+}
+
+/* Shared collapsed event-information panels, used for rules and existing Tile Wars data. */
+body.v170-event-polish .event-info-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:start;
+  gap:10px;
+  margin-top:15px;
+  padding-top:14px;
+  border-top:1px solid rgba(150,214,128,.12);
+}
+body.v170-event-polish .event-info-grid.v170-single-info{
+  grid-template-columns:minmax(0,1fr);
+}
+body.v170-event-polish .event-info-panel{
+  min-width:0;
+  border:1px solid #455c49!important;
+  border-radius:0!important;
+  background:#0d1410!important;
+  box-shadow:none!important;
+}
+body.v170-event-polish .event-info-panel summary{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-height:42px;
+  padding:10px 12px;
+  color:#d3f3bd;
+  font:800 11px/1.2 Arial,Helvetica,sans-serif;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+}
+body.v170-event-polish .event-info-panel summary::-webkit-details-marker{display:none}
+body.v170-event-polish .event-info-panel summary::after{
+  content:"+";
+  flex:0 0 auto;
+  color:#9fbe94;
+  font-size:18px;
+  font-weight:500;
+  line-height:1;
+  transition:transform .16s ease;
+}
+body.v170-event-polish .event-info-panel[open] summary{
+  border-bottom:1px solid rgba(150,214,128,.12);
+  background:#111b14;
+}
+body.v170-event-polish .event-info-panel[open] summary::after{transform:rotate(45deg)}
+body.v170-event-polish .event-info-panel summary:hover,
+body.v170-event-polish .event-info-panel summary:focus-visible{
+  color:#efffe7;
+  background:#142018;
+  outline:none;
+}
+body.v170-event-polish .event-info-content{
+  padding:12px 13px 14px;
+  color:#c2cec0;
+  font-size:12px;
+  line-height:1.58;
+}
+body.v170-event-polish .event-info-content ul,
+body.v170-event-polish .event-info-content ol{
+  margin:0;
+  padding-left:20px;
+}
+body.v170-event-polish .event-info-content li + li{margin-top:8px}
+body.v170-event-polish .event-info-content strong{color:#eef5eb}
+body.v170-event-polish .event-info-subheading,
+body.v170-event-polish .v170-rules-signoff{
+  margin:14px 0 0;
+  color:#a9c99d;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+
+@media(max-width:760px){
+  body.v170-event-polish .event-info-grid{
+    grid-template-columns:1fr;
+    gap:8px;
+    margin-top:13px;
+    padding-top:12px;
+  }
+  body.v170-event-polish .event-info-panel summary{
+    min-height:44px;
+    padding:11px 12px;
+  }
+  body.v170-event-polish .v170-header-ornament{
+    top:-48px;
+    right:-58px;
+    width:150px;
+    height:150px;
+    opacity:.58;
+  }
+}
+@media(max-width:680px){
+  body.v170-event-polish .v170-nav-context{
+    width:100%;
+    gap:10px;
+  }
+  body.v170-event-polish .v170-page-label{
+    flex:1 1 auto;
+    padding-left:10px;
+  }
+}
+@media(max-width:430px){
+  body.v170-event-polish .v170-nav-context{
+    flex-wrap:wrap;
+  }
+  body.v170-event-polish .v170-page-label{
+    width:100%;
+    padding:7px 8px 3px;
+    border-left:0;
+    border-top:1px solid rgba(134,202,112,.25);
+  }
+}

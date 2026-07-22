@@ -1,380 +1,386 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow, noarchive">
-  <meta name="theme-color" content="#0a0e0b">
-  <title>Site Under Construction — Mantis OSRS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Coming Soon | Mantis OSRS</title>
   <style>
-    :root{
-      color-scheme:dark;
-      --bg:#070a08;
-      --panel:#141d16;
-      --panel-soft:#101712;
-      --line:#35463a;
-      --line-soft:rgba(151,201,132,.16);
-      --text:#eef4eb;
-      --muted:#a9b5a7;
-      --sage:#b9e7a5;
-      --glow:rgba(115,203,92,.17);
+    :root {
+      --bg:#090e0b;
+      --panel:#151f18;
+      --panel-raised:#1a271d;
+      --line:#344a38;
+      --line-bright:rgba(134,202,112,.62);
+      --text:#edf2ed;
+      --muted:#9eac9d;
+      --green:#86ca70;
+      --green-pale:#c8ecb3;
     }
 
-    *{box-sizing:border-box}
+    * { box-sizing:border-box; }
 
-    html{min-height:100%}
+    html { scroll-behavior:smooth; }
 
-    body{
+    body {
       margin:0;
       min-height:100vh;
-      display:grid;
-      place-items:center;
-      overflow-x:hidden;
       color:var(--text);
-      font-family:Arial,Helvetica,sans-serif;
       background:
-        radial-gradient(circle at 16% 20%,rgba(112,188,88,.12),transparent 25rem),
-        radial-gradient(circle at 84% 78%,rgba(173,224,148,.07),transparent 22rem),
-        linear-gradient(180deg,#050706 0%,#090c0a 45%,#0d120f 100%);
-      padding:24px;
+        radial-gradient(circle at 8% 18%,rgba(87,148,73,.1),transparent 25rem),
+        radial-gradient(circle at 92% 72%,rgba(87,148,73,.07),transparent 29rem),
+        linear-gradient(180deg,#0e1510 0%,#090e0b 100%);
+      font-family:Arial,Helvetica,sans-serif;
+      overflow-x:hidden;
     }
 
     body::before,
-    body::after{
+    body::after {
       content:"";
       position:fixed;
-      top:-20vh;
-      bottom:-20vh;
-      width:48px;
+      top:0;
+      bottom:0;
+      width:1px;
       pointer-events:none;
-      filter:blur(9px);
-      opacity:.62;
-      background:linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(165,255,164,0) 12%,
-        rgba(165,255,164,.06) 28%,
-        rgba(120,255,143,.15) 42%,
-        rgba(226,255,232,.50) 50%,
-        rgba(120,255,143,.15) 58%,
-        rgba(165,255,164,.06) 72%,
-        rgba(165,255,164,0) 88%,
-        transparent 100%
-      );
-      animation:streakDrift 9s ease-in-out infinite;
+      background:linear-gradient(180deg,transparent,rgba(134,202,112,.28),transparent);
+      box-shadow:0 0 24px rgba(121,218,98,.12);
     }
 
-    body::before{left:7%}
-    body::after{right:7%;animation-delay:-3.4s;animation-duration:11s}
+    body::before { left:4vw; }
+    body::after { right:4vw; }
 
-    .shell{
+    .wrap {
+      width:min(1180px,calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    header {
+      min-height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .brand {
+      display:inline-flex;
+      align-items:center;
+      min-height:34px;
+      padding:8px 11px;
+      border:1px solid rgba(134,202,112,.58);
+      color:var(--text);
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:.75rem;
+      font-weight:800;
+      box-shadow:0 0 10px rgba(121,218,98,.07),inset 0 0 10px rgba(121,218,98,.025);
+    }
+
+
+    .site-links {
+      display:flex;
+      align-items:center;
+      gap:0;
+    }
+
+    .site-links a {
+      color:var(--muted);
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.62rem;
+      font-weight:800;
+      transition:color .18s ease;
+    }
+
+    .site-links a:hover,
+    .site-links a[aria-current="page"] {
+      color:var(--green-pale);
+    }
+
+    .site-links a + a {
       position:relative;
-      isolation:isolate;
-      width:min(760px,100%);
-      padding:clamp(30px,6vw,58px);
+      margin-left:18px;
+      padding-left:18px;
+    }
+
+    .site-links a + a::before {
+      content:"";
+      position:absolute;
+      left:0;
+      top:50%;
+      width:1px;
+      height:15px;
+      transform:translateY(-50%);
+      background:var(--line-bright);
+      box-shadow:0 0 7px rgba(121,218,98,.15);
+    }
+
+    main {
+      min-height:calc(100vh - 65px);
+      display:grid;
+      place-items:center;
+      padding:70px 0 88px;
+    }
+
+    .coming-soon {
+      position:relative;
+      width:min(920px,100%);
+      min-height:430px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 270px;
+      align-items:center;
+      gap:44px;
+      padding:54px 58px;
+      overflow:hidden;
       border:1px solid var(--line);
       background:
-        linear-gradient(145deg,rgba(255,255,255,.018),transparent 42%),
-        linear-gradient(180deg,var(--panel) 0%,var(--panel-soft) 100%);
+        linear-gradient(135deg,rgba(255,255,255,.032),transparent 42%),
+        linear-gradient(180deg,rgba(27,40,30,.98),rgba(18,27,21,.99));
       box-shadow:
-        0 26px 72px rgba(0,0,0,.40),
-        0 0 44px rgba(111,190,89,.055),
-        inset 0 0 0 1px rgba(194,230,181,.035);
+        0 24px 55px rgba(0,0,0,.27),
+        inset 0 1px 0 rgba(255,255,255,.025),
+        0 0 34px rgba(121,218,98,.04);
     }
 
-    .shell::before{
+    .coming-soon::before {
       content:"";
       position:absolute;
-      inset:9px;
-      z-index:-1;
-      border:1px solid var(--line-soft);
+      inset:14px;
       pointer-events:none;
+      border:1px solid rgba(134,202,112,.08);
     }
 
-    .shell::after{
-      content:"";
-      position:absolute;
-      left:clamp(30px,6vw,58px);
-      right:clamp(30px,6vw,58px);
-      top:0;
-      height:1px;
-      background:linear-gradient(90deg,transparent,rgba(198,242,179,.52),transparent);
-      box-shadow:0 0 16px var(--glow);
+    .copy,
+    .character-stage {
+      position:relative;
+      z-index:1;
     }
 
-    .layout{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 184px;
-      align-items:center;
-      gap:clamp(30px,6vw,58px);
-    }
-
-    .copy{min-width:0}
-
-    h1{
-      margin:0;
-      max-width:520px;
-      font-family:Georgia,"Times New Roman",serif;
-      font-size:clamp(2.15rem,7vw,4.55rem);
-      font-weight:600;
-      line-height:.96;
-      letter-spacing:-.045em;
-      text-wrap:balance;
-    }
-
-    .brand{
-      display:block;
-      margin-bottom:11px;
-      color:var(--sage);
-      font-family:Arial,Helvetica,sans-serif;
-      font-size:clamp(.82rem,2vw,1.02rem);
-      font-weight:700;
-      letter-spacing:.22em;
-      line-height:1.2;
-      text-transform:uppercase;
-    }
-
-    .message{
-      max-width:480px;
-      margin:24px 0 0;
-      color:var(--muted);
-      font-size:clamp(.96rem,2vw,1.06rem);
-      line-height:1.7;
-    }
-
-    .status{
+    .status {
       display:inline-flex;
       align-items:center;
       gap:9px;
-      margin-top:28px;
-      padding:9px 12px;
-      border:1px solid rgba(145,196,127,.17);
-      background:rgba(5,9,6,.28);
-      color:#c9d5c6;
-      font-size:.72rem;
-      letter-spacing:.1em;
+      margin-bottom:18px;
+      color:var(--green-pale);
+      font-size:.62rem;
+      font-weight:900;
+      letter-spacing:.18em;
       text-transform:uppercase;
     }
 
-    .status-dot{
-      width:6px;
-      height:6px;
+    .status::before {
+      content:"";
+      width:7px;
+      height:7px;
       border-radius:50%;
-      background:#9ed889;
-      box-shadow:0 0 10px rgba(158,216,137,.6);
-      animation:pulse 2.4s ease-in-out infinite;
+      background:var(--green);
+      box-shadow:0 0 10px rgba(134,202,112,.55);
+      animation:pulse 2.2s ease-in-out infinite;
     }
 
-    .mantis-wrap{
-      position:relative;
-      display:grid;
-      place-items:center;
-      min-height:190px;
-      border-left:1px solid rgba(164,205,146,.16);
+    h1 {
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(3.5rem,8vw,6.2rem);
+      font-weight:400;
+      letter-spacing:-.06em;
+      line-height:.88;
     }
 
-    .mantis-wrap::before,
-    .mantis-wrap::after{
+    h2 {
+      margin:16px 0 15px;
+      color:var(--green-pale);
+      font-size:clamp(1.1rem,2vw,1.45rem);
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .copy p {
+      max-width:520px;
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.75;
+    }
+
+    .home-link {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:27px;
+      padding:10px 14px;
+      border:1px solid rgba(134,202,112,.4);
+      color:var(--green-pale);
+      background:rgba(134,202,112,.04);
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.62rem;
+      font-weight:900;
+      transition:background .18s ease,border-color .18s ease,transform .18s ease;
+    }
+
+    .home-link:hover {
+      transform:translateY(-1px);
+      border-color:var(--green);
+      background:rgba(134,202,112,.08);
+    }
+
+    .character-stage {
+      min-height:290px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+    }
+
+    .character-stage::before {
       content:"";
       position:absolute;
-      left:-1px;
-      width:1px;
-      height:34px;
-      background:linear-gradient(transparent,rgba(204,239,190,.70),transparent);
-      box-shadow:0 0 12px rgba(127,203,105,.17);
-    }
-
-    .mantis-wrap::before{top:0}
-    .mantis-wrap::after{bottom:0}
-
-    .mantis{
-      width:166px;
-      height:166px;
-      overflow:visible;
-      transform:translateY(8px);
-      filter:drop-shadow(0 9px 15px rgba(0,0,0,.34));
-    }
-
-    .mantis-bob{
-      animation:mantisBob 3.1s ease-in-out infinite;
-      transform-box:fill-box;
+      left:50%;
+      bottom:5px;
+      width:210px;
+      height:210px;
+      transform:translateX(-50%);
+      border:1px solid rgba(134,202,112,.15);
+      background:
+        radial-gradient(circle,rgba(134,202,112,.11),transparent 64%),
+        linear-gradient(45deg,transparent 49%,rgba(134,202,112,.05) 50%,transparent 51%),
+        linear-gradient(-45deg,transparent 49%,rgba(134,202,112,.05) 50%,transparent 51%);
+      box-shadow:0 0 30px rgba(121,218,98,.035);
       transform-origin:center;
+      animation:frameFloat 4s ease-in-out infinite;
     }
 
-    .mantis-eye{
-      animation:mantisBlink 5.4s infinite;
-      transform-box:fill-box;
-      transform-origin:center;
+    .character-stage::after {
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:0;
+      width:170px;
+      height:18px;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:rgba(0,0,0,.42);
+      filter:blur(7px);
     }
 
-    .party-hat{
-      animation:hatBounce 3.1s ease-in-out infinite;
-      transform-box:fill-box;
-      transform-origin:center bottom;
+    .character-stage img {
+      position:relative;
+      z-index:1;
+      width:auto;
+      height:280px;
+      image-rendering:pixelated;
+      filter:drop-shadow(0 16px 18px rgba(0,0,0,.45));
+      animation:characterIdle 3.7s ease-in-out infinite;
     }
 
-    .hammer-arm{
-      animation:hammerSwing 2.15s ease-in-out infinite;
-      transform-box:fill-box;
-      transform-origin:18% 82%;
+
+    @keyframes pulse {
+      0%,100% { opacity:.55; transform:scale(.88); }
+      50% { opacity:1; transform:scale(1.12); }
     }
 
-    @keyframes streakDrift{
-      0%,100%{transform:translateY(-7%)}
-      50%{transform:translateY(7%)}
+    @keyframes characterIdle {
+      0%,100% { transform:translateY(0); }
+      50% { transform:translateY(-5px); }
     }
 
-    @keyframes pulse{
-      0%,100%{opacity:.65;transform:scale(.88)}
-      50%{opacity:1;transform:scale(1.08)}
+    @keyframes frameFloat {
+      0%,100% { transform:translateX(-50%) rotate(0deg); }
+      50% { transform:translateX(-50%) rotate(.8deg); }
     }
 
-    @keyframes mantisBob{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-4px)}
-    }
+    @media (max-width:760px) {
+      .wrap { width:min(100% - 28px,1180px); }
 
-    @keyframes mantisBlink{
-      0%,45%,51%,100%{transform:scaleY(1)}
-      47%,49%{transform:scaleY(.12)}
-    }
-
-    @keyframes hatBounce{
-      0%,100%{transform:rotate(-1.5deg) translateY(0)}
-      50%{transform:rotate(1.5deg) translateY(-1.5px)}
-    }
-
-    @keyframes hammerSwing{
-      0%,100%{transform:rotate(-9deg)}
-      45%{transform:rotate(15deg)}
-      62%{transform:rotate(8deg)}
-    }
-
-    @media (max-width:650px){
-      body{padding:14px}
-      .shell{padding:36px 30px 32px}
-      .shell::before{inset:7px}
-      .layout{grid-template-columns:1fr;gap:30px}
-      .mantis-wrap{
-        min-height:142px;
-        border-left:0;
-        border-top:1px solid rgba(164,205,146,.16);
+      header {
+        min-height:74px;
+        align-items:flex-start;
+        padding:14px 0;
       }
-      .mantis-wrap::before,
-      .mantis-wrap::after{
-        top:-1px;
-        bottom:auto;
-        width:34px;
-        height:1px;
-        background:linear-gradient(90deg,transparent,rgba(204,239,190,.70),transparent);
+
+      .site-links {
+        flex-wrap:wrap;
+        justify-content:flex-end;
+        row-gap:8px;
       }
-      .mantis-wrap::before{left:0}
-      .mantis-wrap::after{left:auto;right:0}
-      .mantis-wrap{min-height:154px}
-      .mantis{width:138px;height:138px;transform:translateY(7px)}
+
+      .site-links a + a {
+        margin-left:12px;
+        padding-left:12px;
+      }
+
+      main { padding:38px 0 54px; }
+
+      .coming-soon {
+        grid-template-columns:1fr;
+        gap:24px;
+        padding:40px 30px 28px;
+      }
+
+      .character-stage {
+        min-height:235px;
+      }
+
+      .character-stage::before {
+        width:185px;
+        height:185px;
+      }
+
+      .character-stage img {
+        height:225px;
+      }
     }
 
-    @media (max-width:390px){
-      .shell{padding:32px 24px 28px}
+    @media (max-width:520px) {
+      header { display:block; }
+      .site-links { margin-top:15px; justify-content:flex-start; }
+      h1 { font-size:3.55rem; }
+      .coming-soon { padding:34px 22px 25px; }
     }
 
-    @media (prefers-reduced-motion:reduce){
-      body::before,
-      body::after,
-      .status-dot,
-      .mantis-bob,
-      .mantis-eye,
-      .party-hat,
-      .hammer-arm{animation:none!important}
+    @media (prefers-reduced-motion:reduce) {
+      .status::before,
+      .character-stage::before,
+      .character-stage img {
+        animation:none !important;
+      }
     }
   </style>
+  <link rel="stylesheet" href="assets/v160.css">
 </head>
 <body>
-  <main class="shell" aria-labelledby="maintenance-title">
-    <div class="layout">
-      <section class="copy">
-        <h1 id="maintenance-title">
-          <span class="brand">Mantis OSRS</span>
-          Site Under Construction
-        </h1>
-        <p class="message">We’re making improvements to the site and will be back soon.</p>
-        <div class="status" aria-label="Website maintenance is in progress">
-          <span class="status-dot" aria-hidden="true"></span>
-          Work in progress
+  <div class="wrap">
+    <header class="v160-nav-shell" aria-label="Site navigation">
+      <a class="v160-brand" href="index.html" aria-label="Mantis OSRS home">
+        <span class="v160-brand-icon" aria-hidden="true"><img src="images/mantis-head-mark.svg" alt=""></span>
+        <span class="v160-brand-wordmark"><span class="mantis-word">Mantis</span><span class="osrs-word">OSRS</span></span>
+      </a>
+      <nav class="v160-nav-links" aria-label="Clan links">
+        <a href="about.html" aria-current="page">About Us</a>
+        <a href="https://discord.gg/YaPqtQWQ7N" target="_blank" rel="noopener noreferrer">Discord</a>
+        <a href="https://wiseoldman.net/groups/6808" target="_blank" rel="noopener noreferrer">Wise Old Man</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="coming-soon" aria-labelledby="page-title">
+        <div class="copy">
+          <div class="status">Page in progress</div>
+          <h1 id="page-title">About Us</h1>
+          <h2>Coming Soon</h2>
+          <p>We’re preparing a proper introduction to Mantis. This page is still under construction and will be available soon.</p>
+          <a class="home-link" href="index.html">← Return Home</a>
+        </div>
+
+        <div class="character-stage" aria-label="Old School RuneScape character standing beside the coming soon message">
+          <img src="images/about-member-placeholder.png" alt="Old School RuneScape character">
         </div>
       </section>
-
-      <div class="mantis-wrap" role="img" aria-label="Animated mantis wearing a blue partyhat and holding a hammer">
-        <svg class="mantis" viewBox="0 0 220 220" overflow="visible" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id="mantisBody" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#d7ffb8"/>
-              <stop offset=".45" stop-color="#7dca63"/>
-              <stop offset="1" stop-color="#2f6f38"/>
-            </linearGradient>
-            <linearGradient id="mantisDark" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#6eb958"/>
-              <stop offset="1" stop-color="#17361f"/>
-            </linearGradient>
-            <linearGradient id="hatBlue" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#607cff"/>
-              <stop offset=".42" stop-color="#173fd4"/>
-              <stop offset="1" stop-color="#07146d"/>
-            </linearGradient>
-            <linearGradient id="hatBlueDark" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#244adf"/>
-              <stop offset="1" stop-color="#060c4b"/>
-            </linearGradient>
-            <linearGradient id="hammerMetal" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#d8d6d4"/>
-              <stop offset=".45" stop-color="#8d898a"/>
-              <stop offset="1" stop-color="#4a474b"/>
-            </linearGradient>
-            <linearGradient id="hammerWood" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stop-color="#8a5b1f"/>
-              <stop offset=".5" stop-color="#5e370d"/>
-              <stop offset="1" stop-color="#321b06"/>
-            </linearGradient>
-          </defs>
-
-          <g class="mantis-bob" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M96 45 C80 25 62 17 42 21 C60 25 72 31 80 41" stroke="#75bf5d" stroke-width="4"/>
-            <path d="M124 45 C140 25 158 17 178 21 C160 25 148 31 140 41" stroke="#75bf5d" stroke-width="4"/>
-
-            <path d="M94 89 C73 96 59 111 50 130 C43 145 30 152 17 147 M50 130 L32 120 L21 103 M33 120 L20 136" stroke="url(#mantisBody)" stroke-width="8"/>
-
-            <g class="hammer-arm">
-              <path d="M126 89 C147 96 162 110 172 127 C180 140 190 145 200 139" stroke="url(#mantisBody)" stroke-width="8"/>
-              <g transform="rotate(42 184 108)">
-                <rect x="176.5" y="105" width="9" height="43" rx="4.5" fill="url(#hammerWood)" stroke="#2c1806" stroke-width="2"/>
-                <path d="M179 108 L183 108 L183 145 L179 145 Z" fill="#a36e2a" opacity=".42"/>
-                <path d="M158 96 L196 96 L204 104 L196 114 L158 114 L151 106 Z" fill="url(#hammerMetal)" stroke="#353338" stroke-width="3"/>
-                <path d="M159 99 L191 99" stroke="#eeeae7" stroke-width="2" opacity=".55"/>
-                <path d="M196 98 L201 104 L195 111" fill="none" stroke="#68646a" stroke-width="2"/>
-              </g>
-            </g>
-
-            <path d="M108 63 C96 84 92 109 95 135 C97 156 101 176 110 199 C119 176 123 156 125 135 C128 109 124 84 112 63 Z" fill="url(#mantisBody)" stroke="#8bd373" stroke-width="4"/>
-
-            <g>
-              <path d="M110 65 C95 60 87 48 91 34 C96 19 124 19 129 34 C133 48 125 60 110 65 Z" fill="url(#mantisDark)" stroke="#91d879" stroke-width="4"/>
-              <ellipse class="mantis-eye" cx="98" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
-              <ellipse class="mantis-eye" cx="122" cy="40" rx="8" ry="6" fill="#dfffaa" stroke="#c8f598" stroke-width="1.5"/>
-              <path d="M103 54 Q110 59 117 54" stroke="#16361e" stroke-width="3"/>
-            </g>
-
-            <g class="party-hat">
-              <path d="M88 21 L94 -6 L105 10 L113 -13 L121 9 L133 -7 L138 22 Q113 30 88 21 Z" fill="url(#hatBlue)" stroke="#758cff" stroke-width="3"/>
-              <path d="M89 21 Q113 31 137 22 L136 28 Q113 36 90 27 Z" fill="url(#hatBlueDark)" stroke="#0a217f" stroke-width="2.5"/>
-              <path d="M91 22 Q113 29 136 22" stroke="#8aa0ff" stroke-width="2.5" opacity=".8"/>
-            </g>
-
-            <path d="M98 133 C83 144 73 163 64 191" stroke="#448f42" stroke-width="7"/>
-            <path d="M122 133 C137 144 147 163 156 191" stroke="#448f42" stroke-width="7"/>
-          </g>
-        </svg>
-      </div>
-    </div>
-  </main>
+    </main>
+  </div>
 </body>
 </html>

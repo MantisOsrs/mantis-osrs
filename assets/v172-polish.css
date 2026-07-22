@@ -1,0 +1,104 @@
+/* Mantis OSRS v1.72 — event-header consistency and small interface refinements. */
+
+/* Final Board matches the white Final Scoreboard heading while retaining its existing font and size. */
+body.v170-event-polish .event-section-title{
+  color:#fff!important;
+}
+
+/* Tile Wars replay action: clear double-frame button with white label and arrow. */
+body.v170-event-polish .board-page-nav a{
+  position:relative;
+  min-height:46px;
+  padding:11px 18px;
+  border:1px solid rgba(174,225,151,.34);
+  color:#fff!important;
+  background:rgba(8,13,9,.28);
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.18),
+    inset 0 0 0 5px rgba(4,8,5,.20),
+    inset 0 0 0 6px rgba(174,225,151,.08);
+  text-shadow:none!important;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+body.v170-event-polish .board-page-nav a::before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  pointer-events:none;
+  border:1px solid rgba(174,225,151,.10);
+}
+body.v170-event-polish .board-page-nav a:hover,
+body.v170-event-polish .board-page-nav a:focus-visible{
+  color:#fff!important;
+  border-color:rgba(190,240,170,.58);
+  background:rgba(15,24,16,.46);
+  box-shadow:
+    0 11px 25px rgba(0,0,0,.24),
+    0 0 18px rgba(121,218,98,.09),
+    inset 0 0 0 5px rgba(4,8,5,.18),
+    inset 0 0 0 6px rgba(174,225,151,.13);
+  transform:translateY(-2px);
+  outline:none;
+}
+body.v170-event-polish .board-page-nav a:active{
+  transform:translateY(-1px);
+}
+
+/* Mirror the existing Welcome-box clipped-ring detail into the bottom-left corner. */
+body.v160-home .v172-welcome-ornament-bottom{
+  position:absolute!important;
+  z-index:0!important;
+  bottom:-58px;
+  left:-53px;
+  width:178px;
+  height:178px;
+  pointer-events:none;
+  opacity:.70;
+  transform:rotate(180deg);
+}
+body.v160-home .v172-welcome-ornament-bottom::before{
+  content:"";
+  position:absolute;
+  inset:38px;
+  border:1px solid rgba(151,207,126,.15);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 22px rgba(151,207,126,.026),
+    0 0 0 44px rgba(151,207,126,.018);
+}
+body.v160-home .v172-welcome-ornament-bottom::after{
+  content:"";
+  position:absolute;
+  right:48px;
+  top:91px;
+  width:76px;
+  height:1px;
+  transform:rotate(-43deg);
+  transform-origin:right center;
+  background:linear-gradient(90deg,transparent,rgba(151,207,126,.18));
+}
+
+@media(max-width:760px){
+  body.v160-home .v172-welcome-ornament-bottom{
+    bottom:-48px;
+    left:-58px;
+    width:150px;
+    height:150px;
+    opacity:.56;
+  }
+  body.v170-event-polish .board-page-nav a{
+    min-height:44px;
+    padding:10px 16px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  body.v170-event-polish .board-page-nav a{
+    transition:none;
+  }
+  body.v170-event-polish .board-page-nav a:hover,
+  body.v170-event-polish .board-page-nav a:focus-visible,
+  body.v170-event-polish .board-page-nav a:active{
+    transform:none;
+  }
+}
