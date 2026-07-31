@@ -4,8 +4,8 @@
   min-height:0!important;
   margin:8px auto 0!important;
   padding:4px!important;
-  position:sticky!important;
-  top:8px!important;
+  position:static!important;
+  top:auto!important;
   z-index:950!important;
   display:flex!important;
   flex-direction:row!important;

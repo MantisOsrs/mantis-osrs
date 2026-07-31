@@ -2682,6 +2682,99 @@
       }
     }
   </style>
+  <style>
+    /* Point Rush teaser card: archive-style image overlay without reveal or coming-soon boxes. */
+    body.v160-home .current-event-teaser .event-teaser-art img{
+      object-position:center 48%;
+      transform:scale(1.01);
+      filter:saturate(.94) contrast(1.05) brightness(.80);
+    }
+
+    body.v160-home .current-event-teaser .event-teaser-art::before{
+      background:
+        linear-gradient(180deg,rgba(3,6,4,.03) 0%,rgba(3,6,4,.10) 42%,rgba(3,7,4,.79) 100%),
+        linear-gradient(90deg,rgba(4,7,5,.20),transparent 25%,transparent 82%,rgba(4,7,5,.30));
+    }
+
+    body.v160-home .current-event-feature-copy{
+      left:30px;
+      right:245px;
+      bottom:25px;
+      top:auto;
+      transform:none;
+    }
+
+    body.v160-home .current-event-feature-copy h3{
+      margin:0;
+      color:#eef4eb;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(1.75rem,3vw,2.22rem);
+      line-height:1.02;
+      letter-spacing:-.025em;
+      text-shadow:0 2px 12px rgba(0,0,0,.92),0 0 16px rgba(174,225,150,.10);
+    }
+
+    body.v160-home .current-event-feature-copy .v162-event-description{
+      max-width:390px;
+    }
+
+    body.v160-home .current-event-feature-credit{
+      right:30px;
+      bottom:25px;
+    }
+
+    body.v160-home .current-event-arrow{
+      top:22px!important;
+      right:22px!important;
+      bottom:auto!important;
+    }
+
+    @media(max-width:760px){
+      body.v160-home .current-event-feature-copy{
+        left:18px;
+        right:148px;
+        bottom:18px;
+      }
+
+      body.v160-home .current-event-feature-copy h3{
+        font-size:1.5rem;
+      }
+
+      body.v160-home .current-event-feature-copy .v162-event-description{
+        max-width:230px;
+      }
+
+      body.v160-home .current-event-feature-credit{
+        right:18px;
+        bottom:18px;
+        max-width:118px;
+      }
+
+      body.v160-home .current-event-arrow{
+        top:18px!important;
+        right:18px!important;
+      }
+    }
+
+    @media(max-width:430px){
+      body.v160-home .current-event-feature-copy{
+        right:112px;
+      }
+
+      body.v160-home .current-event-feature-copy h3{
+        font-size:1.34rem;
+      }
+
+      body.v160-home .current-event-feature-copy .v162-event-description{
+        font-size:.62rem;
+      }
+
+      body.v160-home .current-event-feature-credit{
+        max-width:94px;
+        font-size:.58rem;
+      }
+    }
+  </style>
 <style>
   /* V1.47 — selected unified illustrated header option */
   .hero::before {
@@ -2842,23 +2935,18 @@
 
     <section>
       <h2 class="section-title"><span>Upcoming event</span></h2>
-      <div class="current-card current-event-teaser" aria-label="Mantis event teaser — coming soon">
+      <a class="current-card current-event-teaser v161-event-card-link" href="events/point-rush.html" aria-label="View Point Rush event page">
         <div class="event-teaser-art">
-          <img src="images/upcoming-event-teaser.png" alt="OSRS-inspired landscape teaser artwork for the next Mantis event">
-          <div class="teaser-copy">
-            <h4 class="teaser-event-title">Awaiting Reveal</h4>
-            <p class="event-credit current-event-credit">
-              <span class="creator-name">Details coming soon</span>
-            </p>
+          <img src="images/point-rush-upcoming-feature.webp" alt="Fantasy underground Point Rush arena with red, green, and blue reward tubes">
+          <div class="v162-event-copy current-event-feature-copy">
+            <div class="v162-event-archive">COMING SOON • AUGUST 2026</div>
+            <h3>Point Rush</h3>
+            <p class="v162-event-description">Fill the tubes, smash the vials, and expand the board.</p>
           </div>
-          <div class="current-status">
-
-            <div class="status-kicker">Next event</div>
-            <h3 class="status-title">Coming Soon</h3>
-            <p class="status-note">Something is stirring beneath the surface.</p>
-          </div>
+          <p class="event-credit v162-event-credit current-event-feature-credit">Created by <span class="creator-name">Vycra</span></p>
+          <span class="event-link past-event-outcome current-event-arrow" aria-hidden="true">↗</span>
         </div>
-      </div>
+      </a>
     </section>
 
     <section>
