@@ -5778,6 +5778,20 @@
       margin: 0;
     }
 
+    .rush-admin-title-copy {
+      display: flex;
+      min-width: 0;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 5px 10px;
+    }
+
+    .rush-admin-title-note {
+      color: #aebbad;
+      font: 700 10px/1.25 Arial, Helvetica, sans-serif;
+      letter-spacing: .035em;
+    }
+
     .rush-admin-title-mantis {
       display: flex;
       flex: 0 0 44px;
@@ -5909,7 +5923,7 @@
       background:
         linear-gradient(90deg, rgba(224, 244, 229, .055), transparent 18%, rgba(167, 204, 177, .035) 52%, transparent 82%),
         repeating-linear-gradient(112deg, rgba(255, 255, 255, .022) 0 1px, transparent 1px 6px),
-        linear-gradient(180deg, #2c5b47 0%, #173b2c 48%, #081c14 100%);
+        linear-gradient(180deg, #0c241a 0%, #06150f 48%, #010604 100%);
       box-shadow:
         inset 0 1px 0 rgba(224, 241, 226, .16),
         inset 0 -1px 0 rgba(0, 8, 4, .88),
@@ -5938,15 +5952,15 @@
 
     .rush-admin-team-player-layout {
       display: grid;
-      grid-template-columns: minmax(148px, .68fr) minmax(0, 1.55fr);
-      gap: 10px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
       align-items: stretch;
     }
 
     .rush-admin-team-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
       align-content: start;
     }
 
@@ -5955,41 +5969,71 @@
       isolation: isolate;
       display: grid;
       grid-template-columns: 6px minmax(0, 1fr);
-      gap: 9px;
-      align-items: stretch;
-      min-height: 38px;
-      padding: 6px 8px;
+      gap: 10px;
+      align-items: center;
+      min-height: 54px;
+      padding: 9px 28px 9px 10px;
       overflow: hidden;
-      border: 1px solid #344638;
+      border: 1px solid color-mix(in srgb, var(--admin-team, var(--rush-green)) 42%, #3b463e);
       color: #dce7d8;
-      background: #0b110d;
+      background:
+        linear-gradient(108deg, rgba(255, 255, 255, .065), transparent 18%, rgba(255, 255, 255, .018) 46%, transparent 72%),
+        repeating-linear-gradient(116deg, rgba(255, 255, 255, .018) 0 1px, transparent 1px 6px),
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--admin-team, var(--rush-green)) 26%, #18201a) 0%,
+          color-mix(in srgb, var(--admin-team-dark, var(--admin-team)) 18%, #0a0f0b) 58%,
+          #070a08 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .08),
+        inset 0 -1px 0 rgba(0, 0, 0, .7),
+        inset 0 0 16px color-mix(in srgb, var(--admin-team, var(--rush-green)) 10%, transparent);
       text-align: left;
       cursor: pointer;
-      transition: min-height .18s ease, padding .18s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease, transform .16s ease;
+      transition: border-color .16s ease, box-shadow .16s ease, background .16s ease, transform .16s ease, filter .16s ease;
     }
 
     .rush-admin-team-button:hover {
-      border-color: color-mix(in srgb, var(--admin-team, var(--rush-green)) 74%, #9caa9b);
-      background: color-mix(in srgb, var(--admin-team, var(--rush-green)) 8%, #0b110d);
+      border-color: color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 72%, #b9c4ba);
+      filter: brightness(1.08) saturate(1.06);
+      transform: translateY(-1px);
     }
 
     .rush-admin-team-button[aria-pressed="true"] {
-      min-height: 70px;
-      padding: 10px 9px;
       border-color: color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 84%, #f1f6ef);
-      background: color-mix(in srgb, var(--admin-team, var(--rush-green)) 12%, #0b110d);
+      background:
+        linear-gradient(108deg, rgba(255, 255, 255, .1), transparent 20%, rgba(255, 255, 255, .025) 48%, transparent 74%),
+        repeating-linear-gradient(116deg, rgba(255, 255, 255, .024) 0 1px, transparent 1px 6px),
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 34%, #1a231c) 0%,
+          color-mix(in srgb, var(--admin-team, var(--rush-green)) 24%, #0a100c) 58%,
+          #070a08 100%);
       box-shadow:
-        inset 0 0 0 2px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 46%, transparent),
-        inset 0 0 18px color-mix(in srgb, var(--admin-team, var(--rush-green)) 28%, transparent),
-        0 0 10px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 34%, transparent);
-      transform: translateX(2px);
+        inset 0 0 0 1px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 42%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, .11),
+        inset 0 0 20px color-mix(in srgb, var(--admin-team, var(--rush-green)) 24%, transparent),
+        0 0 12px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 32%, transparent);
+      filter: brightness(1.08) saturate(1.08);
+      transform: translateY(-1px);
     }
+
+    .rush-admin-team-button::before {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--admin-team, var(--rush-green)) 18% 82%, transparent);
+      box-shadow: 0 0 8px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 32%, transparent);
+      opacity: .54;
+      pointer-events: none;
+    }
+
+    .rush-admin-team-button[aria-pressed="true"]::before { opacity: 1; }
 
     .rush-admin-team-button::after {
       content: "\2713";
       position: absolute;
-      top: 4px;
-      right: 4px;
+      top: 7px;
+      right: 7px;
       z-index: 3;
       display: grid;
       width: 15px;
@@ -6014,83 +6058,21 @@
       transform: scale(1);
     }
 
-    .rush-admin-team-button[aria-pressed="false"] .rush-admin-team-copy span { display: none; }
-
-    /* Add Drop team controls reuse the live standings liquids while the player roster occupies the adjacent panel. */
-    .rush-admin-team-button > :not(.rush-admin-team-liquid) {
+    .rush-admin-team-swatch {
       position: relative;
       z-index: 2;
-    }
-
-    .rush-admin-team-liquid {
-      position: absolute;
-      inset: 0 auto 0 0;
-      z-index: 0;
-      display: block;
-      width: var(--admin-team-progress, 0%);
-      max-width: 100%;
-      overflow: hidden;
-      background:
-        radial-gradient(ellipse at 42% 10%, color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 22%, transparent) 0 18%, transparent 52%),
-        linear-gradient(180deg,
-          color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 78%, #3a493f) 0%,
-          color-mix(in srgb, var(--admin-team) 88%, #1b281f) 46%,
-          color-mix(in srgb, var(--admin-team-dark, var(--admin-team)) 92%, #0a100c) 100%);
-      box-shadow:
-        inset 0 10px 15px rgba(255, 255, 255, .08),
-        inset 0 -16px 20px rgba(0, 0, 0, .28),
-        inset 0 0 14px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 12%, transparent);
-      opacity: .78;
-      pointer-events: none;
-      transition: width .85s cubic-bezier(.22, .72, .2, 1), filter .2s ease, opacity .2s ease;
-    }
-
-    .rush-admin-team-liquid::before {
-      content: "";
-      position: absolute;
-      top: -31px;
-      left: -22%;
-      width: 150%;
-      height: 42px;
-      border-radius: 48%;
-      background: color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 32%, transparent);
-      box-shadow: 0 3px 7px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 18%, transparent);
-    }
-
-    .rush-admin-team-liquid-bubbles {
-      position: absolute;
-      inset: 8px 5px 5px;
-      background-image:
-        radial-gradient(circle, rgba(241, 249, 243, .26) 0 1px, transparent 1.5px),
-        radial-gradient(circle, color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 46%, transparent) 0 1.5px, transparent 2px);
-      background-position: 4px 20px, 18px 7px;
-      background-size: 23px 27px, 31px 33px;
-      opacity: .46;
-    }
-
-    .rush-admin-team-liquid-edge {
-      position: absolute;
-      inset: 0 0 0 auto;
-      width: 4px;
-      background: color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 42%, transparent);
-      box-shadow:
-        -4px 0 9px color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 30%, transparent),
-        inset 1px 0 0 rgba(255, 255, 255, .1);
-    }
-
-    .rush-admin-team-button:hover .rush-admin-team-liquid,
-    .rush-admin-team-button[aria-pressed="true"] .rush-admin-team-liquid {
-      opacity: .9;
-      filter: brightness(1.06) saturate(1.06);
-    }
-
-    .rush-admin-team-swatch {
+      align-self: stretch;
+      min-height: 30px;
+      border: 1px solid color-mix(in srgb, var(--admin-team-bright, var(--admin-team)) 52%, #d6dfd5);
       background: var(--admin-team, var(--rush-green));
-      box-shadow: 0 0 7px color-mix(in srgb, var(--admin-team, var(--rush-green)) 34%, transparent);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .18),
+        inset 0 -8px 10px rgba(0, 0, 0, .26),
+        0 0 7px color-mix(in srgb, var(--admin-team, var(--rush-green)) 34%, transparent);
     }
-    .rush-admin-team-copy { align-self: center; min-width: 0; }
+    .rush-admin-team-copy { position: relative; z-index: 2; align-self: center; min-width: 0; }
     .rush-admin-team-copy strong { display: block; overflow: hidden; color: #f0f5ed; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
-    .rush-admin-team-copy span { display: block; margin-top: 4px; color: #aebbaa; font-size: 8px; }
+    .rush-admin-team-copy span { display: block; margin-top: 4px; color: #b8c4b5; font-size: 9px; }
 
     .rush-admin-player-grid {
       display: grid;
@@ -6715,6 +6697,60 @@
     .rush-admin-summary-block .rush-admin-summary-row dt { font-size: 11px; }
     .rush-admin-summary-block .rush-admin-summary-row dd { font-size: 12px; }
 
+    .rush-admin-summary-block .rush-admin-summary {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 7px 10px;
+      align-items: start;
+      padding: 9px;
+    }
+
+    .rush-admin-summary-block .rush-admin-summary .rush-admin-sprite {
+      grid-column: 1;
+      grid-row: 1;
+      margin: 0;
+    }
+
+    .rush-admin-summary-block .rush-admin-summary-list {
+      grid-column: 2;
+      grid-row: 1;
+      align-content: start;
+    }
+
+    .rush-admin-summary-block .rush-admin-summary-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      padding: 2px 0;
+      border-bottom: 0;
+    }
+
+    .rush-admin-summary-block .rush-admin-summary-row dd {
+      color: var(--admin-summary-team, var(--admin-active-team-bright, var(--admin-active-team, var(--rush-green))));
+      line-height: 1.15;
+    }
+
+    .rush-admin-review-actions {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 100px minmax(0, 1fr);
+      align-items: flex-start;
+      gap: 7px;
+      margin-top: 2px;
+    }
+
+    .rush-admin-review-actions .rush-inline-pin {
+      width: 100px;
+      margin-right: 0;
+      margin-left: 0;
+    }
+
+    .rush-admin-review-actions .rush-admin-review {
+      width: 100%;
+      min-height: 36px;
+      margin-top: 0;
+      padding: 0 10px;
+    }
+
     .rush-admin-primary,
     .rush-admin-secondary,
     .rush-admin-danger {
@@ -6781,7 +6817,7 @@
       }
     }
 
-    .rush-admin-history-scroll { max-height: 275px; overflow: auto; }
+    .rush-admin-history-scroll { max-height: 390px; overflow: auto; }
     .rush-admin-history-list { margin: 0; padding: 0; list-style: none; }
 
     .rush-admin-history-entry {
@@ -6857,6 +6893,14 @@
       border-color: #eef5eb;
       box-shadow: inset 0 0 0 1px var(--manager-team), 0 0 8px color-mix(in srgb, var(--manager-team) 45%, transparent);
     }
+    .rush-player-manager-team[aria-pressed="true"]::before {
+      content: "\2713";
+      color: #f6faf4;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .9);
+    }
     .rush-player-manager-actions {
       display: grid;
       grid-template-columns: minmax(108px, 1.15fr) 1fr 1fr;
@@ -6883,13 +6927,11 @@
       box-shadow: 0 28px 90px rgba(0, 0, 0, .72);
     }
 
-    /* Keep the simplified confirmation boxes compact while retaining accessible close controls. */
-    #rush-drop-confirm-dialog,
+    /* Keep the simplified reward-wheel confirmation compact while retaining its accessible close control. */
     #rush-pin-dialog { position: relative; }
 
     #rush-pin-dialog { width: min(360px, calc(100vw - 36px)); }
 
-    #rush-drop-confirm-dialog .rush-drop-confirm-close,
     #rush-pin-dialog .rush-pin-close {
       position: absolute;
       top: 10px;
@@ -6904,9 +6946,6 @@
     #rush-pin-dialog .rush-admin-pin-error { min-height: 10px; margin-top: 4px; }
     #rush-pin-dialog .rush-admin-backend-status { margin: 2px 0 0; }
     #rush-pin-dialog .rush-admin-confirm-actions { padding: 6px 13px 13px; }
-
-    #rush-drop-confirm-dialog .rush-admin-summary-row dt { font-size: 11px; }
-    #rush-drop-confirm-dialog .rush-admin-summary-row dd { font-size: 12px; }
 
     .rush-admin-confirm-body { padding: 15px; }
     .rush-admin-confirm-body .rush-admin-sprite { --rush-admin-sprite-limit: 50px; width: 82px; height: 76px; margin: 0 auto 12px; font-size: 12px; }
@@ -7189,8 +7228,9 @@
       .rush-admin-team-player-layout { grid-template-columns: 1fr; }
       .rush-admin-team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .rush-admin-team-button,
-      .rush-admin-team-button[aria-pressed="true"] { min-height: 48px; padding: 7px; transform: none; }
-      .rush-admin-team-button[aria-pressed="false"] .rush-admin-team-copy span { display: block; }
+      .rush-admin-team-button[aria-pressed="true"] { min-height: 48px; padding: 7px 26px 7px 7px; transform: none; }
+      .rush-admin-title-copy { gap: 3px; }
+      .rush-admin-title-note { flex-basis: 100%; }
       .rush-admin-player-grid { grid-template-columns: 1fr; }
       .rush-admin-tier-tabs { grid-template-columns: repeat(8, 58px); overflow-x: auto; padding: 2px 0 6px; }
       .rush-admin-tier-button[aria-selected="true"] { transform: none; }
@@ -10033,7 +10073,10 @@
               </g>
             </svg>
           </div>
-          <h2 id="rush-admin-title">Record a drop</h2>
+          <div class="rush-admin-title-copy">
+            <h2 id="rush-admin-title">Record a drop</h2>
+            <span class="rush-admin-title-note">only event runners can add drops</span>
+          </div>
         </div>
         <button class="rush-admin-close" id="rush-admin-close" type="button" aria-label="Close Admin controls">&times;</button>
       </div>
@@ -10079,13 +10122,20 @@
             <div class="rush-admin-summary">
               <span class="rush-admin-sprite" id="rush-admin-summary-sprite" aria-hidden="true">--</span>
               <dl class="rush-admin-summary-list">
-                <div class="rush-admin-summary-row"><dt>Team</dt><dd id="rush-admin-summary-team">Saradomin</dd></div>
-                <div class="rush-admin-summary-row"><dt>Player</dt><dd id="rush-admin-summary-player">Choose player</dd></div>
-                <div class="rush-admin-summary-row"><dt>Tier</dt><dd id="rush-admin-summary-tier">Tier I</dd></div>
-                <div class="rush-admin-summary-row"><dt>Item</dt><dd id="rush-admin-summary-item">Choose an item</dd></div>
-                <div class="rush-admin-summary-row"><dt>Award</dt><dd id="rush-admin-summary-points">--</dd></div>
+                <div class="rush-admin-summary-row"><dt class="rush-sr-only">Team</dt><dd id="rush-admin-summary-team">Saradomin</dd></div>
+                <div class="rush-admin-summary-row"><dt class="rush-sr-only">Player</dt><dd id="rush-admin-summary-player">Choose player</dd></div>
+                <div class="rush-admin-summary-row"><dt class="rush-sr-only">Tier</dt><dd id="rush-admin-summary-tier">Tier I</dd></div>
+                <div class="rush-admin-summary-row"><dt class="rush-sr-only">Item</dt><dd id="rush-admin-summary-item">Choose an item</dd></div>
+                <div class="rush-admin-summary-row"><dt class="rush-sr-only">Award</dt><dd id="rush-admin-summary-points">--</dd></div>
               </dl>
-              <button class="rush-admin-primary rush-admin-review" id="rush-admin-review" type="button" disabled>Review entry</button>
+              <div class="rush-admin-review-actions">
+                <div class="rush-inline-pin">
+                  <label class="rush-sr-only" for="rush-confirm-pin">PIN</label>
+                  <input id="rush-confirm-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" placeholder="PIN" aria-describedby="rush-confirm-pin-error">
+                  <span class="rush-inline-pin-error" id="rush-confirm-pin-error" role="alert" aria-live="polite"></span>
+                </div>
+                <button class="rush-admin-primary rush-admin-review" id="rush-admin-review" type="button" disabled>Record entry</button>
+              </div>
             </div>
           </section>
 
@@ -10136,31 +10186,6 @@
           </section>
 
         </aside>
-      </div>
-    </section>
-  </div>
-
-  <div class="rush-admin-confirm-modal" id="rush-drop-confirm-modal" hidden>
-    <section class="rush-admin-confirm-dialog" id="rush-drop-confirm-dialog" role="dialog" aria-modal="true" aria-label="Confirm selected drop">
-      <div class="rush-admin-confirm-body">
-        <button class="rush-admin-close rush-drop-confirm-close" type="button" data-close-admin-overlay aria-label="Close drop confirmation">&times;</button>
-        <span class="rush-admin-sprite" id="rush-confirm-sprite" aria-hidden="true">--</span>
-        <dl class="rush-admin-summary-list">
-          <div class="rush-admin-summary-row"><dt>Team</dt><dd id="rush-confirm-team"></dd></div>
-          <div class="rush-admin-summary-row"><dt>Player</dt><dd id="rush-confirm-player"></dd></div>
-          <div class="rush-admin-summary-row"><dt>Tier</dt><dd id="rush-confirm-tier"></dd></div>
-          <div class="rush-admin-summary-row"><dt>Item</dt><dd id="rush-confirm-item"></dd></div>
-          <div class="rush-admin-summary-row"><dt>Award</dt><dd id="rush-confirm-points"></dd></div>
-        </dl>
-      </div>
-      <div class="rush-admin-confirm-actions">
-        <div class="rush-inline-pin">
-          <label class="rush-sr-only" for="rush-confirm-pin">PIN</label>
-          <input id="rush-confirm-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" placeholder="PIN" aria-describedby="rush-confirm-pin-error">
-          <span class="rush-inline-pin-error" id="rush-confirm-pin-error" role="alert" aria-live="polite"></span>
-        </div>
-        <button class="rush-admin-secondary" type="button" data-close-admin-overlay>Go back</button>
-        <button class="rush-admin-primary" id="rush-confirm-save" type="button">Record drop</button>
       </div>
     </section>
   </div>
@@ -10335,6 +10360,7 @@
           "Aranea Boots",
           {
             name: "Any Pet",
+            startingPoints: 8,
             cover: ["Tzrek-jad", "Olmlet", "Nexling", "Tumeken's guardian"],
             coverLayout: "grid",
             variants: [
@@ -11667,15 +11693,6 @@
       const playerManagerStatus = document.getElementById("rush-player-manager-status");
       const playerManagerPinInput = document.getElementById("rush-player-manager-pin");
       const playerManagerPinError = document.getElementById("rush-player-manager-pin-error");
-      const dropConfirmModal = document.getElementById("rush-drop-confirm-modal");
-      const dropConfirmDialog = document.getElementById("rush-drop-confirm-dialog");
-      const confirmSprite = document.getElementById("rush-confirm-sprite");
-      const confirmTeam = document.getElementById("rush-confirm-team");
-      const confirmPlayer = document.getElementById("rush-confirm-player");
-      const confirmTier = document.getElementById("rush-confirm-tier");
-      const confirmItem = document.getElementById("rush-confirm-item");
-      const confirmPoints = document.getElementById("rush-confirm-points");
-      const confirmSaveButton = document.getElementById("rush-confirm-save");
       const confirmPinInput = document.getElementById("rush-confirm-pin");
       const confirmPinError = document.getElementById("rush-confirm-pin-error");
       const targetModal = document.getElementById("rush-target-modal");
@@ -11734,8 +11751,8 @@
       let adminVariantIndex = null;
       let adminRequirementMechanicId = null;
       let playerManagerTeamKey = selectedTeamKey;
-      let pendingConfirmDraft = null;
       let pendingConfirmSubmissionKey = null;
+      let pendingConfirmSubmissionSignature = null;
       let pendingTargetChoice = null;
       let pendingTargetSubmissionKey = null;
       let removedEntry = null;
@@ -11785,6 +11802,7 @@
         const tier = tiers[tierIndex];
         const item = tier && tier.items[itemIndex];
         const name = item ? variantName(item, variantIndex) : "";
+        if (item && typeof item === "object" && Number.isFinite(item.startingPoints)) return item.startingPoints;
         return tierIndex === 7 && tierEightStartingPoints[name] ? tierEightStartingPoints[name] : tier ? tier.base : 0;
       }
 
@@ -12136,7 +12154,6 @@
           const result = await action.execute(pin);
           closeAdminOverlay(false);
           if (typeof action.onSuccess === "function") await action.onSuccess(result);
-          pendingConfirmDraft = null;
         } catch (error) {
           pinError.textContent = error.message || "The action could not be authorized.";
           pinInput.value = "";
@@ -15466,8 +15483,7 @@
           const team = teams[key];
           const points = teamPoints(team);
           return `
-            <button class="rush-admin-team-button" type="button" data-admin-team="${key}" aria-pressed="${key === adminTeamKey}" style="--admin-team:${team.accent};--admin-team-bright:${team.bright};--admin-team-dark:${team.dark};--admin-team-progress:100%">
-              <span class="rush-admin-team-liquid" aria-hidden="true"><span class="rush-admin-team-liquid-bubbles"></span><span class="rush-admin-team-liquid-edge"></span></span>
+            <button class="rush-admin-team-button" type="button" data-admin-team="${key}" aria-pressed="${key === adminTeamKey}" style="--admin-team:${team.accent};--admin-team-bright:${team.bright};--admin-team-dark:${team.dark}">
               <span class="rush-admin-team-swatch" aria-hidden="true"></span>
               <span class="rush-admin-team-copy"><strong>${team.name}</strong><span>${points} points</span></span>
             </button>
@@ -15648,6 +15664,7 @@
       function updateAdminSummary() {
         const pendingTarget = pendingTargetMechanicState();
         if (pendingTarget) {
+          adminSummaryTeam.closest(".rush-admin-summary").style.setProperty("--admin-summary-team", teams[pendingTarget.claimedTeam].bright);
           adminSummarySprite.textContent = "!";
           adminSummaryTeam.textContent = teams[pendingTarget.claimedTeam].name;
           adminSummaryPlayer.textContent = pendingTarget.claimedPlayer;
@@ -15655,19 +15672,20 @@
           adminSummaryItem.textContent = pendingTarget.mechanic.revealedTitle;
           adminSummaryPoints.textContent = "Choose opponent";
           adminReviewButton.disabled = true;
-          adminReviewButton.textContent = "Review entry";
+          adminReviewButton.textContent = "Record entry";
           return;
         }
         const draft = adminDraft();
         const award = projectedAward(draft);
+        adminSummaryTeam.closest(".rush-admin-summary").style.setProperty("--admin-summary-team", adminTeam().bright);
         adminSummarySprite.innerHTML = draft ? spriteImageMarkup(draft.item) : "--";
         adminSummaryTeam.textContent = adminTeam().name;
         adminSummaryPlayer.textContent = adminPlayerSelect.value || "Choose player";
-        adminSummaryTier.textContent = draft && draft.eventType === "requirement" ? "Requirement" : `Tier ${adminTier().roman}`;
+        adminSummaryTier.textContent = draft && draft.eventType === "requirement" ? "Requirement" : `T${adminTierIndex + 1}`;
         adminSummaryItem.textContent = draft ? draft.item : "Choose an item";
         adminSummaryPoints.textContent = draft ? draft.eventType === "requirement" ? "No points" : `+${award} pts` : "--";
         adminReviewButton.disabled = !draft;
-        adminReviewButton.textContent = "Review entry";
+        adminReviewButton.textContent = "Record entry";
       }
 
       function formatEntryTime(timestamp) {
@@ -15851,8 +15869,11 @@
         playerManagerStatus.textContent = "";
         clearInlinePin(playerManagerPinInput, playerManagerPinError);
         clearInlinePin(restorePinInput, restorePinError);
+        clearInlinePin(confirmPinInput, confirmPinError);
         pendingPlayerManagementSubmission = null;
         pendingRestoreSubmissionKey = null;
+        pendingConfirmSubmissionKey = null;
+        pendingConfirmSubmissionSignature = null;
         adminTierIndex = teamCurrentTier(teams[adminTeamKey]);
         renderAdminAll();
         openAdminOverlay(adminModal, adminDialog, adminOpenButton);
@@ -15950,24 +15971,6 @@
         liveStatus.textContent = `${chosenTeam} selected for ${state.mechanic.revealedTitle}. Drop recording is available again.`;
       }
 
-      function openDropConfirmation() {
-        const draft = adminDraft();
-        if (!draft) return;
-        const award = projectedAward(draft);
-        pendingConfirmDraft = draft;
-        pendingConfirmSubmissionKey = makeBackendSubmissionKey();
-        clearInlinePin(confirmPinInput, confirmPinError);
-        confirmSaveButton.textContent = draft.eventType === "requirement" ? "Record requirement" : "Record drop";
-        confirmSaveButton.disabled = false;
-        confirmSprite.innerHTML = spriteImageMarkup(draft.item);
-        confirmTeam.textContent = teams[draft.team].name;
-        confirmPlayer.textContent = draft.player;
-        confirmTier.textContent = draft.eventType === "requirement" ? "Blockage requirement" : `Tier ${tiers[draft.tierIndex].roman}`;
-        confirmItem.textContent = draft.item;
-        confirmPoints.textContent = draft.eventType === "requirement" ? "No points" : `+${award} pts`;
-        openAdminOverlay(dropConfirmModal, dropConfirmDialog, adminReviewButton);
-      }
-
       async function recordDraftEntry(draft, options = {}) {
         if (!draft) return;
         const requirement = draft.eventType === "requirement";
@@ -15989,7 +15992,6 @@
             ? { action: "requirement", teamCode: draft.team, playerName: draft.player, mechanicKey: draft.mechanicId }
             : { action: "drop", teamCode: draft.team, playerName: draft.player, itemSlug: backendItemSlug(draft) };
           const result = await pointRushAdminAction({ ...payload, submissionKey: options.submissionKey }, options.pin);
-          if (options.closeConfirmation && !dropConfirmModal.hidden && adminOverlayStack[adminOverlayStack.length - 1]?.modal === dropConfirmModal) closeAdminOverlay(false);
           if (options.clearAdminSelection !== false) {
             adminItemIndex = null;
             adminVariantIndex = null;
@@ -16019,7 +16021,6 @@
           return;
         }
 
-        if (options.closeConfirmation) closeAdminOverlay(false);
         if (options.clearAdminSelection !== false) {
           adminItemIndex = null;
           adminVariantIndex = null;
@@ -16039,10 +16040,14 @@
       }
 
       async function recordAdminEntry() {
-        const draft = pendingConfirmDraft || adminDraft();
+        const draft = adminDraft();
         if (!draft) return;
+        const submissionSignature = [draft.team, draft.player, draft.tierIndex, draft.itemIndex, draft.variantIndex, draft.eventType, draft.mechanicId].join("|");
+        if (!pendingConfirmSubmissionKey || pendingConfirmSubmissionSignature !== submissionSignature) {
+          pendingConfirmSubmissionKey = makeBackendSubmissionKey();
+          pendingConfirmSubmissionSignature = submissionSignature;
+        }
         const options = {
-          closeConfirmation: true,
           closeAdminWindow: true,
           clearAdminSelection: true,
           focusTarget: adminOpenButton,
@@ -16052,18 +16057,19 @@
           await runInlineAuthorization({
             input: confirmPinInput,
             errorOutput: confirmPinError,
-            submitButton: confirmSaveButton,
+            submitButton: adminReviewButton,
             busyLabel: "Recording…",
             execute: (pin) => recordDraftEntry(draft, { ...options, pin, submissionKey: pendingConfirmSubmissionKey }),
             onSuccess: () => {
-              pendingConfirmDraft = null;
               pendingConfirmSubmissionKey = null;
+              pendingConfirmSubmissionSignature = null;
             }
           });
           return;
         }
         await recordDraftEntry(draft, options);
-        pendingConfirmDraft = null;
+        pendingConfirmSubmissionKey = null;
+        pendingConfirmSubmissionSignature = null;
       }
 
       function openUndoConfirmation(id, trigger) {
@@ -16245,10 +16251,6 @@
           pinError.textContent = "";
           pinSubmitButton.disabled = false;
           pinSubmitButton.textContent = "Authorize";
-        } else if (overlay.modal === dropConfirmModal) {
-          pendingConfirmDraft = null;
-          pendingConfirmSubmissionKey = null;
-          clearInlinePin(confirmPinInput, confirmPinError);
         } else if (overlay.modal === targetModal) {
           pendingTargetChoice = null;
           pendingTargetSubmissionKey = null;
@@ -16260,6 +16262,9 @@
         } else if (overlay.modal === adminModal) {
           pendingPlayerManagementSubmission = null;
           pendingRestoreSubmissionKey = null;
+          pendingConfirmSubmissionKey = null;
+          pendingConfirmSubmissionSignature = null;
+          clearInlinePin(confirmPinInput, confirmPinError);
           clearInlinePin(playerManagerPinInput, playerManagerPinError);
           clearInlinePin(restorePinInput, restorePinError);
         }
@@ -16446,9 +16451,8 @@
         if (!state || state.mechanic.id !== button.dataset.pendingMechanic) return;
         openPendingTargetModal(button);
       });
-      adminReviewButton.addEventListener("click", openDropConfirmation);
+      adminReviewButton.addEventListener("click", recordAdminEntry);
       adminRestoreButton.addEventListener("click", restoreAdminEntry);
-      confirmSaveButton.addEventListener("click", recordAdminEntry);
       targetSaveButton.addEventListener("click", recordPendingTarget);
       confirmUndoButton.addEventListener("click", confirmUndoEntry);
       pinSubmitButton.addEventListener("click", submitPinAuthorization);
@@ -16479,7 +16483,7 @@
       document.querySelectorAll("[data-close-admin-overlay]").forEach((button) => {
         button.addEventListener("click", () => closeAdminOverlay());
       });
-      [adminModal, dropConfirmModal, targetModal, undoConfirmModal, pinModal].forEach((modal) => {
+      [adminModal, targetModal, undoConfirmModal, pinModal].forEach((modal) => {
         modal.addEventListener("mousedown", (event) => {
           if (event.target !== modal) return;
           if (modal === adminModal) closeAdminWindow();
