@@ -176,6 +176,65 @@
       pointer-events: none;
     }
 
+    .rush-loot-counter {
+      position: absolute;
+      z-index: 8;
+      top: 50%;
+      left: var(--rush-loot-left, 290px);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-width: max-content;
+      padding: 2px 7px 2px 3px;
+      border: 1px solid rgba(193, 155, 45, .34);
+      border-radius: 7px;
+      background: linear-gradient(180deg, rgba(35, 39, 23, .92), rgba(12, 15, 10, .92));
+      box-shadow: inset 0 1px 0 rgba(255, 236, 142, .10), 0 2px 7px rgba(0, 0, 0, .40);
+      color: #f0cf54;
+      font: 800 16px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: .025em;
+      text-shadow: 0 1px 1px #000, 0 0 7px rgba(238, 190, 39, .24);
+      transform: translateY(-50%);
+      pointer-events: auto;
+      cursor: help;
+    }
+
+    .rush-loot-counter img {
+      width: 31px;
+      height: 31px;
+      object-fit: contain;
+    }
+
+    .rush-loot-counter-tooltip {
+      position: absolute;
+      z-index: 20;
+      top: calc(100% + 7px);
+      left: 50%;
+      width: max-content;
+      max-width: min(250px, calc(100vw - 28px));
+      padding: 7px 9px;
+      border: 1px solid #746126;
+      border-radius: 4px;
+      background: #11150f;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .48);
+      color: #f3e6b4;
+      font: 700 12px/1.2 Arial, Helvetica, sans-serif;
+      letter-spacing: 0;
+      text-shadow: none;
+      transform: translate(-50%, 3px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .14s ease, transform .14s ease, visibility .14s;
+      pointer-events: none;
+    }
+
+    .rush-loot-counter:hover .rush-loot-counter-tooltip,
+    .rush-loot-counter:focus-visible .rush-loot-counter-tooltip {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      visibility: visible;
+    }
+
     .rush-standings-frame-header .rush-hero-actions {
       z-index: 6;
       flex-wrap: nowrap;
@@ -184,26 +243,22 @@
     }
 
     .rush-standings-column-labels {
-      position: absolute;
-      top: 9px;
-      right: 12px;
-      bottom: 8px;
-      left: 12px;
-      z-index: 5;
       display: grid;
       grid-template-columns: minmax(0, 1.55fr) 1px minmax(330px, .72fr);
       gap: 10px;
-      align-items: end;
+      align-items: start;
+      padding: 7px 12px 3px;
+      background: #101511;
       pointer-events: none;
     }
 
     .rush-standings-column-label {
       position: relative;
-      justify-self: start;
+      justify-self: center;
       width: max-content;
       max-width: 100%;
       min-width: 0;
-      margin-left: calc(var(--rush-team-feed-gutter, 42px) + 250px);
+      margin-left: 0;
       padding: 0 0 4px;
       color: #e6d49b;
       font-family: Georgia, "Times New Roman", serif;
@@ -229,6 +284,7 @@
 
     .rush-standings-column-label--recent {
       grid-column: 3;
+      justify-self: start;
       margin-left: 0;
     }
 
@@ -1054,7 +1110,7 @@
     .rush-standings-divider::before {
       content: "";
       position: absolute;
-      top: -10px;
+      top: -37px;
       bottom: -10px;
       left: 50%;
       width: 6px;
@@ -7079,20 +7135,20 @@
     @media (max-width: 1000px) {
       .rush-standings-layout { grid-template-columns: 1fr; }
       .rush-standings-column-labels {
-        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       }
       .rush-standings-column-label:not(.rush-standings-column-label--recent) {
-        justify-self: end;
-        margin-right: 18px;
+        justify-self: center;
+        margin-right: 0;
         margin-left: 0;
       }
       .rush-standings-column-label--recent {
         grid-column: 2;
-        justify-self: end;
-        text-align: right;
+        justify-self: start;
+        text-align: left;
       }
       .rush-standings-column-label--recent::after {
-        background: linear-gradient(270deg, color-mix(in srgb, var(--active-team-bright) 46%, transparent), rgba(210, 183, 106, .18), transparent 86%);
+        background: linear-gradient(90deg, color-mix(in srgb, var(--active-team-bright) 46%, transparent), rgba(210, 183, 106, .18), transparent 86%);
       }
       .rush-standings-divider {
         width: 100%;
@@ -7133,10 +7189,8 @@
         padding: 10px 9px 14px;
       }
       .rush-standings-column-labels {
-        top: 10px;
-        right: 9px;
-        bottom: 8px;
-        left: 9px;
+        padding-right: 9px;
+        padding-left: 9px;
       }
       .rush-standings-title-mount {
         width: 100%;
@@ -7181,6 +7235,8 @@
         min-height: 40px;
       }
       .rush-standings-column-labels { gap: 8px; }
+      .rush-loot-counter { font-size: 14px; }
+      .rush-loot-counter img { width: 27px; height: 27px; }
       .rush-standings-column-label {
         padding-inline: 2px;
         font-size: 9px;
@@ -9629,6 +9685,11 @@
           <header class="rush-standings-frame-header">
             <div class="rush-standings-title-mount" id="rush-standings-title-mount">
               <h1 class="rush-sr-only">Point Rush</h1>
+              <div class="rush-loot-counter" id="rush-loot-counter" tabindex="0" aria-describedby="rush-loot-counter-tooltip" aria-label="Total loot value: 0 GP">
+                <img src="../images/point-rush/coins-detail.webp" alt="" aria-hidden="true" decoding="async">
+                <span id="rush-loot-counter-value">0</span>
+                <span class="rush-loot-counter-tooltip" id="rush-loot-counter-tooltip" role="tooltip">0 GP</span>
+              </div>
             </div>
             <div class="rush-hero-actions">
               <details class="rush-rules" id="rush-rules">
@@ -9656,11 +9717,11 @@
               </details>
               <button class="rush-admin-open" id="rush-admin-open" type="button" aria-haspopup="dialog" aria-controls="rush-admin-modal">Add Drop</button>
             </div>
-            <div class="rush-standings-column-labels">
-              <span class="rush-standings-column-label">Select a team bar to view details</span>
-              <span class="rush-standings-column-label rush-standings-column-label--recent">Recent Drops</span>
-            </div>
           </header>
+        <div class="rush-standings-column-labels">
+          <span class="rush-standings-column-label">Select a team bar to view details</span>
+          <span class="rush-standings-column-label rush-standings-column-label--recent">Recent Drops</span>
+        </div>
         <div class="rush-standings-layout">
           <div class="rush-standings-board">
         <div class="rush-team-list" role="group" aria-label="Select a team to view its details">
@@ -10269,6 +10330,7 @@
 
   <div class="rush-sr-only" id="rush-live-status" aria-live="polite"></div>
 
+  <script src="../assets/point-rush-gp-prices.js"></script>
   <script>
     (() => {
       "use strict";
@@ -11438,17 +11500,17 @@
       const teams = {
         tide: {
           name: "Saradomin", accent: "#50569c", bright: "#747bc5", dark: "#2d3260", deep: "#14172e", ready: "#6e74b4", readyBright: "#9298d5", readyDark: "#363c72",
-          playerNames: ["PixelPike", "RuneRaven", "KaramjaKid"],
+          playerNames: ["Pond Scum", "meat zyn", "Vycra", "C D C D C D", "Kuja the iii", "Third Leg", "nickd6", "Ottertoebean", "Bustaa", "Gary Salty", "TTVak2silly", "Azmoric", "ImFatMatt", "Joshuahtree"],
           counts: [], playerPoints: {}
         },
         moss: {
           name: "Guthix", accent: "#2d8065", bright: "#45aa86", dark: "#174d3d", deep: "#071e18", ready: "#3ca77e", readyBright: "#72e2b2", readyDark: "#14523e",
-          playerNames: ["MossyMage", "ZenyteZed", "BarrowsBard"],
+          playerNames: ["The Antidote", "Big Baby Boy", "KrystalOS", "GIMSaintDrip", "ironVikings", "4taa", "NoPants V2", "socksarewet", "Dhampir007", "nutzach00", "AnulAssassin", "Admiral Blud", "CringusKhan", "Parbs"],
           counts: [], playerPoints: {}
         },
         ember: {
           name: "Zamorak", accent: "#8e3028", bright: "#bb5a4d", dark: "#501a17", deep: "#250a09", ready: "#d84d3f", readyBright: "#ff8270", readyDark: "#6b1713",
-          playerNames: ["ChaosChick", "IronOtter", "FaladorFox"],
+          playerNames: ["TheDog", "Mollie", "Iron Hogey", "rskru", "Dum n dumr", "Pyros", "YeetMyLoad", "Macks B", "Ghrimreapr", "LilJecki", "GingerBihh", "jhnfrmbonton", "PoeticMan", "P4pa Swag"],
           counts: [], playerPoints: {}
         }
       };
@@ -11484,6 +11546,7 @@
       ]);
       let entries = [];
       let derivedDrops = [];
+      let lootValueGp = 0;
       let wheelResults = [];
       let mechanicStates = new Map();
       let mechanicActivity = [];
@@ -11495,6 +11558,9 @@
       const standingsLayout = document.querySelector(".rush-standings-layout");
       const standingsFooter = document.querySelector(".rush-standings-threshold-footer");
       const standingsTitleMount = document.getElementById("rush-standings-title-mount");
+      const lootCounter = document.getElementById("rush-loot-counter");
+      const lootCounterValue = document.getElementById("rush-loot-counter-value");
+      const lootCounterTooltip = document.getElementById("rush-loot-counter-tooltip");
       const tierOutletShadow = document.getElementById("rush-tier-outlet-shadow");
       const tierOutletGlass = document.getElementById("rush-tier-outlet-glass");
       const tierOutletInner = document.getElementById("rush-tier-outlet-inner");
@@ -11944,6 +12010,7 @@
             variantIndex,
             item: item ? variantName(item, variantIndex) : entry.item,
             cardItem: item ? itemName(item) : entry.cardItem,
+            gpValue: gpValueForEntry({ ...entry, tierIndex, itemIndex, variantIndex }),
             mechanicsEligible: migratePreviousVersion && !preserveMechanics ? false : entry.mechanicsEligible === true
           };
         }).filter(isValidEntry);
@@ -12053,6 +12120,30 @@
         if (!draft || !Number.isInteger(draft.tierIndex) || !Number.isInteger(draft.itemIndex)) return "";
         const variantIndex = Number.isInteger(draft.variantIndex) ? draft.variantIndex : 0;
         return `t${draft.tierIndex + 1}-c${draft.itemIndex + 1}-v${variantIndex + 1}`;
+      }
+
+      function gpValueForEntry(entry) {
+        const snapshot = Number(entry && entry.gpValue);
+        if (Number.isSafeInteger(snapshot) && snapshot >= 0) return snapshot;
+        const configured = Number(window.MANTIS_POINT_RUSH_GP_PRICES?.[backendItemSlug(entry)] ?? 0);
+        return Number.isSafeInteger(configured) && configured >= 0 ? configured : 0;
+      }
+
+      function compactGpValue(value) {
+        const amount = Math.max(0, Number(value) || 0);
+        if (amount < 1000) return String(Math.trunc(amount));
+        const units = amount >= 1e9 ? [1e9, "B"] : amount >= 1e6 ? [1e6, "M"] : [1e3, "K"];
+        const scaled = amount / units[0];
+        const digits = scaled >= 100 ? 0 : scaled >= 10 ? 1 : 2;
+        return `${scaled.toFixed(digits).replace(/\.0+$|(?<=\.[0-9])0$/, "")}${units[1]}`;
+      }
+
+      function refreshLootCounter() {
+        if (!lootCounter || !lootCounterValue || !lootCounterTooltip) return;
+        const exact = `${Math.trunc(lootValueGp).toLocaleString("en-US")} GP`;
+        lootCounterValue.textContent = compactGpValue(lootValueGp);
+        lootCounterTooltip.textContent = exact;
+        lootCounter.setAttribute("aria-label", `Total loot value: ${exact}`);
       }
 
       async function pointRushBackendFetch(url, options = {}) {
@@ -12438,6 +12529,7 @@
           team.playerPoints = Object.fromEntries(team.playerNames.map((player) => [player, 0]));
         });
         derivedDrops = [];
+        lootValueGp = 0;
         resetMechanicState();
 
         entries.forEach((entry, entryIndex) => {
@@ -12539,6 +12631,7 @@
 
           team.counts[entry.tierIndex][entry.itemIndex][variantIndex] += 1;
           team.playerPoints[entry.player] += points;
+          lootValueGp += gpValueForEntry(entry);
           derivedDrops.push({ ...draft, type: "drop", rawPoints, bonusPoints, modifierLabel, points, sprite: `${tiers[entry.tierIndex].roman}.${entry.itemIndex + 1}`, activityOrder });
         });
       }
@@ -14605,6 +14698,13 @@
         const titleBottomLimitY = titleMountRect.bottom - sectionRect.top - 3;
         const titleRightLimitX = titleMountRect.right - sectionRect.left - 5;
         const titleGeometry = buildTeamFeedTitlePath(riserX, titleTopLimitY, titleBottomLimitY, titleRightLimitX);
+        if (lootCounter && titleGeometry.path) {
+          const mountLeft = titleMountRect.left - sectionRect.left;
+          const idealLeft = titleGeometry.rightX - mountLeft + 14;
+          const maximumLeft = Math.max(0, titleMountRect.width - lootCounter.offsetWidth - 3);
+          lootCounter.style.setProperty("--rush-loot-left", `${Math.min(idealLeft, maximumLeft).toFixed(2)}px`);
+          lootCounter.style.top = `${(((titleGeometry.topY + titleGeometry.bottomY) / 2) - (titleMountRect.top - sectionRect.top)).toFixed(2)}px`;
+        }
 
         // The lower outlet starts where the removed lower-barrel inlet lived, then flares downward.
         const outletTipY = Math.min(
@@ -15242,6 +15342,7 @@
       }
 
       function refreshStandings() {
+        refreshLootCounter();
         const standings = teamOrder.map((key, originalIndex) => ({
           key,
           originalIndex,
@@ -16014,7 +16115,7 @@
         const previousLeaderPoints = leadingTeamPoints();
         const previousTier = teamCurrentTier(teams[draft.team]);
         const now = new Date().toISOString();
-        entries.push({ ...draft, eventType: requirement ? "requirement" : "drop", id: makeEntryId(), createdAt: now, mechanicsEligible: true });
+        entries.push({ ...draft, eventType: requirement ? "requirement" : "drop", id: makeEntryId(), createdAt: now, mechanicsEligible: true, gpValue: requirement ? 0 : gpValueForEntry(draft) });
 
         if (!saveEntries()) {
           entries = previousEntries;
