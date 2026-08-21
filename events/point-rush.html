@@ -11657,6 +11657,8 @@
       let mechanicStates = new Map();
       let mechanicActivity = [];
       let mechanicStandingAdjustments = Object.fromEntries(teamOrder.map((teamKey) => [teamKey, 0]));
+      let backendTeamProgression = null;
+      let backendTeamStandings = null;
       const teamButtons = Array.from(document.querySelectorAll(".rush-team-row"));
       const teamList = document.querySelector(".rush-team-list");
       const standingsSection = document.querySelector(".rush-standings-section");
@@ -12349,6 +12351,121 @@
         teamOrder.forEach((teamKey) => { teams[teamKey].playerNames = nextRoster[teamKey]; });
       }
 
+      function applyBackendAuthoritativeState(state) {
+        const backendPlayers = Array.isArray(state.players) ? state.players : [];
+        const backendTeamStates = Array.isArray(state.teamStates) ? state.teamStates : [];
+        const backendPlayerStates = Array.isArray(state.playerStates) ? state.playerStates : [];
+        const backendMechanicStates = Array.isArray(state.mechanicStates) ? state.mechanicStates : [];
+        const backendActivity = Array.isArray(state.activity) ? state.activity : [];
+        const teamKeyById = new Map();
+        const playerById = new Map();
+
+        backendTeamProgression = new Map();
+        backendTeamStandings = new Map();
+        backendTeamStates.forEach((teamState) => {
+          const teamKey = typeof teamState.teamCode === "string" && Object.prototype.hasOwnProperty.call(teams, teamState.teamCode)
+            ? teamState.teamCode
+            : null;
+          if (!teamKey) return;
+          if (typeof teamState.teamId === "string") teamKeyById.set(teamState.teamId, teamKey);
+          backendTeamProgression.set(teamKey, Number(teamState.progressionPoints) || 0);
+          backendTeamStandings.set(teamKey, Number(teamState.standingsPoints) || 0);
+        });
+
+        backendPlayers.forEach((player) => {
+          if (!player || typeof player.id !== "string") return;
+          const teamKey = typeof player.teamCode === "string" && Object.prototype.hasOwnProperty.call(teams, player.teamCode)
+            ? player.teamCode
+            : teamKeyById.get(player.teamId);
+          const name = typeof player.name === "string" ? player.name.trim() : "";
+          if (teamKey && name) playerById.set(player.id, { name, teamKey });
+        });
+
+        teamOrder.forEach((teamKey) => {
+          teams[teamKey].playerPoints = Object.fromEntries(teams[teamKey].playerNames.map((name) => [name, 0]));
+        });
+        backendPlayerStates.forEach((playerState) => {
+          const player = playerById.get(playerState.playerId);
+          const teamKey = player ? player.teamKey : teamKeyById.get(playerState.teamId);
+          if (!player || !teamKey || !teams[teamKey]) return;
+          teams[teamKey].playerPoints[player.name] = Number(playerState.standingsPoints) || 0;
+        });
+
+        const mechanicStateByKey = new Map();
+        backendMechanicStates.forEach((backendMechanic) => {
+          const localState = mechanicStateFor(backendMechanic.mechanicKey);
+          if (!localState) return;
+          const status = backendMechanic.status === "pending_target" ? "pending" : backendMechanic.status;
+          const claimedPlayer = playerById.get(backendMechanic.claimedPlayerId);
+          Object.assign(localState, {
+            status,
+            claimedTeam: teamKeyById.get(backendMechanic.claimedTeamId) || null,
+            claimedPlayer: claimedPlayer ? claimedPlayer.name : null,
+            targetTeam: teamKeyById.get(backendMechanic.targetTeamId) || null,
+            progress: Number(backendMechanic.progress) || 0,
+            blockedTierIndex: Number.isInteger(Number(backendMechanic.blockedTierNumber)) && Number(backendMechanic.blockedTierNumber) > 0
+              ? Number(backendMechanic.blockedTierNumber) - 1
+              : null,
+            pointsDelta: Number(backendMechanic.pointsDelta) || 0
+          });
+          mechanicStateByKey.set(backendMechanic.mechanicKey, localState);
+        });
+
+        const dropActivity = backendActivity
+          .filter((activity) => activity && activity.eventType === "drop")
+          .sort((first, second) => Number(first.actionSequence) - Number(second.actionSequence));
+        const visibleDrops = derivedDrops.filter((drop) => drop.type === "drop" && !drop.suppressed);
+        visibleDrops.forEach((drop, index) => {
+          const activity = dropActivity[index];
+          if (!activity) return;
+          const rawPoints = Number(activity.metadata && activity.metadata.rawPoints);
+          const awardedPoints = Number(activity.pointsDelta);
+          if (Number.isFinite(rawPoints)) drop.rawPoints = rawPoints;
+          if (Number.isFinite(awardedPoints)) {
+            drop.points = awardedPoints;
+            drop.bonusPoints = awardedPoints - (Number.isFinite(rawPoints) ? rawPoints : drop.rawPoints);
+            drop.modifierLabel = drop.bonusPoints
+              ? `Base ${formatSignedPoints(Number.isFinite(rawPoints) ? rawPoints : drop.rawPoints)} Â· Power-up ${formatSignedPoints(drop.bonusPoints)}`
+              : "";
+          }
+        });
+
+        mechanicActivity = backendActivity.flatMap((activity) => {
+          if (!activity || typeof activity.eventType !== "string" || !activity.eventType.startsWith("mechanic_")) return [];
+          const mechanicKey = activity.metadata && activity.metadata.mechanicKey;
+          const mechanicState = mechanicStateByKey.get(mechanicKey) || mechanicStateFor(mechanicKey);
+          if (!mechanicState) return [];
+          const phase = activity.eventType === "mechanic_progress" ? "progress"
+            : activity.eventType === "mechanic_resolved" ? "resolved"
+            : activity.eventType === "mechanic_targeted" ? "targeted"
+            : mechanicState.status === "pending" ? "pending"
+            : mechanicState.status === "resolved" ? "resolved" : "triggered";
+          const actor = playerById.get(activity.playerId);
+          return [{
+            id: `backend-mechanic-${activity.actionSequence}-${activity.activityOrder}`,
+            type: "mechanic",
+            sourceEntryId: null,
+            mechanicId: mechanicState.mechanic.id,
+            mechanicType: mechanicState.mechanic.type,
+            tierIndex: mechanicState.mechanic.tierIndex,
+            phase,
+            team: mechanicState.claimedTeam,
+            affectedTeam: affectedTeamForMechanic(mechanicState),
+            targetTeam: mechanicState.targetTeam,
+            player: mechanicState.claimedPlayer,
+            actor: actor ? actor.name : mechanicState.claimedPlayer,
+            title: typeof activity.title === "string" ? activity.title : mechanicState.mechanic.revealedTitle,
+            description: typeof activity.description === "string" ? activity.description : mechanicDescriptionForState(mechanicState, phase),
+            points: Number(activity.pointsDelta) || 0,
+            createdAt: activity.createdAt,
+            activityOrder: (Number(activity.actionSequence) * 100) + Number(activity.activityOrder || 0)
+          }];
+        });
+
+        const backendLootValue = Number(state.lootValueGp);
+        if (Number.isSafeInteger(backendLootValue) && backendLootValue >= 0) lootValueGp = backendLootValue;
+      }
+
       async function syncPointRushBackend(force = false, previousLeaderPoints = null, celebrateScaleChange = false) {
         if (!pointRushBackendEnabled || pointRushBackendSyncing || prototypeWheelSpinning || pendingPinAction) return false;
         pointRushBackendSyncing = true;
@@ -12363,6 +12480,7 @@
           entries = normalizeStoredEntries(Array.isArray(state.entries) ? state.entries : []);
           wheelResults = normalizeStoredWheelResults(Array.isArray(state.wheelResults) ? state.wheelResults : []);
           rebuildBoardState();
+          applyBackendAuthoritativeState(state);
           const selectedCurrentTier = teamCurrentTier(currentTeam());
           if (selectedTierIndex > selectedCurrentTier) selectedTierIndex = selectedCurrentTier;
           const adminCurrentTier = teamCurrentTier(adminTeam());
@@ -12804,6 +12922,10 @@
       }
 
       function teamDropPoints(team) {
+        const teamKey = teamOrder.find((key) => teams[key] === team);
+        if (pointRushBackendEnabled && teamKey && backendTeamProgression && backendTeamProgression.has(teamKey)) {
+          return backendTeamProgression.get(teamKey);
+        }
         return team.counts.reduce((total, tierCounts, tierIndex) => {
           return total + tierCounts.reduce((tierTotal, counts, itemIndex) => {
             return tierTotal + counts.reduce((itemTotal, count, variantIndex) => itemTotal + scoreDrop(tierIndex, itemIndex, variantIndex, count), 0);
@@ -12825,6 +12947,10 @@
       }
 
       function teamPoints(team) {
+        const teamKey = teamOrder.find((key) => teams[key] === team);
+        if (pointRushBackendEnabled && teamKey && backendTeamStandings && backendTeamStandings.has(teamKey)) {
+          return backendTeamStandings.get(teamKey);
+        }
         return teamAdjustedDropPoints(team) + teamWheelAdjustment(team);
       }
 
