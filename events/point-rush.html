@@ -279,13 +279,17 @@
       bottom: 0;
       left: 0;
       height: 1px;
-      background: linear-gradient(90deg, color-mix(in srgb, var(--active-team-bright) 46%, transparent), rgba(210, 183, 106, .18), transparent 86%);
+      background: rgba(230, 212, 155, .48);
+      box-shadow: 0 0 4px rgba(210, 183, 106, .24);
+      transform: scaleY(.5);
+      transform-origin: center;
     }
 
     .rush-standings-column-label--recent {
       grid-column: 3;
-      justify-self: start;
+      justify-self: center;
       margin-left: 0;
+      text-align: center;
     }
 
     .rush-rules { position: relative; }
@@ -778,12 +782,23 @@
     }
 
     .rush-team-name strong {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 7px;
       color: #eff5ec;
       font-family: Georgia, "Times New Roman", serif;
       font-size: clamp(18px, 1.8vw, 24px);
       font-weight: 500;
       line-height: 1;
+    }
+
+    .rush-team-name-sprite {
+      width: 24px;
+      height: 24px;
+      flex: 0 0 24px;
+      object-fit: contain;
+      image-rendering: pixelated;
+      filter: brightness(1.45) saturate(1.2) drop-shadow(0 0 3px var(--team-bright, #e6d49b));
     }
 
     .rush-team-viewing {
@@ -5690,6 +5705,7 @@
       text-align: center;
     }
 
+    .rush-event-countdown,
     .rush-admin-open,
     .rush-rules summary {
       position: relative;
@@ -5709,9 +5725,79 @@
       letter-spacing: .13em;
       text-transform: uppercase;
       white-space: nowrap;
-      cursor: pointer;
     }
 
+    .rush-event-countdown {
+      gap: 7px;
+      min-width: 214px;
+      cursor: default;
+    }
+
+    .rush-event-countdown-label {
+      color: #9dac9a;
+      font-size: .62rem;
+    }
+
+    .rush-event-countdown-value {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 3px;
+      color: var(--active-team-bright, #e6d49b);
+      font-family: Arial, Helvetica, sans-serif;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .07em;
+      transition: color .18s ease;
+    }
+
+    .rush-event-countdown-number,
+    .rush-event-countdown-clock { font-size: .86rem; }
+
+    .rush-event-countdown-unit {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: .56rem;
+      letter-spacing: .04em;
+    }
+
+    .rush-event-countdown-separator {
+      font-size: .62rem;
+      opacity: .72;
+    }
+
+    .rush-event-countdown-ended { font-size: .78rem; }
+
+    .rush-event-countdown[data-phase="ended"] .rush-event-countdown-value { color: #b9c4b6; }
+
+    .rush-event-countdown[data-urgent="true"] {
+      border-color: #a63c35;
+      animation: rush-event-countdown-urgent 1s steps(2, end) infinite;
+    }
+
+    .rush-event-countdown[data-urgent="true"] .rush-event-countdown-label,
+    .rush-event-countdown[data-urgent="true"] .rush-event-countdown-value { color: #ff6f66; }
+
+    @keyframes rush-event-countdown-urgent {
+      0%, 100% {
+        background: linear-gradient(180deg, #351612, #160807 72%, #090303);
+        box-shadow: inset 0 0 9px rgba(255, 71, 61, .18), 0 0 4px rgba(255, 71, 61, .18);
+      }
+      50% {
+        background: linear-gradient(180deg, #6a211c, #290b09 72%, #100403);
+        box-shadow: inset 0 0 12px rgba(255, 91, 80, .34), 0 0 10px rgba(255, 71, 61, .38);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rush-event-countdown[data-urgent="true"] {
+        animation: none;
+        background: linear-gradient(180deg, #51201b, #210a08 72%, #0d0403);
+        box-shadow: inset 0 0 10px rgba(255, 91, 80, .24), 0 0 6px rgba(255, 71, 61, .24);
+      }
+    }
+
+    .rush-admin-open,
+    .rush-rules summary { cursor: pointer; }
+
+    .rush-event-countdown::before,
     .rush-admin-open::before,
     .rush-rules::before {
       content: "";
@@ -5732,6 +5818,7 @@
       z-index: 1;
     }
 
+    .rush-event-countdown::after,
     .rush-admin-open::after,
     .rush-rules::after {
       content: "";
@@ -7144,11 +7231,8 @@
       }
       .rush-standings-column-label--recent {
         grid-column: 2;
-        justify-self: start;
-        text-align: left;
-      }
-      .rush-standings-column-label--recent::after {
-        background: linear-gradient(90deg, color-mix(in srgb, var(--active-team-bright) 46%, transparent), rgba(210, 183, 106, .18), transparent 86%);
+        justify-self: center;
+        text-align: center;
       }
       .rush-standings-divider {
         width: 100%;
@@ -7275,7 +7359,14 @@
       .rush-wheel-modal { padding: 8px; }
       .rush-wheel-dialog { width: min(calc(100vw - 16px), 78dvh); }
       .rush-wheel-dialog-close { width: 30px; height: 30px; font-size: 19px; }
-      .rush-admin-open, .rush-rules summary { min-height: 32px; padding: 0 9px; font-size: .57rem; }
+      .rush-event-countdown, .rush-admin-open, .rush-rules summary { min-height: 32px; padding: 0 9px; font-size: .57rem; }
+      .rush-event-countdown { gap: 4px; min-width: 176px; }
+      .rush-event-countdown-label { font-size: .54rem; }
+      .rush-event-countdown-value { gap: 2px; letter-spacing: .035em; }
+      .rush-event-countdown-number,
+      .rush-event-countdown-clock { font-size: .74rem; }
+      .rush-event-countdown-unit { font-size: .48rem; }
+      .rush-event-countdown-separator { font-size: .54rem; }
       .rush-admin-modal, .rush-admin-confirm-modal { padding: 7px; }
       .rush-admin-dialog { width: calc(100vw - 14px); max-height: calc(100dvh - 14px); }
       .rush-admin-dialog-body { padding: 8px; }
@@ -9692,6 +9783,13 @@
               </div>
             </div>
             <div class="rush-hero-actions">
+              <div class="rush-event-countdown" id="rush-event-countdown" role="timer" aria-live="off" aria-label="Point Rush starts August 21, 2026 at 7:00 PM Eastern and ends September 5, 2026 at 7:00 PM Eastern">
+                <span class="rush-event-countdown-label" id="rush-event-countdown-label">Starts in</span>
+                <strong class="rush-event-countdown-value" id="rush-event-countdown-value">
+                  <span class="rush-event-countdown-running" id="rush-event-countdown-running"><span class="rush-event-countdown-number" id="rush-event-countdown-days">--</span> <span class="rush-event-countdown-unit" id="rush-event-countdown-unit">days</span> <span class="rush-event-countdown-separator" aria-hidden="true">·</span> <span class="rush-event-countdown-clock" id="rush-event-countdown-clock">--:--:--</span></span>
+                  <span class="rush-event-countdown-ended" id="rush-event-countdown-ended" hidden>Ended</span>
+                </strong>
+              </div>
               <details class="rush-rules" id="rush-rules">
                 <summary aria-controls="rush-rules-panel">Rules</summary>
                 <div class="rush-rules-panel" id="rush-rules-panel" aria-label="Point Rush rules">
@@ -9730,7 +9828,7 @@
               <span class="rush-team-liquid" aria-hidden="true"><span class="rush-liquid-bubbles"></span><span class="rush-liquid-edge"></span></span>
               <span class="rush-team-feed-inlet" aria-hidden="true"></span>
               <span class="rush-rank">T1<span class="rush-rank-label">Tied</span></span>
-              <span class="rush-team-name"><strong>Saradomin</strong><span class="rush-team-viewing" aria-hidden="true">Viewing</span></span>
+              <span class="rush-team-name"><strong><img class="rush-team-name-sprite" src="../images/point-rush/clan-icon-law.webp" alt="" aria-hidden="true" width="24" height="24" decoding="async"><span class="rush-team-name-label">Saradomin</span></strong><span class="rush-team-viewing" aria-hidden="true">Viewing</span></span>
               <span class="rush-points">0<span>Points</span></span>
               <span class="rush-tier"><strong>Tier I</strong></span>
               <span class="rush-progress-pair"><span class="rush-row-milestone" role="progressbar" aria-label="Saradomin has 0 points on the shared 10 point race scale" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"></span></span>
@@ -9744,7 +9842,7 @@
               <span class="rush-team-liquid" aria-hidden="true"><span class="rush-liquid-bubbles"></span><span class="rush-liquid-edge"></span></span>
               <span class="rush-team-feed-inlet" aria-hidden="true"></span>
               <span class="rush-rank">T1<span class="rush-rank-label">Tied</span></span>
-              <span class="rush-team-name"><strong>Guthix</strong><span class="rush-team-viewing" aria-hidden="true">Viewing</span></span>
+              <span class="rush-team-name"><strong><img class="rush-team-name-sprite" src="../images/point-rush/clan-icon-guthixian.webp" alt="" aria-hidden="true" width="24" height="24" decoding="async"><span class="rush-team-name-label">Guthix</span></strong><span class="rush-team-viewing" aria-hidden="true">Viewing</span></span>
               <span class="rush-points">0<span>Points</span></span>
               <span class="rush-tier"><strong>Tier I</strong></span>
               <span class="rush-progress-pair"><span class="rush-row-milestone" role="progressbar" aria-label="Guthix has 0 points on the shared 10 point race scale" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"></span></span>
@@ -9758,7 +9856,7 @@
               <span class="rush-team-liquid" aria-hidden="true"><span class="rush-liquid-bubbles"></span><span class="rush-liquid-edge"></span></span>
               <span class="rush-team-feed-inlet" aria-hidden="true"></span>
               <span class="rush-rank">T1<span class="rush-rank-label">Tied</span></span>
-              <span class="rush-team-name"><strong>Zamorak</strong><span class="rush-team-viewing" aria-hidden="true">Viewing</span></span>
+              <span class="rush-team-name"><strong><img class="rush-team-name-sprite" src="../images/point-rush/clan-icon-zamorakian.webp" alt="" aria-hidden="true" width="24" height="24" decoding="async"><span class="rush-team-name-label">Zamorak</span></strong><span class="rush-team-viewing" aria-hidden="true">Viewing</span></span>
               <span class="rush-points">0<span>Points</span></span>
               <span class="rush-tier"><strong>Tier I</strong></span>
               <span class="rush-progress-pair"><span class="rush-row-milestone" role="progressbar" aria-label="Zamorak has 0 points on the shared 10 point race scale" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"></span></span>
@@ -11500,20 +11598,28 @@
       const teams = {
         tide: {
           name: "Saradomin", accent: "#50569c", bright: "#747bc5", dark: "#2d3260", deep: "#14172e", ready: "#6e74b4", readyBright: "#9298d5", readyDark: "#363c72",
-          playerNames: ["Pond Scum", "meat zyn", "Vycra", "C D C D C D", "Kuja the iii", "Third Leg", "nickd6", "Ottertoebean", "Bustaa", "Gary Salty", "TTVak2silly", "Azmoric", "ImFatMatt", "Joshuahtree"],
+          playerNames: ["Pond Scum", "meat zyn", "Vycra", "C D C D C D", "Kuja the iii", "Third Leg", "nickd6", "Ottertoebean", "Bustaa", "Gary Salty", "TTVak2silly", "Azmoric", "ImFatMatt", "Joshuahtree", "Cawk Bawls"],
           counts: [], playerPoints: {}
         },
         moss: {
           name: "Guthix", accent: "#2d8065", bright: "#45aa86", dark: "#174d3d", deep: "#071e18", ready: "#3ca77e", readyBright: "#72e2b2", readyDark: "#14523e",
-          playerNames: ["The Antidote", "Big Baby Boy", "KrystalOS", "GIMSaintDrip", "ironVikings", "4taa", "NoPants V2", "socksarewet", "Dhampir007", "nutzach00", "AnulAssassin", "Admiral Blud", "CringusKhan", "Parbs"],
+          playerNames: ["The Antidote", "Big Baby Boy", "KrystalOS", "GIMSaintDrip", "ironVikings", "4taa", "NoPants V2", "socksarewet", "Dhampir007", "nutzach00", "AnulAssassin", "Admiral Blud", "CringusKhan", "Parbs", "R A S L A N"],
           counts: [], playerPoints: {}
         },
         ember: {
           name: "Zamorak", accent: "#8e3028", bright: "#bb5a4d", dark: "#501a17", deep: "#250a09", ready: "#d84d3f", readyBright: "#ff8270", readyDark: "#6b1713",
-          playerNames: ["TheDog", "Mollie", "Iron Hogey", "rskru", "Dum n dumr", "Pyros", "YeetMyLoad", "Macks B", "Ghrimreapr", "LilJecki", "GingerBihh", "jhnfrmbonton", "PoeticMan", "P4pa Swag"],
+          playerNames: ["TheDog", "Mollie", "Iron Hogey", "rskru", "Dum n dumr", "Pyros", "YeetMyLoad", "Macks B", "Ghrimreapr", "LilJecki", "GingerBihh", "jhnfrmbonton", "PoeticMan", "P4pa Swag", "Iron Brapper"],
           counts: [], playerPoints: {}
         }
       };
+      const teamUrlSlugByKey = Object.freeze({ tide: "saradomin", moss: "guthix", ember: "zamorak" });
+      const teamKeyByUrlSlug = Object.freeze({ saradomin: "tide", guthix: "moss", zamorak: "ember" });
+
+      function teamKeyFromUrlValue(value) {
+        const normalized = typeof value === "string" ? value.trim().toLowerCase() : "";
+        if (Object.prototype.hasOwnProperty.call(teams, normalized)) return normalized;
+        return teamKeyByUrlSlug[normalized] || null;
+      }
 
       // Tier-upgrade rewards: Tier I starts unlocked, then every later tier threshold grants one reward.
       const milestones = Object.freeze(tiers.slice(1).map((tier) => tier.unlockAt));
@@ -11724,6 +11830,13 @@
       const listItemCardStage = document.getElementById("rush-list-item-card-stage");
       const supportsListItemCardPopover = typeof listItemCardModal.showPopover === "function";
       const liveStatus = document.getElementById("rush-live-status");
+      const eventCountdown = document.getElementById("rush-event-countdown");
+      const eventCountdownLabel = document.getElementById("rush-event-countdown-label");
+      const eventCountdownRunning = document.getElementById("rush-event-countdown-running");
+      const eventCountdownDays = document.getElementById("rush-event-countdown-days");
+      const eventCountdownUnit = document.getElementById("rush-event-countdown-unit");
+      const eventCountdownClock = document.getElementById("rush-event-countdown-clock");
+      const eventCountdownEnded = document.getElementById("rush-event-countdown-ended");
       const adminOpenButton = document.getElementById("rush-admin-open");
       const adminModal = document.getElementById("rush-admin-modal");
       const adminDialog = document.getElementById("rush-admin-dialog");
@@ -11788,6 +11901,10 @@
       const pinSubmitButton = document.getElementById("rush-pin-submit");
       const pageParameters = new URLSearchParams(window.location.search);
       const pointRushBackendEventId = "10000000-0000-4000-8000-000000000001";
+      const pointRushStartsAt = Date.parse("2026-08-21T23:00:00Z");
+      const pointRushEndsAt = Date.parse("2026-09-05T23:00:00Z");
+      const pointRushUrgencyThreshold = 15 * 60 * 1000;
+      const pointRushScheduleLabel = "August 21, 2026 at 7:00 PM Eastern to September 5, 2026 at 7:00 PM Eastern";
       const pointRushLocalHost = location.protocol === "file:" || ["127.0.0.1", "localhost"].includes(location.hostname);
       const pointRushProductionBackendUrl = "https://lpkieolbvwpdckazjrel.supabase.co/functions/v1/point-rush-admin-action";
       const pointRushBackendUrl = pointRushLocalHost
@@ -11799,9 +11916,10 @@
       let pointRushBackendRosterRevision = -1;
       let pointRushBackendSyncing = false;
       let pointRushBackendPollTimer = null;
+      let eventCountdownTimer = null;
       let pendingPinAction = null;
       const requestedTeam = pageParameters.get("team");
-      let selectedTeamKey = Object.prototype.hasOwnProperty.call(teams, requestedTeam) ? requestedTeam : "tide";
+      let selectedTeamKey = teamKeyFromUrlValue(requestedTeam) || "tide";
       let selectedTierIndex = 0;
       let selectedTierView = "cards";
       let lastPlayerTrigger = null;
@@ -12144,6 +12262,49 @@
         lootCounterValue.textContent = compactGpValue(lootValueGp);
         lootCounterTooltip.textContent = exact;
         lootCounter.setAttribute("aria-label", `Total loot value: ${exact}`);
+      }
+
+      function renderEventCountdown(milliseconds) {
+        const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        const dayLabel = days === 1 ? "day" : "days";
+        const clock = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        eventCountdownDays.textContent = String(days);
+        eventCountdownUnit.textContent = dayLabel;
+        eventCountdownClock.textContent = clock;
+        eventCountdownRunning.hidden = false;
+        eventCountdownEnded.hidden = true;
+        return `${days} ${dayLabel} · ${clock}`;
+      }
+
+      function refreshEventCountdown(now = Date.now()) {
+        if (now < pointRushStartsAt) {
+          const remaining = pointRushStartsAt - now;
+          eventCountdown.dataset.phase = "upcoming";
+          eventCountdown.dataset.urgent = String(remaining <= pointRushUrgencyThreshold);
+          eventCountdownLabel.textContent = "Starts in";
+          const countdownText = renderEventCountdown(remaining);
+          eventCountdown.setAttribute("aria-label", `Point Rush starts in ${countdownText}. Scheduled ${pointRushScheduleLabel}.`);
+          return;
+        }
+        if (now < pointRushEndsAt) {
+          const remaining = pointRushEndsAt - now;
+          eventCountdown.dataset.phase = "active";
+          eventCountdown.dataset.urgent = String(remaining <= pointRushUrgencyThreshold);
+          eventCountdownLabel.textContent = "Ends in";
+          const countdownText = renderEventCountdown(remaining);
+          eventCountdown.setAttribute("aria-label", `Point Rush ends in ${countdownText}. Scheduled ${pointRushScheduleLabel}.`);
+          return;
+        }
+        eventCountdown.dataset.phase = "ended";
+        eventCountdown.dataset.urgent = "false";
+        eventCountdownLabel.textContent = "Event";
+        eventCountdownRunning.hidden = true;
+        eventCountdownEnded.hidden = false;
+        eventCountdown.setAttribute("aria-label", `Point Rush ended. Scheduled ${pointRushScheduleLabel}.`);
       }
 
       async function pointRushBackendFetch(url, options = {}) {
@@ -15381,7 +15542,7 @@
           button.dataset.firstPlace = standing.points === standings[0].points ? "true" : "false";
           button.dataset.tierEight = String(tierEightReached);
           button.removeAttribute("data-reward-ready");
-          button.querySelector(".rush-team-name strong").textContent = team.name;
+          button.querySelector(".rush-team-name-label").textContent = team.name;
           button.querySelector(".rush-points").innerHTML = `${standing.points}<span>Points</span>`;
           button.querySelector(".rush-tier strong").textContent = `Tier ${tier.roman}`;
           rankCopy.innerHTML = `${rankText}${rankLabel ? `<span class="rush-rank-label">${rankLabel}</span>` : ""}`;
@@ -15467,10 +15628,10 @@
         window.setTimeout(() => entry.classList.remove("rush-selection-pulse"), 700);
       }
 
-      function updateTeamUrl(key) {
+      function updateTeamUrl(key, replace = false) {
         const url = new URL(window.location.href);
-        url.searchParams.set("team", key);
-        window.history.pushState({ team: key }, "", url);
+        url.searchParams.set("team", teamUrlSlugByKey[key] || key);
+        window.history[replace ? "replaceState" : "pushState"]({ team: key }, "", url);
       }
 
       function selectTeam(key, announce, updateUrl) {
@@ -16593,8 +16754,10 @@
       });
 
       window.addEventListener("popstate", () => {
-        const key = new URLSearchParams(window.location.search).get("team");
-        selectTeam(Object.prototype.hasOwnProperty.call(teams, key) ? key : "tide", false, false);
+        const value = new URLSearchParams(window.location.search).get("team");
+        const key = teamKeyFromUrlValue(value) || "tide";
+        selectTeam(key, false, false);
+        if (value && value.toLowerCase() !== teamUrlSlugByKey[key]) updateTeamUrl(key, true);
       });
 
       let hitsplatResizeFrame = null;
@@ -16611,6 +16774,12 @@
 
       entries = [];
       wheelResults = [];
+      refreshEventCountdown();
+      eventCountdownTimer = window.setInterval(refreshEventCountdown, 1000);
+      window.addEventListener("beforeunload", () => {
+        if (eventCountdownTimer !== null) window.clearInterval(eventCountdownTimer);
+      });
+      if (requestedTeam && requestedTeam.toLowerCase() !== teamUrlSlugByKey[selectedTeamKey]) updateTeamUrl(selectedTeamKey, true);
       rebuildBoardState();
       selectedTierIndex = teamCurrentTier(currentTeam());
       adminTierIndex = teamCurrentTier(adminTeam());
