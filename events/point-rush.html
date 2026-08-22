@@ -292,6 +292,8 @@
       text-align: center;
     }
 
+    .rush-past-drops-stacked-label { display: none; }
+
     .rush-rules { position: relative; }
     .rush-rules summary { list-style: none; }
     .rush-rules summary::-webkit-details-marker { display: none; }
@@ -7250,15 +7252,16 @@
     @media (max-width: 1000px) {
       .rush-standings-layout { grid-template-columns: 1fr; }
       .rush-standings-column-labels {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
       }
       .rush-standings-column-label:not(.rush-standings-column-label--recent) {
+        grid-column: 1 / -1;
         justify-self: center;
         margin-right: 0;
         margin-left: 0;
       }
       .rush-standings-column-label--recent {
-        grid-column: 2;
+        display: none;
         justify-self: center;
         text-align: center;
       }
@@ -7284,7 +7287,15 @@
           inset 0 -2px 0 rgba(0, 0, 0, .88),
           0 2px 3px rgba(0, 0, 0, .34);
       }
-      .rush-past-drops { align-self: stretch; }
+      .rush-past-drops {
+        align-self: stretch;
+        margin-left: var(--rush-team-feed-gutter, 42px);
+      }
+      .rush-past-drops-stacked-label {
+        display: block;
+        align-self: center;
+        margin: 7px auto 6px;
+      }
       .rush-past-drops-scroll { flex: 0 1 auto; max-height: 244px; }
       .rush-item-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
@@ -7314,15 +7325,21 @@
       }
 
       .rush-team-row {
-        grid-template-columns: 1fr auto;
-        gap: 11px;
-        align-items: start;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 8px;
+        align-items: center;
+        height: 92px;
+        min-height: 92px;
+        max-height: 92px;
       }
 
-      .rush-team-name { grid-column: 1; grid-row: 1; }
-      .rush-points { grid-column: 2; grid-row: 1; font-size: 46px; }
-      .rush-tier { grid-column: 1; grid-row: 2; }
-      .rush-progress-pair { grid-column: 1 / -1; grid-row: 3; }
+      .rush-team-name { grid-column: 1; grid-row: 1; min-width: 0; }
+      .rush-team-name strong { min-width: 0; }
+      .rush-team-name-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .rush-points { grid-column: 2; grid-row: 1; font-size: 38px; }
+      .rush-tier { grid-column: 3; grid-row: 1; }
+      .rush-progress-pair,
+      .rush-team-row > .rush-row-threshold { display: none; }
       .rush-item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .rush-admin-dialog-body { grid-template-columns: 1fr; }
       .rush-admin-side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -7373,12 +7390,22 @@
       .rush-hero.event-page-header, .rush-section { padding: 14px; }
       .rush-standings-section { padding: 9px; }
       .rush-team-detail { padding: 14px 0 0; }
-      .rush-team-row { grid-template-columns: 1fr; min-height: 0; padding: 13px 12px 13px 16px; }
+      .rush-team-row {
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 6px;
+        height: 92px;
+        min-height: 92px;
+        max-height: 92px;
+        padding: 10px 8px 10px 14px;
+      }
       .rush-team-entry { grid-template-columns: minmax(0, 1fr) 58px; gap: 0; }
       .rush-team-name { grid-column: 1; grid-row: 1; }
-      .rush-points { grid-column: 1 / -1; grid-row: 2; margin: 8px 0; font-size: 52px; text-align: left; }
-      .rush-tier { grid-column: 1 / -1; grid-row: 3; }
-      .rush-progress-pair { grid-row: 4; grid-template-columns: 1fr; }
+      .rush-team-name strong { font-size: 16px; }
+      .rush-team-name-sprite { width: 21px; height: 21px; flex-basis: 21px; }
+      .rush-points { grid-column: 2; grid-row: 1; margin: 0; font-size: 32px; text-align: right; }
+      .rush-tier { grid-column: 3; grid-row: 1; }
+      .rush-tier strong { font-size: 10px; white-space: nowrap; }
+      .rush-progress-pair { display: none; }
       .rush-item-grid { grid-template-columns: 1fr; }
       .rush-tier-tabs { grid-template-columns: repeat(8, 112px); }
       .rush-milestone-track { margin-left: 0; margin-right: 0; }
@@ -9899,6 +9926,7 @@
           <span class="rush-standings-divider" aria-hidden="true"></span>
 
           <aside class="rush-past-drops" aria-label="Recent drops">
+            <span class="rush-standings-column-label rush-past-drops-stacked-label" aria-hidden="true">Recent Drops</span>
             <div class="rush-past-drops-scroll" tabindex="0" aria-label="Scrollable recent drops list">
               <ol class="rush-past-drops-list" id="past-drops-list" aria-live="polite"></ol>
             </div>
