@@ -16,8 +16,6 @@
   border-radius:0!important;
   background:rgba(7,11,8,.94)!important;
   box-shadow:0 12px 30px rgba(0,0,0,.32),inset 0 0 0 1px rgba(184,232,159,.035)!important;
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
 }
 .v160-nav-shell::before,.v160-nav-shell::after{display:none!important}
 .v160-brand{
@@ -171,12 +169,12 @@
 /* Homepage event interactions selected from the experimental design. */
 body.v160-home .past-card.feature-past-event,
 body.v160-home .current-card.current-event-teaser{
-  transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease!important;
+  transition:transform .28s ease,border-color .28s ease!important;
 }
 body.v160-home .past-event-art img,
 body.v160-home .event-teaser-art img{
   scale:1;
-  transition:scale .72s cubic-bezier(.2,.65,.2,1),filter .5s ease!important;
+  transition:scale .72s cubic-bezier(.2,.65,.2,1)!important;
   will-change:scale;
 }
 body.v160-home .past-event-outcome.event-link{
@@ -208,12 +206,10 @@ body.v160-home .past-event-outcome.event-link:focus-visible{
   body.v160-home .current-card.current-event-teaser:hover{
     transform:translateY(-3px)!important;
     border-color:#68826b!important;
-    box-shadow:0 22px 46px rgba(0,0,0,.29),0 0 30px rgba(121,218,98,.07)!important;
   }
   body.v160-home .past-card.feature-past-event:hover .past-event-art img,
   body.v160-home .past-card.feature-past-event:focus-within .past-event-art img{
     scale:1.045;
-    filter:saturate(1.08) contrast(1.04)!important;
   }
   body.v160-home .past-card.feature-past-event:hover .past-event-outcome,
   body.v160-home .past-card.feature-past-event:focus-within .past-event-outcome{
@@ -222,7 +218,6 @@ body.v160-home .past-event-outcome.event-link:focus-visible{
   }
   body.v160-home .current-card.current-event-teaser:hover .event-teaser-art img{
     scale:1.035;
-    filter:saturate(1.06) contrast(1.025)!important;
   }
 }
 
@@ -362,14 +357,6 @@ body.v160-home .welcome-heading-row::after{
   text-shadow:none!important;
   box-shadow:none!important;
 }
-body.v160-home .welcome-mantis{
-  filter:none!important;
-}
-body.v160-home .welcome-panel .mantis-eye{
-  animation:none!important;
-  filter:none!important;
-}
-
 /* Homepage paper-flake pattern repeated behind the completed-event pages. */
 .v161-event-dots{
   position:fixed!important;
@@ -398,4 +385,3 @@ body.v161-event-page > :not(.v161-event-dots){
     transition:none!important;
   }
 }
-

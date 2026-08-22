@@ -40,9 +40,15 @@
       min-height: 100vh;
       overflow-x: hidden;
       color: var(--rush-text);
-      background:
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, .12) 0 1px, transparent 1.4px),
+        radial-gradient(circle, rgba(255, 255, 255, .08) 0 .8px, transparent 1.25px),
+        radial-gradient(circle, rgba(255, 255, 255, .055) 0 .7px, transparent 1.1px),
         radial-gradient(circle at 50% -20%, rgba(105, 147, 89, .13), transparent 42rem),
         linear-gradient(180deg, #050706 0%, #090c0a 42%, #0d120f 100%);
+      background-size: 83px 97px, 127px 139px, 181px 163px, auto, auto;
+      background-position: 13px 21px, 47px 69px, 91px 37px, center top, center top;
+      background-repeat: repeat, repeat, repeat, no-repeat, no-repeat;
       font: 14px/1.5 Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -485,30 +491,12 @@
 
     .rush-team-entry.rush-blockage-panel-pulse,
     .rush-past-drop.rush-blockage-panel-pulse {
-      animation: rush-blockage-panel-pulse 1.35s ease-in-out infinite;
+      filter: brightness(1.08);
     }
 
     .rush-past-drop.rush-blockage-panel-pulse {
       outline: 1px solid color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 68%, #dce7da);
       outline-offset: -1px;
-    }
-
-    @keyframes rush-blockage-panel-pulse {
-      0%, 100% {
-        filter: brightness(1);
-        box-shadow: 0 0 0 0 transparent;
-      }
-      50% {
-        filter: brightness(1.18);
-        box-shadow:
-          inset 0 0 28px color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 24%, transparent),
-          0 0 0 1px color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 65%, transparent),
-          0 0 22px color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 52%, transparent);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .rush-blockage-panel-pulse { animation: none; }
     }
 
     .rush-team-row {
@@ -607,7 +595,6 @@
         0 3px 8px color-mix(in srgb, var(--team-bright, var(--team, var(--rush-pale))) 12%, transparent),
         inset 0 -2px 0 rgba(255, 255, 255, .07);
       transform-origin: center;
-      animation: rush-liquid-wave-back 9.4s ease-in-out infinite;
     }
 
     .rush-team-liquid::after {
@@ -624,7 +611,6 @@
         0 2px 7px color-mix(in srgb, var(--team-bright, var(--team, var(--rush-pale))) 15%, transparent),
         inset 0 -1px 0 rgba(255, 255, 255, .09);
       transform-origin: center;
-      animation: rush-liquid-wave-front 6.8s ease-in-out infinite;
     }
 
     .rush-liquid-bubbles {
@@ -639,19 +625,6 @@
         radial-gradient(circle at 91px 88px, color-mix(in srgb, var(--team-bright, #dce8df) 28%, #f4fff7) 0 1px, transparent 1.8px),
         radial-gradient(circle at 126px 78px, color-mix(in srgb, var(--team-bright, #dce8df) 20%, #f4fff7) 0 1.2px, transparent 2px);
       background-size: 112px 98px, 138px 112px, 166px 124px, 194px 134px;
-      animation: rush-potion-bubbles 6.4s linear infinite;
-    }
-
-    .rush-liquid-bubbles::before {
-      content: "";
-      position: absolute;
-      top: -28%;
-      bottom: -28%;
-      left: -42%;
-      width: 34%;
-      transform: skewX(-18deg);
-      background: linear-gradient(90deg, transparent, rgba(242, 255, 247, .19), transparent);
-      animation: rush-liquid-highlight 6.8s ease-in-out infinite;
     }
 
     .rush-liquid-bubbles::after {
@@ -664,7 +637,6 @@
         radial-gradient(circle at 78px 96px, rgba(248, 255, 250, .56) 0 2.4px, transparent 3.1px),
         radial-gradient(circle at 138px 84px, rgba(248, 255, 250, .64) 0 3.6px, transparent 4.4px);
       background-size: 132px 112px, 176px 128px, 218px 142px;
-      animation: rush-potion-bubbles-large 8.4s linear infinite;
     }
 
     .rush-liquid-edge {
@@ -682,7 +654,6 @@
         -5px 0 10px color-mix(in srgb, var(--team-bright, var(--team, var(--rush-green))) 34%, transparent),
         inset 2px 0 0 rgba(255, 255, 255, .08);
       transform-origin: center;
-      animation: rush-liquid-edge-wobble 3.1s ease-in-out infinite;
     }
 
     .rush-team-row[data-first-place="true"] .rush-team-liquid {
@@ -695,68 +666,36 @@
     }
 
     .rush-team-row[data-first-place="true"] .rush-team-liquid::before {
-      animation-duration: 6.9s;
       background: color-mix(in srgb, var(--team-bright, var(--team)) 29%, transparent);
     }
 
     .rush-team-row[data-first-place="true"] .rush-team-liquid::after {
-      animation-duration: 4.8s;
       background: color-mix(in srgb, var(--team-bright, var(--team)) 40%, transparent);
     }
 
     .rush-team-row[data-first-place="true"] .rush-liquid-bubbles {
       opacity: .66;
-      animation-duration: 4.1s;
     }
 
     .rush-team-row[data-first-place="true"] .rush-liquid-bubbles::after {
       opacity: .48;
-      animation-duration: 5.3s;
     }
 
     .rush-team-row[data-first-place="true"] .rush-liquid-edge {
       opacity: .9;
-      animation-duration: 2.1s;
       box-shadow:
         -6px 0 13px color-mix(in srgb, var(--team-bright, var(--team)) 42%, transparent),
         inset 2px 0 0 rgba(255, 255, 255, .12);
     }
 
     .rush-team-row[data-tier-eight="true"] .rush-team-liquid {
-      animation: rush-team-tier-eight-pulse 1.65s ease-in-out infinite;
-    }
-
-    @keyframes rush-team-tier-eight-pulse {
-      0%, 100% {
-        opacity: .9;
-        filter: brightness(1.04) saturate(1.08);
-        box-shadow:
-          inset 0 15px 22px rgba(255, 255, 255, .09),
-          inset 0 -22px 28px rgba(0, 0, 0, .24),
-          inset 0 0 20px color-mix(in srgb, var(--team-bright, var(--team)) 18%, transparent);
-      }
-      50% {
-        opacity: 1;
-        filter: brightness(1.28) saturate(1.18);
-        box-shadow:
-          inset 0 18px 26px rgba(255, 255, 255, .16),
-          inset 0 -18px 24px rgba(0, 0, 0, .18),
-          inset 0 0 32px color-mix(in srgb, var(--team-bright, var(--team)) 42%, transparent),
-          0 0 18px color-mix(in srgb, var(--team-bright, var(--team)) 44%, transparent);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .rush-team-row[data-tier-eight="true"] .rush-team-liquid {
-        animation: none;
-        opacity: 1;
-        filter: brightness(1.18) saturate(1.14);
-        box-shadow:
-          inset 0 16px 24px rgba(255, 255, 255, .13),
-          inset 0 -20px 26px rgba(0, 0, 0, .2),
-          inset 0 0 28px color-mix(in srgb, var(--team-bright, var(--team)) 34%, transparent),
-          0 0 14px color-mix(in srgb, var(--team-bright, var(--team)) 36%, transparent);
-      }
+      opacity: 1;
+      filter: brightness(1.18) saturate(1.14);
+      box-shadow:
+        inset 0 16px 24px rgba(255, 255, 255, .13),
+        inset 0 -20px 26px rgba(0, 0, 0, .2),
+        inset 0 0 28px color-mix(in srgb, var(--team-bright, var(--team)) 34%, transparent),
+        0 0 14px color-mix(in srgb, var(--team-bright, var(--team)) 36%, transparent);
     }
 
     .rush-team-row[data-reward-ready="true"] .rush-team-liquid {
@@ -1027,9 +966,7 @@
         radial-gradient(circle at 50% 50%, rgba(255, 255, 255, .58) 0 .8px, color-mix(in srgb, var(--team-bright, var(--team, var(--rush-green))) 40%, transparent) 1px 1.8px, transparent 2.1px);
       background-size: 19px 27px, 27px 35px, 15px 23px;
       background-position: 2px 28px, 13px 42px, 7px 19px;
-      animation: rush-tier-boil-bubbles var(--boil-duration, 6.6s) linear infinite;
       pointer-events: none;
-      will-change: background-position, opacity;
     }
 
     .rush-unique-fill::after {
@@ -1048,9 +985,7 @@
         linear-gradient(180deg, color-mix(in srgb, var(--team-bright, var(--team, var(--rush-green))) 58%, rgba(235, 247, 239, .58)), transparent 72%);
       filter: blur(.35px);
       transform-origin: 50% 100%;
-      animation: rush-tier-boil-surface var(--boil-surface-duration, 4.8s) ease-in-out infinite;
       pointer-events: none;
-      will-change: transform, opacity;
     }
 
     .rush-unique-copy {
@@ -1084,50 +1019,6 @@
       line-height: 1;
       font-variant-numeric: tabular-nums;
       text-shadow: 0 1px 3px rgba(0, 0, 0, .9);
-    }
-
-    @keyframes rush-liquid-wave-back {
-      0%, 100% { transform: translate3d(-4%, 1px, 0) rotate(-3deg) scaleY(.96); }
-      50% { transform: translate3d(5%, 7px, 0) rotate(4deg) scaleY(1.06); }
-    }
-
-    @keyframes rush-liquid-wave-front {
-      0%, 100% { transform: translate3d(5%, 6px, 0) rotate(4deg) scaleY(1.04); }
-      50% { transform: translate3d(-5%, 0, 0) rotate(-4deg) scaleY(.95); }
-    }
-
-    @keyframes rush-liquid-edge-wobble {
-      0%, 100% { transform: translateX(-1px) scaleX(.76) rotate(-2deg); }
-      50% { transform: translateX(5px) scaleX(1.18) rotate(3deg); }
-    }
-
-    @keyframes rush-liquid-highlight {
-      0%, 16% { transform: translateX(0) skewX(-18deg); opacity: 0; }
-      45% { opacity: .78; }
-      78%, 100% { transform: translateX(430%) skewX(-18deg); opacity: 0; }
-    }
-
-    @keyframes rush-potion-bubbles {
-      0% { background-position: 0 38px, 18px 50px, 42px 62px, 68px 46px; }
-      100% { background-position: 12px -30px, 30px -26px, 54px -22px, 82px -38px; }
-    }
-
-    @keyframes rush-potion-bubbles-large {
-      0% { background-position: 0 34px, 26px 58px, 54px 42px; transform: translateX(0); }
-      50% { transform: translateX(3px); }
-      100% { background-position: 10px -78px, 40px -70px, 68px -88px; transform: translateX(0); }
-    }
-
-    @keyframes rush-tier-boil-bubbles {
-      0% { background-position: 2px 34px, 13px 47px, 7px 27px; }
-      50% { background-position: 8px 2px, 5px 10px, 14px -5px; }
-      100% { background-position: 14px -32px, 20px -39px, 2px -34px; }
-    }
-
-    @keyframes rush-tier-boil-surface {
-      0%, 100% { transform: translate3d(-1.5%, 1px, 0) scaleY(.82) skewX(-2deg); }
-      35% { transform: translate3d(2.2%, -1px, 0) scaleY(1.08) skewX(2deg); }
-      68% { transform: translate3d(-.3%, 0, 0) scaleY(.94) skewX(-1deg); }
     }
 
     .rush-standings-section { padding: 14px; }
@@ -2491,18 +2382,6 @@
       transition: width .85s cubic-bezier(.22, .72, .2, 1), background .28s ease, box-shadow .28s ease, filter .28s ease;
     }
 
-    .rush-milestone-fill::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(117deg, rgba(255, 255, 255, .018) 0 2px, transparent 2px 9px),
-        linear-gradient(100deg, transparent 0 34%, rgba(255, 228, 199, .14) 47%, transparent 60%);
-      background-size: auto, 180% 100%;
-      animation: rush-threshold-sheen 6.4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
     .rush-milestone-fill::after {
       content: "";
       position: absolute;
@@ -2515,30 +2394,6 @@
       box-shadow: -4px 0 8px color-mix(in srgb, var(--wheel-bright) 28%, transparent);
       opacity: .82;
       pointer-events: none;
-    }
-
-    @keyframes rush-threshold-sheen {
-      0%, 100% { background-position: 0 0, 140% 0; }
-      50% { background-position: 0 0, -40% 0; }
-    }
-
-    @keyframes rush-wheel-ready-pulse {
-      0%, 100% {
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, .18),
-          inset 0 -2px 0 rgba(0, 0, 0, .78),
-          inset 0 0 0 3px color-mix(in srgb, var(--wheel-ready-dark) 46%, #111512),
-          0 0 7px color-mix(in srgb, var(--wheel-ready) 34%, transparent),
-          0 3px 8px rgba(0, 0, 0, .48);
-      }
-      50% {
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, .22),
-          inset 0 -2px 0 rgba(0, 0, 0, .76),
-          inset 0 0 0 3px color-mix(in srgb, var(--wheel-ready-dark) 58%, #111512),
-          0 0 14px color-mix(in srgb, var(--wheel-ready) 58%, transparent),
-          0 3px 8px rgba(0, 0, 0, .48);
-      }
     }
 
     .rush-standings-milestone[data-ready="true"]::before {
@@ -2561,7 +2416,6 @@
         radial-gradient(circle at 7px 50%, var(--wheel-ready) 0 1px, transparent 1.5px),
         linear-gradient(180deg, color-mix(in srgb, var(--wheel-ready-bright) 22%, transparent), transparent 30%),
         linear-gradient(180deg, color-mix(in srgb, var(--wheel-ready-dark) 62%, #353a36), color-mix(in srgb, var(--wheel-ready-dark) 42%, #121614) 60%, #050706);
-      animation: rush-wheel-ready-pulse 2.2s ease-in-out infinite;
     }
 
     .rush-wheel-button[data-ready="true"]::before {
@@ -2886,24 +2740,9 @@
       filter: saturate(.72) brightness(.82);
     }
 
-    @keyframes rush-vial-ready-pulse {
-      0%, 100% {
-        transform: translateX(-50%) scale(1);
-        filter: drop-shadow(0 0 4px color-mix(in srgb, var(--wheel-ready) 34%, transparent));
-      }
-      50% {
-        transform: translateX(-50%) scale(1.055);
-        filter: drop-shadow(0 0 10px color-mix(in srgb, var(--wheel-ready-bright) 68%, transparent));
-      }
-    }
-
     .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-feed::before {
       height: calc(100% - 4px);
       opacity: .88;
-    }
-
-    .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-shell {
-      animation: rush-vial-ready-pulse 2.15s ease-in-out var(--vial-delay, 0s) infinite;
     }
 
     .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-liquid {
@@ -3072,7 +2911,6 @@
       stroke: var(--active-team, #50569c);
       stroke-width: 6;
       opacity: .84;
-      filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team, #50569c) 42%, transparent));
       transition: stroke .28s ease, opacity .28s ease;
     }
 
@@ -3081,12 +2919,7 @@
       stroke-width: 2;
       stroke-dasharray: 4 10;
       opacity: .88;
-      animation: rush-team-feed-flow 1.45s linear infinite;
       transition: stroke .28s ease;
-    }
-
-    @keyframes rush-team-feed-flow {
-      to { stroke-dashoffset: -28; }
     }
 
     /* Upward riser + POINT RUSH: polished clear glass energized by tight selected-team light. */
@@ -3112,7 +2945,6 @@
       filter:
         blur(1.35px)
         drop-shadow(0 0 5px color-mix(in srgb, var(--active-team, #50569c) 66%, transparent));
-      animation: rush-team-glass-halo-breathe 7.2s ease-in-out infinite;
     }
 
     /* A saturated narrow light keeps most of the tube transparent while adding vivid color. */
@@ -3140,7 +2972,6 @@
       opacity: .58;
       transform: translate(-1px, -1px);
       filter: drop-shadow(0 0 1.5px color-mix(in srgb, #ffffff 48%, transparent));
-      animation: rush-team-glass-sheen 6.8s ease-in-out infinite;
     }
 
     .rush-team-feed-gas-riser-sheen {
@@ -3149,17 +2980,6 @@
 
     .rush-team-feed-gas-title-sheen {
       stroke: color-mix(in srgb, #ffffff 72%, var(--active-team-bright, #747bc5) 28%);
-    }
-
-    @keyframes rush-team-glass-halo-breathe {
-      0%, 100% { opacity: .21; }
-      50% { opacity: .29; }
-    }
-
-    @keyframes rush-team-glass-sheen {
-      0%, 100% { opacity: .48; }
-      48% { opacity: .68; }
-      58% { opacity: .62; }
     }
 
     .rush-team-feed-inlet {
@@ -3271,7 +3091,6 @@
 
     .rush-team-feed-throat-liquid {
       fill: url(#rush-team-feed-throat-liquid-gradient);
-      filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team, #50569c) 42%, transparent));
       opacity: .88;
     }
 
@@ -3282,7 +3101,6 @@
       stroke-linecap: round;
       stroke-dasharray: 4 10;
       opacity: .88;
-      animation: rush-team-feed-flow 1.45s linear infinite;
     }
 
     .rush-point-total {
@@ -3324,18 +3142,6 @@
       }
       .rush-team-feed-inlet { width: 16px; height: 24px; }
       .rush-team-name { margin-left: 13px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .rush-team-feed-liquid-highlight,
-      .rush-team-feed-throat-liquid-highlight,
-      #rush-tier-outlet-liquid-highlight,
-      .rush-team-feed-gas-riser-aura,
-      .rush-team-feed-gas-riser-cloud,
-      .rush-team-feed-gas-riser-sheen,
-      .rush-team-feed-gas-title-aura,
-      .rush-team-feed-gas-title-cloud,
-      .rush-team-feed-gas-title-sheen { animation: none; }
     }
 
     .rush-tier-tabs {
@@ -3491,13 +3297,7 @@
       stroke-dasharray: 4 10;
       stroke-dashoffset: 0;
       opacity: .9;
-      filter: drop-shadow(0 0 2px color-mix(in srgb, var(--active-team-bright) 42%, transparent));
-      animation: rush-player-flow-out 1.45s linear infinite;
       vector-effect: non-scaling-stroke;
-    }
-
-    @keyframes rush-player-flow-out {
-      to { stroke-dashoffset: -28; }
     }
 
     .rush-player-bar-throats { pointer-events: none; }
@@ -3634,18 +3434,6 @@
       transition: width .34s ease, background .28s ease, box-shadow .28s ease;
     }
 
-    .rush-player-point-fill::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(117deg, rgba(255, 255, 255, .018) 0 2px, transparent 2px 9px),
-        linear-gradient(100deg, transparent 0 34%, rgba(255, 228, 199, .14) 47%, transparent 60%);
-      background-size: auto, 180% 100%;
-      animation: rush-threshold-sheen 6.4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
     .rush-player-bar-label {
       position: relative;
       z-index: 4;
@@ -3723,10 +3511,6 @@
       .rush-player-button.rush-player-button--reservoir { gap: 5px; min-height: 24px; }
       .rush-player-button--reservoir .rush-player-sprite-cell { flex-basis: 20px; width: 20px; height: 20px; }
       .rush-player-button--reservoir .rush-player-sprite-cell .rush-sprite-image { height: 20px; max-width: 20px; max-height: 20px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .rush-player-point-fill::before { animation: none; }
     }
 
     /* Tier progression rail: the live transfer tube shows selected-team point progress through each tier. */
@@ -3809,18 +3593,6 @@
       transition: width .34s ease, background .28s ease, box-shadow .28s ease;
     }
 
-    .rush-tier-main-fill::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        repeating-linear-gradient(117deg, rgba(255, 255, 255, .018) 0 2px, transparent 2px 9px),
-        linear-gradient(100deg, transparent 0 34%, rgba(255, 228, 199, .14) 47%, transparent 60%);
-      background-size: auto, 180% 100%;
-      animation: rush-threshold-sheen 6.4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
     /* One shared liquid material and coordinate system for the entire tier plumbing network. */
     .rush-tier-loop-system .rush-tier-liquid-route path {
       fill: none;
@@ -3833,14 +3605,12 @@
       stroke: url(#rush-tier-liquid-network-gradient);
       stroke-width: var(--rush-tier-liquid-width, 4px);
       opacity: .94;
-      filter: saturate(1.08) drop-shadow(0 0 5px color-mix(in srgb, var(--active-team) 48%, transparent));
     }
 
     .rush-tier-liquid-route-core {
       stroke: var(--active-team-bright);
       stroke-width: var(--rush-tier-liquid-core-width, 1.6px);
       opacity: .34;
-      filter: drop-shadow(0 0 3px color-mix(in srgb, var(--active-team-bright) 46%, transparent));
     }
 
     .rush-tier-liquid-route-sheen {
@@ -3849,12 +3619,6 @@
       stroke-dasharray: 6 14;
       stroke-dashoffset: 0;
       opacity: .66;
-      filter: drop-shadow(0 0 2px color-mix(in srgb, var(--active-team-bright) 42%, transparent));
-      animation: rush-tier-liquid-network-flow 1.45s linear infinite;
-    }
-
-    @keyframes rush-tier-liquid-network-flow {
-      to { stroke-dashoffset: -20; }
     }
 
     .rush-tier-main-segments {
@@ -3964,32 +3728,24 @@
     .rush-tier-loop-liquid,
     .rush-tier-loop-liquid-glint {
       stroke-dasharray: var(--rush-tier-loop-progress, 0) 100;
-      transition: stroke-dasharray .32s ease, opacity .25s ease, filter .25s ease;
+      transition: stroke-dasharray .32s ease, opacity .25s ease;
     }
 
     .rush-tier-loop-liquid {
       stroke: var(--active-team);
       stroke-width: 4px;
       opacity: .84;
-      filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team) 42%, transparent));
     }
 
     .rush-tier-loop-liquid-glint {
       stroke: var(--active-team-bright);
       stroke-width: 1.5px;
       opacity: .72;
-      filter: drop-shadow(0 0 3px color-mix(in srgb, var(--active-team-bright) 45%, transparent));
-    }
-
-    .rush-tier-loop[data-state="complete"] .rush-tier-loop-liquid,
-    .rush-tier-loop[data-state="complete"] .rush-tier-loop-liquid-glint {
-      filter: saturate(1.08) brightness(1.08) drop-shadow(0 0 5px color-mix(in srgb, var(--active-team) 48%, transparent));
     }
 
     .rush-tier-loop[data-state="current"] .rush-tier-loop-liquid,
     .rush-tier-loop[data-state="current"] .rush-tier-loop-liquid-glint {
       opacity: .95;
-      filter: saturate(1.14) brightness(1.12) drop-shadow(0 0 7px color-mix(in srgb, var(--active-team-bright) 58%, transparent));
     }
 
     /* Discrete per-unique progress tubes live in the plumbing SVG so they physically hang from each lower loop. */
@@ -4030,29 +3786,22 @@
     .rush-tier-progress-branch-liquid,
     .rush-tier-progress-branch-liquid-glint {
       opacity: 0;
-      transition: opacity .25s ease, filter .25s ease;
+      transition: opacity .25s ease;
     }
 
     .rush-tier-progress-branch-liquid {
       stroke: var(--active-team);
       stroke-width: 2.8px;
-      filter: drop-shadow(0 0 4px color-mix(in srgb, var(--active-team) 46%, transparent));
     }
 
     .rush-tier-progress-branch-liquid-glint {
       stroke: var(--active-team-bright);
       stroke-width: 1px;
-      filter: drop-shadow(0 0 2px color-mix(in srgb, var(--active-team-bright) 48%, transparent));
     }
 
     .rush-tier-progress-branch[data-earned="true"] .rush-tier-progress-branch-liquid,
     .rush-tier-progress-branch[data-earned="true"] .rush-tier-progress-branch-liquid-glint {
       opacity: .96;
-    }
-
-    .rush-tier-progress-branch[data-state="current"][data-earned="true"] .rush-tier-progress-branch-liquid,
-    .rush-tier-progress-branch[data-state="current"][data-earned="true"] .rush-tier-progress-branch-liquid-glint {
-      filter: saturate(1.12) brightness(1.08) drop-shadow(0 0 5px color-mix(in srgb, var(--active-team-bright) 58%, transparent));
     }
 
     .rush-tier-feed-system {
@@ -4071,15 +3820,15 @@
     .rush-tier-feed-glass { fill: none; stroke: rgba(42, 53, 47, .96); stroke-width: 14px; stroke-linecap: round; stroke-linejoin: round; }
     .rush-tier-feed-inner { fill: none; stroke: rgba(8, 13, 10, .74); stroke-width: 9px; stroke-linecap: round; stroke-linejoin: round; }
     .rush-tier-feed-highlight { fill: none; stroke: rgba(218, 232, 222, .20); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; opacity: .88; }
-    .rush-tier-feed-liquid { fill: none; stroke: var(--active-team); stroke-width: 6px; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team) 42%, transparent)); opacity: .84; }
-    .rush-tier-feed-liquid-highlight { fill: none; stroke: var(--active-team-bright); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 4 10; opacity: .88; animation: rush-team-feed-flow 1.45s linear infinite; }
+    .rush-tier-feed-liquid { fill: none; stroke: var(--active-team); stroke-width: 6px; stroke-linecap: round; stroke-linejoin: round; opacity: .84; }
+    .rush-tier-feed-liquid-highlight { fill: none; stroke: var(--active-team-bright); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 4 10; opacity: .88; }
 
     .rush-tier-feed-throat-shadow { fill: rgba(0, 0, 0, .74); stroke: rgba(0, 0, 0, .62); stroke-width: 4px; filter: drop-shadow(0 4px 5px rgba(0, 0, 0, .52)); }
     .rush-tier-feed-throat-glass { fill: url(#rush-tier-feed-throat-glass-gradient); stroke: rgba(176, 190, 181, .48); stroke-width: 1px; }
     .rush-tier-feed-throat-inner { fill: url(#rush-tier-feed-throat-inner-gradient); opacity: .96; }
     .rush-tier-feed-throat-highlight { fill: none; stroke: rgba(218, 232, 222, .22); stroke-width: 1.5px; stroke-linecap: round; opacity: .9; }
-    .rush-tier-feed-throat-liquid { fill: url(#rush-tier-feed-throat-liquid-gradient); filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team) 42%, transparent)); opacity: .88; }
-    .rush-tier-feed-throat-liquid-highlight { fill: none; stroke: var(--active-team-bright); stroke-width: 2px; stroke-linecap: round; stroke-dasharray: 4 10; opacity: .88; animation: rush-team-feed-flow 1.45s linear infinite; }
+    .rush-tier-feed-throat-liquid { fill: url(#rush-tier-feed-throat-liquid-gradient); opacity: .88; }
+    .rush-tier-feed-throat-liquid-highlight { fill: none; stroke: var(--active-team-bright); stroke-width: 2px; stroke-linecap: round; stroke-dasharray: 4 10; opacity: .88; }
 
     .rush-tier-display-shell[data-tier-view="list"] .rush-tier-feed-system,
     .rush-tier-display-shell[data-tier-view="list"] .rush-tier-main-feed { display: none; }
@@ -4100,11 +3849,6 @@
       .rush-tier-main-fill,
       .rush-tier-loop-liquid,
       .rush-tier-loop-liquid-glint { transition: none; }
-
-      .rush-tier-main-fill::before,
-      .rush-tier-feed-liquid-highlight,
-      .rush-tier-feed-throat-liquid-highlight,
-      .rush-tier-liquid-route-sheen { animation: none; }
     }
 
     .rush-tier-tab,
@@ -7056,7 +6800,7 @@
       .rush-item-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     }
 
-    @media (max-width: 1000px) {
+    @media (max-width: 900px) {
       .rush-standings-layout { grid-template-columns: 1fr; }
       .rush-standings-column-labels {
         grid-template-columns: minmax(0, 1fr);
@@ -7383,7 +7127,6 @@
         radial-gradient(ellipse at 15% 50%, rgba(255,255,255,.22), transparent 22%),
         linear-gradient(180deg, color-mix(in srgb, var(--tier-light) 76%, white 24%), var(--tier-color));
       box-shadow: 0 -1px 6px color-mix(in srgb, var(--tier-color) 50%, transparent);
-      animation: rush-tier-reservoir-surface 3.2s ease-in-out infinite alternate;
     }
 
     .rush-tier-reservoir-liquid::after {
@@ -7397,15 +7140,6 @@
         radial-gradient(circle at 86% 35%, rgba(255,255,255,.12) 0 1px, transparent 2px);
       background-size: 67px 53px, 83px 61px, 59px 71px, 91px 47px;
       opacity: .42;
-      animation: rush-tier-reservoir-bubbles 8s linear infinite;
-    }
-
-    .rush-tier-reservoir-liquid-sheen {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(105deg, transparent 0 31%, rgba(255,255,255,.11) 44%, transparent 57%);
-      transform: translateX(-45%);
-      animation: rush-tier-reservoir-sheen 6.8s ease-in-out infinite;
     }
 
     .rush-tier-reservoir-glass {
@@ -7659,17 +7393,6 @@
       line-height: 1;
     }
     .rush-tier-tabs .rush-tier-tab[data-state="locked"] .rush-tier-strip-state { display: none; }
-
-    @keyframes rush-tier-reservoir-surface {
-      from { transform: translateX(-1%) scaleY(.86); }
-      to { transform: translateX(1%) scaleY(1.08); }
-    }
-    @keyframes rush-tier-reservoir-bubbles { to { background-position: 0 -53px, 0 -61px, 0 -71px, 0 -47px; } }
-    @keyframes rush-tier-reservoir-sheen {
-      0%, 18% { transform: translateX(-55%); opacity: 0; }
-      42%, 65% { opacity: .7; }
-      82%, 100% { transform: translateX(65%); opacity: 0; }
-    }
 
     @media (max-width: 760px) {
       .rush-tier-reservoir { height: 142px; margin-left: 76px; }
@@ -9027,16 +8750,7 @@
         0 0 8px color-mix(in srgb, var(--mechanic-team) 54%, transparent);
     }
 
-    .rush-mechanic-button[data-status="active"] {
-      animation: rush-mechanic-active-pulse 1.8s ease-in-out infinite;
-    }
-
     .rush-mechanic-button[data-status="resolved"] { opacity: .82; }
-
-    @keyframes rush-mechanic-active-pulse {
-      0%, 100% { filter: brightness(.94); }
-      50% { filter: brightness(1.22); box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 0 12px color-mix(in srgb, var(--mechanic-team) 68%, transparent); }
-    }
 
     .rush-mechanic-symbol {
       font: 900 16px/1 Arial, Helvetica, sans-serif;
@@ -9153,17 +8867,8 @@
       box-shadow: inset 3px 0 0 var(--drop-team, #9eb09a);
     }
 
-    @keyframes rush-action-required-pulse {
-      0%, 100% { box-shadow: inset 3px 0 0 #efb84d, 0 0 0 rgba(239, 184, 77, 0); filter: brightness(1); }
-      50% { box-shadow: inset 3px 0 0 #ffe08a, 0 0 18px rgba(239, 184, 77, .46); filter: brightness(1.2); }
-    }
-
-    .rush-past-drop--action-required { animation: rush-action-required-pulse .9s ease-in-out infinite; }
+    .rush-past-drop--action-required { box-shadow: inset 3px 0 0 #ffe08a, 0 0 0 2px rgba(239, 184, 77, .32); }
     .rush-mechanic-action-button { margin-top: 6px; padding: 5px 8px; border: 1px solid #d6a84f; color: #fff1bd; background: #31220d; font: 900 8px/1 Arial, Helvetica, sans-serif; text-transform: uppercase; cursor: pointer; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .rush-past-drop--action-required { animation: none; box-shadow: inset 3px 0 0 #ffe08a, 0 0 0 2px rgba(239, 184, 77, .32); }
-    }
 
     .rush-mechanic-activity-sprite {
       color: color-mix(in srgb, var(--drop-team, #9eb09a) 74%, white);
@@ -9221,10 +8926,6 @@
       .rush-tier-view-controls { min-height: 56px; padding-left: 72px; padding-right: 5px; }
       .rush-tier-view-switch { top: -29px; }
       .rush-mechanic-station { min-width: 62px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .rush-mechanic-button[data-status="active"] { animation: none; filter: brightness(1.1); }
     }
 
     /* v5.49 mechanic-header frame, switch visibility, and tooltip positioning corrections. */
@@ -9539,41 +9240,9 @@
       filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team-bright) 28%, transparent));
     }
 
-    /* Remove decorative glimmer streaks while preserving liquid and state motion. */
-    .rush-liquid-bubbles::before,
-    .rush-milestone-fill::before,
-    .rush-player-point-fill::before,
-    .rush-tier-main-fill::before {
-      content: none !important;
-    }
-
-    .rush-tier-reservoir-liquid-sheen {
-      display: none !important;
-    }
-
-    /* Preserve the dashed liquid highlights but keep every tube visually still. */
-    .rush-team-feed-liquid-highlight,
-    .rush-team-feed-throat-liquid-highlight,
-    .rush-tier-feed-liquid-highlight,
-    .rush-tier-feed-throat-liquid-highlight,
-    .rush-tier-liquid-route-sheen,
-    .rush-player-flow-pulse {
-      animation: none !important;
-    }
-
-    /* Keep liquid bubbles as a static texture instead of continuously floating. */
-    .rush-liquid-bubbles,
-    .rush-liquid-bubbles::after,
-    .rush-unique-fill::before,
-    .rush-unique-fill::after,
-    .rush-tier-reservoir-liquid::after {
-      animation: none !important;
-    }
 </style>
 </head>
 <body class="v161-event-page v169-clean-event v170-event-polish rush-page">
-  <div class="v161-event-dots" aria-hidden="true"></div>
-
   <header class="v160-nav-shell" aria-label="Site navigation">
     <div class="v170-nav-context">
       <a class="v160-brand" href="../index.html" aria-label="Mantis OSRS home">
@@ -9865,7 +9534,7 @@
                 <section class="rush-tier-reservoir" id="rush-tier-reservoir" data-tier-material="1" data-state="current" aria-label="Active tier reservoir">
                   <div class="rush-tier-reservoir-cap" aria-hidden="true"><span></span><span></span><span></span></div>
                   <div class="rush-tier-reservoir-window" id="rush-tier-reservoir-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Tier I reservoir progress, 0 percent toward Tier II">
-                    <span class="rush-tier-reservoir-liquid" aria-hidden="true"><span class="rush-tier-reservoir-liquid-sheen"></span></span>
+                    <span class="rush-tier-reservoir-liquid" aria-hidden="true"></span>
                     <span class="rush-tier-reservoir-glass" aria-hidden="true"></span>
                     <span class="rush-tier-reservoir-gauge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
                     <div class="rush-tier-reservoir-face">
@@ -9933,7 +9602,7 @@
               <section class="rush-tier-reservoir rush-list-tier-reservoir" id="rush-list-tier-reservoir" data-tier-material="1" data-state="current" data-positioned="false" aria-label="Active tier reservoir">
                 <div class="rush-tier-reservoir-cap" aria-hidden="true"><span></span><span></span><span></span></div>
                 <div class="rush-tier-reservoir-window" id="rush-list-tier-reservoir-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Tier I reservoir progress, 0 percent toward Tier II">
-                  <span class="rush-tier-reservoir-liquid" aria-hidden="true"><span class="rush-tier-reservoir-liquid-sheen"></span></span>
+                  <span class="rush-tier-reservoir-liquid" aria-hidden="true"></span>
                   <span class="rush-tier-reservoir-glass" aria-hidden="true"></span>
                   <div class="rush-tier-reservoir-face">
                     <img class="rush-tier-reservoir-symbol" id="rush-list-tier-reservoir-symbol" src="../images/point-rush/tier-emblems/tier-i.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
@@ -16785,7 +16454,7 @@
         });
         pointRushBackendPollTimer = window.setInterval(() => {
           if (!document.hidden) syncPointRushBackend(false);
-        }, 2000);
+        }, 5000);
         window.addEventListener("beforeunload", () => {
           if (pointRushBackendPollTimer !== null) window.clearInterval(pointRushBackendPollTimer);
         });
