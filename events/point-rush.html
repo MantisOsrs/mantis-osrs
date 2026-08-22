@@ -13550,7 +13550,7 @@
           const secondOrder = Math.max(...secondGroup.map((item) => item.activityOrder || 0));
           return Math.floor(secondOrder / 100) - Math.floor(firstOrder / 100);
         }).flatMap((group) => group.sort((first, second) =>
-          (first.activityOrder || 0) - (second.activityOrder || 0)));
+          (second.activityOrder || 0) - (first.activityOrder || 0)));
         pastDropsList.innerHTML = dropRows(activity, "No drops, mechanics, or wheel rewards have been recorded yet.", true, true);
         scheduleStandingsSurfaceSync();
       }
