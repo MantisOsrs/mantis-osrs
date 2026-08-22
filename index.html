@@ -2828,6 +2828,15 @@
       width: min(640px, 100%);
     }
   }
+
+  /* Keep the Point Rush teaser free of decorative glimmer. */
+  .event-teaser-art {
+    animation: none !important;
+  }
+
+  .event-teaser-art::after {
+    content: none !important;
+  }
 </style>
 </head>
 <body class="v160-home">

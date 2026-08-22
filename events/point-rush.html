@@ -9538,6 +9538,37 @@
       opacity: .92;
       filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team-bright) 28%, transparent));
     }
+
+    /* Remove decorative glimmer streaks while preserving liquid and state motion. */
+    .rush-liquid-bubbles::before,
+    .rush-milestone-fill::before,
+    .rush-player-point-fill::before,
+    .rush-tier-main-fill::before {
+      content: none !important;
+    }
+
+    .rush-tier-reservoir-liquid-sheen {
+      display: none !important;
+    }
+
+    /* Preserve the dashed liquid highlights but keep every tube visually still. */
+    .rush-team-feed-liquid-highlight,
+    .rush-team-feed-throat-liquid-highlight,
+    .rush-tier-feed-liquid-highlight,
+    .rush-tier-feed-throat-liquid-highlight,
+    .rush-tier-liquid-route-sheen,
+    .rush-player-flow-pulse {
+      animation: none !important;
+    }
+
+    /* Keep liquid bubbles as a static texture instead of continuously floating. */
+    .rush-liquid-bubbles,
+    .rush-liquid-bubbles::after,
+    .rush-unique-fill::before,
+    .rush-unique-fill::after,
+    .rush-tier-reservoir-liquid::after {
+      animation: none !important;
+    }
 </style>
 </head>
 <body class="v161-event-page v169-clean-event v170-event-polish rush-page">
