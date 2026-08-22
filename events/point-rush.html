@@ -1245,8 +1245,6 @@
       object-fit: contain;
       object-position: center;
       filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .42));
-      animation: rush-item-sprite-float 3.4s ease-in-out infinite;
-      transform-origin: 50% 58%;
     }
 
     .rush-drop-sprite .rush-sprite-image {
@@ -1277,14 +1275,6 @@
       font-size: 6px;
       letter-spacing: .08em;
     }
-    .rush-past-drop:nth-child(3n + 2) .rush-sprite-image { animation-delay: -1.1s; }
-    .rush-past-drop:nth-child(3n) .rush-sprite-image { animation-delay: -2.2s; }
-
-    @keyframes rush-item-sprite-float {
-      0%, 100% { transform: translate3d(0, 1px, 0) rotate(-.35deg); filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .42)) brightness(1); }
-      50% { transform: translate3d(0, -3px, 0) rotate(.35deg); filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .5)) brightness(1.1); }
-    }
-
     .rush-past-drop-copy { min-width: 0; }
 
     .rush-past-drop-copy strong {
@@ -1540,9 +1530,6 @@
       height: 30px;
       max-height: 30px;
     }
-    .rush-player-sprite-cell:nth-child(3n + 2) .rush-sprite-image { animation-delay: -1.1s; }
-    .rush-player-sprite-cell:nth-child(3n) .rush-sprite-image { animation-delay: -2.2s; }
-
     .rush-player-button:hover,
     .rush-player-button:focus-visible { color: var(--active-team-bright); outline: 1px solid var(--active-team-bright); }
 
@@ -2809,22 +2796,6 @@
       transition: height .28s ease, opacity .2s ease;
     }
 
-    /* The gap between spout and vial is reserved for this drop. */
-    .rush-threshold-vial-feed::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 17px;
-      width: 6px;
-      height: 8px;
-      transform: translate(-50%, -4px) scale(.55);
-      border-radius: 50% 50% 55% 55% / 38% 38% 68% 68%;
-      background: linear-gradient(180deg, var(--wheel-ready-bright), var(--wheel-ready) 48%, var(--wheel-ready-dark));
-      box-shadow: 0 0 7px color-mix(in srgb, var(--wheel-ready) 56%, transparent);
-      opacity: 0;
-      pointer-events: none;
-    }
-
     .rush-threshold-vial-shell {
       position: absolute;
       left: 50%;
@@ -2915,22 +2886,6 @@
       filter: saturate(.72) brightness(.82);
     }
 
-    @keyframes rush-vial-drip {
-      0%, 18% {
-        transform: translate(-50%, -5px) scale(.45);
-        opacity: 0;
-      }
-      28% { opacity: .95; }
-      74% {
-        transform: translate(-50%, 5px) scale(.9);
-        opacity: .9;
-      }
-      82%, 100% {
-        transform: translate(-50%, 8px) scale(.5);
-        opacity: 0;
-      }
-    }
-
     @keyframes rush-vial-ready-pulse {
       0%, 100% {
         transform: translateX(-50%) scale(1);
@@ -2945,10 +2900,6 @@
     .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-feed::before {
       height: calc(100% - 4px);
       opacity: .88;
-    }
-
-    .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-feed::after {
-      animation: rush-vial-drip 2.35s ease-in var(--vial-delay, 0s) infinite;
     }
 
     .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-shell {
@@ -2997,11 +2948,6 @@
 
     .rush-milestone-marker[data-used="true"] .rush-threshold-vial-feed::before {
       height: 0;
-      opacity: 0;
-    }
-
-    .rush-milestone-marker[data-used="true"] .rush-threshold-vial-feed::after {
-      animation: none;
       opacity: 0;
     }
 
@@ -3058,7 +3004,6 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-feed::after,
       .rush-milestone-marker[data-ready="true"] .rush-threshold-vial-shell {
         animation: none;
       }
@@ -3404,62 +3349,6 @@
       scrollbar-width: thin;
     }
 
-    /* Tier transfer: the main standings tube flares into a three-stream drip outlet above the tier controls. */
-    .rush-tier-drip-field {
-      position: absolute;
-      left: var(--rush-tier-transfer-x, 30px);
-      top: var(--rush-tier-drip-start-y, -64px);
-      z-index: 60;
-      width: 38px;
-      height: 1px;
-      transform: translateX(-50%);
-      overflow: visible;
-      pointer-events: none;
-    }
-
-    .rush-tier-drip-stream {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      width: 10px;
-      height: 1px;
-      transform: translateX(calc(-50% + var(--rush-tier-drip-x, 0px)));
-    }
-
-    .rush-tier-drip-stream:nth-child(1) { --rush-tier-drip-x: -10px; }
-    .rush-tier-drip-stream:nth-child(2) { --rush-tier-drip-x: 0px; }
-    .rush-tier-drip-stream:nth-child(3) { --rush-tier-drip-x: 10px; }
-
-    .rush-tier-drip {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      width: 5px;
-      height: 8px;
-      border-radius: 55% 55% 65% 65% / 45% 45% 75% 75%;
-      background: linear-gradient(180deg, var(--active-team-bright), var(--active-team) 58%, var(--active-team-dark));
-      box-shadow:
-        inset 1px 0 1px rgba(255, 255, 255, .28),
-        0 0 6px color-mix(in srgb, var(--active-team) 52%, transparent);
-      opacity: 0;
-      transform: translate(-50%, 0) scale(.82);
-      animation: rush-tier-drip-fall 1.62s linear var(--rush-tier-drip-delay, 0s) infinite;
-      transition: background .28s ease, box-shadow .28s ease;
-    }
-
-    .rush-tier-drip-stream .rush-tier-drip:nth-child(1) { --rush-tier-drip-delay: 0s; }
-    .rush-tier-drip-stream .rush-tier-drip:nth-child(2) { --rush-tier-drip-delay: -.54s; width: 4px; height: 7px; }
-    .rush-tier-drip-stream .rush-tier-drip:nth-child(3) { --rush-tier-drip-delay: -1.08s; width: 5px; height: 9px; }
-    .rush-tier-drip-stream:nth-child(1) .rush-tier-drip { animation-delay: calc(var(--rush-tier-drip-delay) - .11s); }
-    .rush-tier-drip-stream:nth-child(3) .rush-tier-drip { animation-delay: calc(var(--rush-tier-drip-delay) - .23s); }
-
-    @keyframes rush-tier-drip-fall {
-      0% { opacity: 0; transform: translate(-50%, 0) scale(.7); }
-      12% { opacity: .92; }
-      78% { opacity: .92; }
-      100% { opacity: 0; transform: translate(-50%, var(--rush-tier-drip-distance, 66px)) scale(1.05); }
-    }
-
     .rush-tier-funnel {
       --rush-tier-funnel-optical-shift: -5px;
       position: absolute;
@@ -3534,32 +3423,15 @@
       .rush-tier-view-controls { padding-left: 92px; }
     }
 
-    /* Continue the tier transfer vertically from the rounded elbow into the leaderboard. */
-    .rush-leaderboard-drip-field {
-      position: absolute;
-      left: var(--rush-leaderboard-transfer-x, 39px);
-      top: var(--rush-leaderboard-drip-start-y, 0px);
-      z-index: 58;
-      width: 38px;
-      height: 1px;
-      transform: translateX(-50%);
-      overflow: visible;
-      pointer-events: none;
-    }
-
-    .rush-leaderboard-drip-field .rush-tier-drip {
-      animation-duration: var(--rush-leaderboard-drip-duration, 2.85s);
-    }
-
     .rush-leaderboard-funnel {
-      /* Center the visible funnel bowl under the three falling streams. */
+      /* Center the visible funnel bowl beneath the transfer outlet. */
       left: calc(var(--rush-leaderboard-transfer-x, 39px) - 29px);
       top: 0;
       z-index: 20;
       transform: none;
     }
 
-    /* Reserve clean aligned lanes for the falling streams through the item board and inside the player leaderboard. */
+    /* Reserve clean aligned lanes for the transfer plumbing and player leaderboard. */
     .rush-tier-display-shell .rush-card-item-tray {
       padding-left: 58px;
     }
@@ -3857,11 +3729,6 @@
       .rush-player-point-fill::before { animation: none; }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .rush-tier-drip { animation: none; opacity: .78; transform: translate(-50%, 12px); }
-      .rush-tier-spigot[data-ready="true"]::after { animation: none; opacity: .78; transform: translate(-50%, 4px) scale(.68); }
-    }
-
     /* Tier progression rail: the live transfer tube shows selected-team point progress through each tier. */
     .rush-tier-main-feed {
       position: relative;
@@ -4038,28 +3905,9 @@
       transition: height .28s ease, opacity .2s ease;
     }
 
-    .rush-tier-spigot::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: 17px;
-      width: 6px;
-      height: 8px;
-      transform: translate(-50%, -4px) scale(.55);
-      border-radius: 50% 50% 55% 55% / 38% 38% 68% 68%;
-      background: linear-gradient(180deg, var(--active-team-bright), var(--active-team) 48%, var(--active-team-dark));
-      box-shadow: 0 0 7px color-mix(in srgb, var(--active-team) 56%, transparent);
-      opacity: 0;
-      pointer-events: none;
-    }
-
     .rush-tier-spigot[data-ready="true"]::before {
       height: calc(100% - 4px);
       opacity: .88;
-    }
-
-    .rush-tier-spigot[data-ready="true"]::after {
-      animation: rush-vial-drip 2.35s ease-in var(--spigot-delay, 0s) infinite;
     }
 
     .rush-tier-loop-system {
@@ -5228,27 +5076,6 @@
       min-width: 31px;
       height: 29px;
       font-size: 11px;
-    }
-
-    .rush-item-card[data-motion-ready="true"] .rush-item-sprite-fit,
-    .rush-item-card[data-motion-ready="true"] .rush-item-card-hitsplat,
-    .rush-tier-list-item[data-motion-ready="true"] {
-      animation: rush-board-item-float 3.4s ease-in-out infinite;
-      transform-origin: 50% 58%;
-      will-change: transform;
-    }
-
-    .rush-item-card:nth-child(3n + 2)[data-motion-ready="true"] .rush-item-sprite-fit,
-    .rush-item-card:nth-child(3n + 2)[data-motion-ready="true"] .rush-item-card-hitsplat,
-    .rush-tier-list-item:nth-child(3n + 2)[data-motion-ready="true"] { animation-delay: -1.1s; }
-
-    .rush-item-card:nth-child(3n)[data-motion-ready="true"] .rush-item-sprite-fit,
-    .rush-item-card:nth-child(3n)[data-motion-ready="true"] .rush-item-card-hitsplat,
-    .rush-tier-list-item:nth-child(3n)[data-motion-ready="true"] { animation-delay: -2.2s; }
-
-    @keyframes rush-board-item-float {
-      0%, 100% { transform: translate3d(0, 1px, 0) rotate(-.25deg); }
-      50% { transform: translate3d(0, -3px, 0) rotate(.25deg); }
     }
 
     .rush-tier-list-item .rush-sprite-image {
@@ -6684,12 +6511,10 @@
       background:
         radial-gradient(ellipse at 37% 43%, color-mix(in srgb, var(--sprite-team) 32%, transparent) 0, color-mix(in srgb, var(--sprite-team) 13%, transparent) 38%, transparent 68%),
         radial-gradient(ellipse at 68% 59%, color-mix(in srgb, var(--sprite-team) 22%, transparent) 0, color-mix(in srgb, var(--sprite-team) 8%, transparent) 40%, transparent 66%);
-      opacity: .58;
-      transform: scale(.96);
+      opacity: .65;
+      transform: scale(1);
       transform-origin: center;
-      filter: blur(1px) brightness(.92) saturate(.9);
-      animation: rush-sprite-aura-breathe 5.8s ease-in-out infinite;
-      will-change: transform, opacity, filter;
+      filter: blur(1px) brightness(.96) saturate(.92);
       pointer-events: none;
     }
 
@@ -6735,17 +6560,6 @@
       image-rendering: pixelated;
     }
 
-    .rush-item-card:nth-child(3n + 2) .rush-sprite-stage::before,
-    .rush-admin-item-button:nth-child(3n + 2) .rush-admin-sprite::before { animation-delay: -1.9s; }
-
-    .rush-item-card:nth-child(3n) .rush-sprite-stage::before,
-    .rush-admin-item-button:nth-child(3n) .rush-admin-sprite::before { animation-delay: -3.8s; }
-
-    @keyframes rush-sprite-aura-breathe {
-      0%, 100% { opacity: .45; transform: scale(.92); filter: blur(1px) brightness(.86) saturate(.86); }
-      50% { opacity: .76; transform: scale(1.1); filter: blur(2px) brightness(1.06) saturate(1.04); }
-    }
-
     .rush-item-card .rush-sprite-stage {
       --sprite-team: var(--item-tier-color);
       background:
@@ -6779,8 +6593,6 @@
       opacity: .86;
       transform: scale(1);
       filter: none;
-      animation-name: rush-item-card-aura-breathe;
-      animation-duration: 6.8s;
     }
 
     .rush-item-card .rush-sprite-stage::after {
@@ -6795,11 +6607,6 @@
         inset 0 0 0 1px rgba(255, 255, 255, .035),
         inset 0 0 12px rgba(0, 0, 0, .48);
       opacity: min(1, calc(.72 + var(--item-tier-detail-opacity)));
-    }
-
-    @keyframes rush-item-card-aura-breathe {
-      0%, 100% { opacity: .78; transform: scale(.99); }
-      50% { opacity: .92; transform: scale(1.015); }
     }
 
     .rush-admin-item-copy { min-width: 0; }
@@ -8654,11 +8461,7 @@
       object-position: center;
       transform: none !important;
       filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .48));
-      animation: rush-board-item-float 3.4s ease-in-out infinite;
     }
-
-    .rush-item-card--prototype:nth-child(3n + 2) .rush-standard-sprite .rush-sprite-image { animation-delay: -1.1s; }
-    .rush-item-card--prototype:nth-child(3n) .rush-standard-sprite .rush-sprite-image { animation-delay: -2.2s; }
 
     .rush-standard-sprite .rush-group-cover {
       width: 50px;
@@ -9889,7 +9692,7 @@
               <span class="rush-progress-pair"><span class="rush-row-milestone" role="progressbar" aria-label="Saradomin has 0 points on the shared 10 point race scale" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"></span></span>
               <span class="rush-row-threshold" hidden aria-hidden="true"><span class="rush-row-threshold-number">50</span><span class="rush-row-threshold-diamond"></span></span>
             </button>
-            <span class="rush-unique-meter" id="tier-meter-tide" role="progressbar" aria-label="Saradomin tier progress, 0 of 10 points toward Tier II" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="--team:#50569c;--team-bright:#747bc5;--team-dark:#2d3260;--team-deep:#14172e;--unique-progress:0%"><span class="rush-unique-fill" aria-hidden="true"></span><span class="rush-unique-copy"><img class="rush-unique-tier-emblem" src="../images/point-rush/tier-emblems/tier-i.png" alt="" aria-hidden="true" decoding="async"><strong>0/10</strong></span></span>
+            <span class="rush-unique-meter" id="tier-meter-tide" role="progressbar" aria-label="Saradomin tier progress, 0 of 10 points toward Tier II" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="--team:#50569c;--team-bright:#747bc5;--team-dark:#2d3260;--team-deep:#14172e;--unique-progress:0%"><span class="rush-unique-fill" aria-hidden="true"></span><span class="rush-unique-copy"><img class="rush-unique-tier-emblem" src="../images/point-rush/tier-emblems/tier-i.webp" alt="" aria-hidden="true" width="192" height="192" decoding="async"><strong>0/10</strong></span></span>
           </div>
 
           <div class="rush-team-entry" id="team-entry-moss" data-team-entry="moss" data-selected="false" style="--team:#2d8065;--team-bright:#45aa86;--team-dark:#174d3d;--team-deep:#071e18">
@@ -9903,7 +9706,7 @@
               <span class="rush-progress-pair"><span class="rush-row-milestone" role="progressbar" aria-label="Guthix has 0 points on the shared 10 point race scale" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"></span></span>
               <span class="rush-row-threshold" hidden aria-hidden="true"><span class="rush-row-threshold-number">50</span><span class="rush-row-threshold-diamond"></span></span>
             </button>
-            <span class="rush-unique-meter" id="tier-meter-moss" role="progressbar" aria-label="Guthix tier progress, 0 of 10 points toward Tier II" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="--team:#2d8065;--team-bright:#45aa86;--team-dark:#174d3d;--team-deep:#071e18;--unique-progress:0%"><span class="rush-unique-fill" aria-hidden="true"></span><span class="rush-unique-copy"><img class="rush-unique-tier-emblem" src="../images/point-rush/tier-emblems/tier-i.png" alt="" aria-hidden="true" decoding="async"><strong>0/10</strong></span></span>
+            <span class="rush-unique-meter" id="tier-meter-moss" role="progressbar" aria-label="Guthix tier progress, 0 of 10 points toward Tier II" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="--team:#2d8065;--team-bright:#45aa86;--team-dark:#174d3d;--team-deep:#071e18;--unique-progress:0%"><span class="rush-unique-fill" aria-hidden="true"></span><span class="rush-unique-copy"><img class="rush-unique-tier-emblem" src="../images/point-rush/tier-emblems/tier-i.webp" alt="" aria-hidden="true" width="192" height="192" decoding="async"><strong>0/10</strong></span></span>
           </div>
 
           <div class="rush-team-entry" id="team-entry-ember" data-team-entry="ember" data-selected="false" style="--team:#8e3028;--team-bright:#bb5a4d;--team-dark:#501a17;--team-deep:#250a09">
@@ -9917,7 +9720,7 @@
               <span class="rush-progress-pair"><span class="rush-row-milestone" role="progressbar" aria-label="Zamorak has 0 points on the shared 10 point race scale" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0"></span></span>
               <span class="rush-row-threshold" hidden aria-hidden="true"><span class="rush-row-threshold-number">50</span><span class="rush-row-threshold-diamond"></span></span>
             </button>
-            <span class="rush-unique-meter" id="tier-meter-ember" role="progressbar" aria-label="Zamorak tier progress, 0 of 10 points toward Tier II" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="--team:#8e3028;--team-bright:#bb5a4d;--team-dark:#501a17;--team-deep:#250a09;--unique-progress:0%"><span class="rush-unique-fill" aria-hidden="true"></span><span class="rush-unique-copy"><img class="rush-unique-tier-emblem" src="../images/point-rush/tier-emblems/tier-i.png" alt="" aria-hidden="true" decoding="async"><strong>0/10</strong></span></span>
+            <span class="rush-unique-meter" id="tier-meter-ember" role="progressbar" aria-label="Zamorak tier progress, 0 of 10 points toward Tier II" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" style="--team:#8e3028;--team-bright:#bb5a4d;--team-dark:#501a17;--team-deep:#250a09;--unique-progress:0%"><span class="rush-unique-fill" aria-hidden="true"></span><span class="rush-unique-copy"><img class="rush-unique-tier-emblem" src="../images/point-rush/tier-emblems/tier-i.webp" alt="" aria-hidden="true" width="192" height="192" decoding="async"><strong>0/10</strong></span></span>
           </div>
         </div>
 
@@ -9949,11 +9752,6 @@
 
       <section class="rush-section rush-team-detail" id="team-detail" aria-label="Selected team details">
         <section class="rush-subsection" aria-label="Drop board">
-          <span class="rush-tier-drip-field" id="rush-tier-drip-field" aria-hidden="true">
-            <span class="rush-tier-drip-stream"><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span></span>
-            <span class="rush-tier-drip-stream"><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span></span>
-            <span class="rush-tier-drip-stream"><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span></span>
-          </span>
             <div class="rush-tier-view-switch rush-tier-view-switch--extruded" role="group" aria-label="Choose tier display">
               <button class="rush-tier-view-button" type="button" data-tier-view="cards" aria-pressed="true" aria-controls="tier-card-view">Cards</button>
               <button class="rush-tier-view-button" type="button" data-tier-view="list" aria-pressed="false" aria-controls="tier-list-view">List</button>
@@ -10040,7 +9838,7 @@
                     <span class="rush-tier-reservoir-glass" aria-hidden="true"></span>
                     <span class="rush-tier-reservoir-gauge" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
                     <div class="rush-tier-reservoir-face">
-                      <img class="rush-tier-reservoir-symbol" id="rush-tier-reservoir-symbol" src="../images/point-rush/tier-emblems/tier-i.png" alt="" loading="lazy" decoding="async">
+                      <img class="rush-tier-reservoir-symbol" id="rush-tier-reservoir-symbol" src="../images/point-rush/tier-emblems/tier-i.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
                       <span class="rush-tier-reservoir-progress" id="rush-tier-reservoir-progress">0%</span>
                       <small class="rush-tier-reservoir-helper" id="rush-tier-reservoir-helper">10 points to unlock Tier II</small>
                     </div>
@@ -10107,7 +9905,7 @@
                   <span class="rush-tier-reservoir-liquid" aria-hidden="true"><span class="rush-tier-reservoir-liquid-sheen"></span></span>
                   <span class="rush-tier-reservoir-glass" aria-hidden="true"></span>
                   <div class="rush-tier-reservoir-face">
-                    <img class="rush-tier-reservoir-symbol" id="rush-list-tier-reservoir-symbol" src="../images/point-rush/tier-emblems/tier-i.png" alt="" loading="lazy" decoding="async">
+                    <img class="rush-tier-reservoir-symbol" id="rush-list-tier-reservoir-symbol" src="../images/point-rush/tier-emblems/tier-i.webp" alt="" width="192" height="192" loading="lazy" decoding="async">
                     <span class="rush-tier-reservoir-progress" id="rush-list-tier-reservoir-progress">0%</span>
                     <small class="rush-tier-reservoir-helper" id="rush-list-tier-reservoir-helper">10 points to unlock Tier II</small>
                   </div>
@@ -10120,11 +9918,6 @@
               </div>
             </div>
           </div>
-          <span class="rush-leaderboard-drip-field" id="rush-leaderboard-drip-field" aria-hidden="true">
-            <span class="rush-tier-drip-stream"><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span></span>
-            <span class="rush-tier-drip-stream"><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span></span>
-            <span class="rush-tier-drip-stream"><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span><span class="rush-tier-drip"></span></span>
-          </span>
           <section class="rush-player-board" aria-labelledby="player-board-title">
             <h3 class="rush-sr-only" id="player-board-title"><span id="player-team-name">Saradomin</span> leaderboard</h3>
             <div class="rush-player-table-wrap" tabindex="0" aria-labelledby="player-board-title">
@@ -10237,8 +10030,8 @@
       <button class="rush-wheel-dialog-close" id="rush-wheel-dialog-close" type="button" aria-label="Close prize wheel">&times;</button>
       <div class="rush-wheel-prototype">
         <div class="rush-wheel-stage">
-          <img class="rush-wheel-concept-art" id="rush-wheel-concept-art" src="../images/rush-wheel-concept1-blue-nolegs.png" alt="" aria-hidden="true" draggable="false">
-          <img class="rush-wheel-concept-tongue" src="../images/rush-wheel-concept1-tongue.png" alt="" aria-hidden="true" draggable="false">
+          <img class="rush-wheel-concept-art" id="rush-wheel-concept-art" alt="" aria-hidden="true" decoding="async" draggable="false">
+          <img class="rush-wheel-concept-tongue" id="rush-wheel-concept-tongue" data-src="../images/rush-wheel-concept1-tongue.png" alt="" aria-hidden="true" decoding="async" draggable="false">
           <div class="rush-wheel-machine">
             <div class="rush-prototype-wheel" id="rush-prototype-wheel" aria-hidden="true">
               <span class="rush-wheel-sector-label rush-wheel-sector-label--one">+2 PTS</span>
@@ -10505,7 +10298,7 @@
       // v5.81 add the approved Tier VIII groups and variant-specific starting point values.
       // v5.80 consolidate the approved raid, boss, and weapon entries while retaining variant-level scoring.
       const tiers = [
-        { roman: "I", base: 1, unlockAt: 0, symbol: "../images/point-rush/tier-emblems/tier-i.png", items: [
+        { roman: "I", base: 1, unlockAt: 0, symbol: "../images/point-rush/tier-emblems/tier-i.webp", items: [
           {
             name: "Any Barrows Item",
             cover: ["Ahrim's hood", "Dharok's greataxe", "Karil's crossbow", "Verac's flail"],
@@ -10548,7 +10341,7 @@
           "Belle’s Folly",
           "Black Mask"
         ] },
-        { roman: "II", base: 2, unlockAt: 10, symbol: "../images/point-rush/tier-emblems/tier-ii.png", items: [
+        { roman: "II", base: 2, unlockAt: 10, symbol: "../images/point-rush/tier-emblems/tier-ii.webp", items: [
           {
             name: "Any Bludgeon Item",
             cover: ["Bludgeon claw", "Bludgeon spine", "Bludgeon axon"],
@@ -10596,7 +10389,7 @@
             ]
           }
         ] },
-        { roman: "III", base: 3, unlockAt: 25, symbol: "../images/point-rush/tier-emblems/tier-iii.png", items: [
+        { roman: "III", base: 3, unlockAt: 25, symbol: "../images/point-rush/tier-emblems/tier-iii.webp", items: [
           {
             name: "Any Bandos Armor",
             cover: ["Bandos chestplate", "Bandos tassets", "Bandos boots"],
@@ -10631,7 +10424,7 @@
           "Venator Shard",
           "Dragon Hunter Wand"
         ] },
-        { roman: "IV", base: 4, unlockAt: 40, symbol: "../images/point-rush/tier-emblems/tier-iv.png", items: [
+        { roman: "IV", base: 4, unlockAt: 40, symbol: "../images/point-rush/tier-emblems/tier-iv.webp", items: [
           {
             name: "Any Voidwaker Item",
             cover: ["Voidwaker blade", "Voidwaker gem", "Voidwaker hilt"],
@@ -10672,7 +10465,7 @@
           "Black Tourmaline Core",
           "Araxyte Fang"
         ] },
-        { roman: "V", base: 5, unlockAt: 60, symbol: "../images/point-rush/tier-emblems/tier-v.png", items: [
+        { roman: "V", base: 5, unlockAt: 60, symbol: "../images/point-rush/tier-emblems/tier-v.webp", items: [
           {
             name: "Any Virtus Robe",
             cover: ["Virtus mask", "Virtus robe top", "Virtus robe bottom"],
@@ -10713,7 +10506,7 @@
           },
           "Ancient Relic"
         ] },
-        { roman: "VI", base: 6, unlockAt: 90, symbol: "../images/point-rush/tier-emblems/tier-vi.png", items: [
+        { roman: "VI", base: 6, unlockAt: 90, symbol: "../images/point-rush/tier-emblems/tier-vi.webp", items: [
           {
             name: "Any Oathplate Armour",
             cover: ["Oathplate helm", "Oathplate chest", "Oathplate legs"],
@@ -10739,7 +10532,7 @@
           "Dexterous prayer scroll",
           "Masori crafting kit"
         ] },
-        { roman: "VII", base: 7, unlockAt: 120, symbol: "../images/point-rush/tier-emblems/tier-vii.png", items: [
+        { roman: "VII", base: 7, unlockAt: 120, symbol: "../images/point-rush/tier-emblems/tier-vii.webp", items: [
           {
             name: "Any NEX Item",
             cover: ["Nihil horn", "Zaryte vambraces", "Ancient hilt", "Torva platebody"],
@@ -10763,7 +10556,7 @@
           "Cursed phalanx",
           "Twisted ancestral colour kit"
         ] },
-        { roman: "VIII", base: 8, unlockAt: 150, symbol: "../images/point-rush/tier-emblems/tier-viii.png", items: [
+        { roman: "VIII", base: 8, unlockAt: 150, symbol: "../images/point-rush/tier-emblems/tier-viii.webp", items: [
           {
             name: "Any Corporeal Beast Sigil",
             cover: ["Spectral sigil", "Arcane sigil", "Elysian sigil"],
@@ -11731,13 +11524,13 @@
       const tierOutletHighlight = document.getElementById("rush-tier-outlet-highlight");
       const tierOutletLiquid = document.getElementById("rush-tier-outlet-liquid");
       const tierOutletLiquidHighlight = document.getElementById("rush-tier-outlet-liquid-highlight");
-      const tierDripField = document.getElementById("rush-tier-drip-field");
       const milestoneMarkers = document.getElementById("milestone-markers");
       const rewardReadyMessage = document.getElementById("rush-reward-ready-message");
       const wheelModal = document.getElementById("rush-wheel-modal");
       const wheelDialog = document.getElementById("rush-wheel-dialog");
       const wheelDialogClose = document.getElementById("rush-wheel-dialog-close");
       const wheelConceptArt = document.getElementById("rush-wheel-concept-art");
+      const wheelConceptTongue = document.getElementById("rush-wheel-concept-tongue");
       const prototypeWheel = document.getElementById("rush-prototype-wheel");
       const prototypeWheelSpin = document.getElementById("rush-wheel-spin");
       const prototypeWheelResult = document.getElementById("rush-wheel-result");
@@ -11786,7 +11579,6 @@
       const mechanicTooltip = document.getElementById("rush-mechanic-tooltip");
       const teamMechanicTooltip = document.getElementById("rush-team-mechanic-tooltip");
       const tierFunnel = document.getElementById("rush-tier-funnel");
-      const tierDetailSubsection = tierDisplayShell ? tierDisplayShell.closest(".rush-subsection") : null;
       const tierMainFeed = document.getElementById("rush-tier-main-feed");
       const tierMainFeedTrack = document.getElementById("rush-tier-main-track");
       const tierMainSegments = document.getElementById("rush-tier-main-segments");
@@ -11814,7 +11606,6 @@
       const tierTransferOutletHighlight = document.getElementById("rush-tier-transfer-outlet-highlight");
       const tierTransferOutletLiquid = document.getElementById("rush-tier-transfer-outlet-liquid");
       const tierTransferOutletLiquidHighlight = document.getElementById("rush-tier-transfer-outlet-liquid-highlight");
-      const leaderboardDripField = document.getElementById("rush-leaderboard-drip-field");
       const leaderboardFunnel = document.getElementById("rush-leaderboard-funnel");
       const playerBoard = document.querySelector(".rush-player-board");
       const playerTableWrap = document.querySelector(".rush-player-table-wrap");
@@ -11964,6 +11755,25 @@
       const pointRushUrgencyThreshold = 15 * 60 * 1000;
       const pointRushScheduleLabel = "August 21, 2026 at 7:00 PM Eastern to September 5, 2026 at 7:00 PM Eastern";
       const pointRushLocalHost = location.protocol === "file:" || ["127.0.0.1", "localhost"].includes(location.hostname);
+      const pointRushInspectionEntries = pointRushLocalHost
+        ? [
+            { id: "localhost-entry-01", team: "tide", player: "Pond Scum", tierIndex: 0, itemIndex: 0, variantIndex: 3 },
+            { id: "localhost-entry-02", team: "moss", player: "socksarewet", tierIndex: 0, itemIndex: 0, variantIndex: 21 },
+            { id: "localhost-entry-03", team: "ember", player: "Iron Brapper", tierIndex: 0, itemIndex: 1, variantIndex: 11 },
+            { id: "localhost-entry-04", team: "tide", player: "Vycra", tierIndex: 0, itemIndex: 2, variantIndex: 0 },
+            { id: "localhost-entry-05", team: "moss", player: "The Antidote", tierIndex: 0, itemIndex: 3, variantIndex: 2 },
+            { id: "localhost-entry-06", team: "ember", player: "Mollie", tierIndex: 0, itemIndex: 6, variantIndex: 0 },
+            { id: "localhost-entry-07", team: "tide", player: "Cawk Bawls", tierIndex: 1, itemIndex: 7, variantIndex: 0 },
+            { id: "localhost-entry-08", team: "moss", player: "R A S L A N", tierIndex: 1, itemIndex: 9, variantIndex: 0 },
+            { id: "localhost-entry-09", team: "ember", player: "Pyros", tierIndex: 1, itemIndex: 1, variantIndex: 2 },
+            { id: "localhost-entry-10", team: "tide", player: "Kuja the iii", tierIndex: 2, itemIndex: 2, variantIndex: 0 }
+          ].map((entry, index) => ({
+            ...entry,
+            eventType: "drop",
+            createdAt: new Date(Date.now() - ((10 - index) * 60 * 1000)).toISOString(),
+            mechanicsEligible: false
+          }))
+        : [];
       const pointRushProductionBackendUrl = "https://lpkieolbvwpdckazjrel.supabase.co/functions/v1/point-rush-admin-action";
       const pointRushBackendUrl = pointRushLocalHost
         ? "http://127.0.0.1:54321/functions/v1/point-rush-admin-action"
@@ -11980,6 +11790,7 @@
       let selectedTeamKey = teamKeyFromUrlValue(requestedTeam) || "tide";
       let selectedTierIndex = 0;
       let selectedTierView = "cards";
+      let tierListNeedsRender = true;
       let lastPlayerTrigger = null;
       let lastGroupItemTrigger = null;
       let lastListItemCardTrigger = null;
@@ -13722,6 +13533,7 @@
         const resultLabel = storedResult ? wheelPrizeLabels[storedResult.resultIndex] : null;
         wheelModal.dataset.team = activeWheelTeamKey;
         wheelConceptArt.src = wheelTeamArtwork[activeWheelTeamKey];
+        if (!wheelConceptTongue.getAttribute("src")) wheelConceptTongue.src = wheelConceptTongue.dataset.src;
         prototypeWheel.style.transitionDuration = "0ms";
         prototypeWheel.style.transform = `rotate(${state.rotation}deg)`;
         prototypeWheelResult.dataset.state = resultLabel ? "result" : "ready";
@@ -14383,7 +14195,7 @@
           const stateMark = state === "complete" ? "✓" : state === "current" ? "●" : "○";
           return `
             <button class="rush-tier-tab" id="tier-tab-${index}" type="button" role="tab" aria-label="Tier ${tier.roman}, ${progressLabel}" aria-selected="${index === selectedTierIndex}" aria-controls="tier-panel" tabindex="${index === selectedTierIndex ? 0 : -1}" data-tier="${index}" data-state="${state}" style="--tier-progress:${progress.toFixed(3)}%">
-              <img class="rush-tier-card-emblem" src="${tier.symbol}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+              <img class="rush-tier-card-emblem" src="${tier.symbol}" alt="" aria-hidden="true" width="192" height="192" loading="lazy" decoding="async">
               <span class="rush-tier-strip-title">Tier ${tier.roman}</span>
               <span class="rush-tier-strip-state" aria-hidden="true">${stateMark}</span>
               ${lock}
@@ -14451,7 +14263,7 @@
               <div class="rush-tier-list-label" aria-hidden="true">
                 <span class="rush-tier-tabs rush-list-tier-card-mount">
                   <span class="rush-tier-tab rush-tier-list-status-card" data-tier-material="${tierIndex + 1}" data-state="${state}" aria-selected="${state === "current"}">
-                    <img class="rush-tier-card-emblem" src="${tier.symbol}" alt="" loading="lazy" decoding="async">
+                    <img class="rush-tier-card-emblem" src="${tier.symbol}" alt="" width="192" height="192" loading="lazy" decoding="async">
                     <span class="rush-tier-strip-title">Tier ${tier.roman}</span>
                     <span class="rush-tier-strip-state">${stateMark}</span>
                     ${tierLock}
@@ -14462,6 +14274,7 @@
             </section>
           `;
         }).join("");
+        tierListNeedsRender = false;
         positionHitsplats(tierList);
         if (selectedTierView === "list") scheduleListStarterPipeSync();
       }
@@ -14587,54 +14400,13 @@
           `C ${(centerX - startRadius + 1).toFixed(2)} ${controlOneY.toFixed(2)} ${(centerX - endRadius + 1).toFixed(2)} ${controlTwoY.toFixed(2)} ${(centerX - endRadius + 1).toFixed(2)} ${(endY - 1).toFixed(2)}`;
       }
 
-      function syncPlayerLeaderboardDrips(sourcePageX, sourcePageY) {
-        if (!tierDetailSubsection || !leaderboardDripField || !leaderboardFunnel || !playerTableWrap) return;
-
-        const subsectionRect = tierDetailSubsection.getBoundingClientRect();
+      function syncPlayerLeaderboardTransfer(sourcePageX) {
+        if (!playerTableWrap) return;
         const playerTableWrapRect = playerTableWrap.getBoundingClientRect();
         const playerTableWrapStyle = getComputedStyle(playerTableWrap);
         const playerTableBorderLeft = parseFloat(playerTableWrapStyle.borderLeftWidth) || 0;
-        const transferSubsectionX = sourcePageX - subsectionRect.left;
-        const transferDripStartY = sourcePageY - subsectionRect.top;
         const playerTransferX = sourcePageX - playerTableWrapRect.left - playerTableBorderLeft;
-
         playerTableWrap.style.setProperty("--rush-leaderboard-transfer-x", `${playerTransferX.toFixed(2)}px`);
-        leaderboardDripField.style.left = `${transferSubsectionX.toFixed(2)}px`;
-        leaderboardDripField.style.top = `${transferDripStartY.toFixed(2)}px`;
-
-        const leaderboardFunnelRect = leaderboardFunnel.getBoundingClientRect();
-        const leaderboardCatchY = leaderboardFunnelRect.top - subsectionRect.top + 7;
-        const leaderboardDripDistance = Math.max(22, leaderboardCatchY - transferDripStartY);
-        leaderboardDripField.style.setProperty("--rush-tier-drip-distance", `${leaderboardDripDistance.toFixed(2)}px`);
-
-        const teamBarDripDistance = tierDripField
-          ? parseFloat(tierDripField.style.getPropertyValue("--rush-tier-drip-distance")) || 66
-          : 66;
-        const teamBarDrip = tierDripField ? tierDripField.querySelector(".rush-tier-drip") : null;
-        const teamBarDurationText = teamBarDrip ? getComputedStyle(teamBarDrip).animationDuration : "1.62s";
-        const teamBarDuration = Math.max(.1, parseFloat(teamBarDurationText) || 1.62);
-        const leaderboardDuration = Math.max(
-          teamBarDuration,
-          teamBarDuration * (leaderboardDripDistance / Math.max(1, teamBarDripDistance))
-        );
-        leaderboardDripField.style.setProperty("--rush-leaderboard-drip-duration", `${leaderboardDuration.toFixed(3)}s`);
-
-        const teamBarStreams = tierDripField
-          ? [...tierDripField.querySelectorAll(".rush-tier-drip-stream")]
-          : [];
-        const leaderboardStreams = [...leaderboardDripField.querySelectorAll(".rush-tier-drip-stream")];
-        leaderboardStreams.forEach((stream, streamIndex) => {
-          const drops = [...stream.querySelectorAll(".rush-tier-drip")];
-          const step = leaderboardDuration / Math.max(1, drops.length);
-          const teamBarStream = teamBarStreams[streamIndex];
-          const teamBarFirstDrop = teamBarStream ? teamBarStream.querySelector(".rush-tier-drip") : null;
-          const teamBarDelayText = teamBarFirstDrop ? getComputedStyle(teamBarFirstDrop).animationDelay : "0s";
-          const teamBarPhaseRatio = Math.abs(parseFloat(teamBarDelayText) || 0) / teamBarDuration;
-          const streamPhase = leaderboardDuration * teamBarPhaseRatio;
-          drops.forEach((drop, dropIndex) => {
-            drop.style.animationDelay = `${-(streamPhase + dropIndex * step).toFixed(3)}s`;
-          });
-        });
       }
 
       const listStarterPipeLength = 30;
@@ -14771,7 +14543,7 @@
           `M ${pipeX.toFixed(2)} ${(smallFaucetStartY - 1).toFixed(2)} V ${railEndY.toFixed(2)}`
         ];
         listSmallFaucetPaths.forEach((path, index) => path.setAttribute("d", smallFaucetRoutes[index]));
-        syncPlayerLeaderboardDrips(listRect.left + pipeX, listRect.top + railEndY);
+        syncPlayerLeaderboardTransfer(listRect.left + pipeX);
 
         /* v5.67 shorten only the lower end of the List-view tier track so it clears the border below. */
         const tierRailEndY = Math.max(railStartY + 1, railEndY - 10);
@@ -15119,7 +14891,7 @@
         teamFeedThroatLiquid.setAttribute("d", flaredTeamFeedThroatPath(throatTipX - 1, throatEndX, trackY, liquidRadius, trackLiquidRadius));
         teamFeedThroatLiquidHighlight.setAttribute("d", `M ${(throatTipX - 1).toFixed(2)} ${trackY.toFixed(2)} H ${throatEndX.toFixed(2)}`);
 
-        // Same molded throat, rotated vertically: narrow tube at top, wide drip outlet at bottom.
+        // Same molded throat, rotated vertically: narrow tube at top, wide transfer outlet at bottom.
         const outletGlassPath = flaredTeamFeedVerticalThroatPath(riserX, outletTipY, outletEndY, glassRadius, trackOuterRadius);
         tierOutletShadow.setAttribute("d", outletGlassPath);
         tierOutletGlass.setAttribute("d", outletGlassPath);
@@ -15132,18 +14904,6 @@
           const shellRect = tierDisplayShell.getBoundingClientRect();
           const transferX = sectionRect.left + riserX - shellRect.left;
           tierDisplayShell.style.setProperty("--rush-tier-transfer-x", `${transferX.toFixed(2)}px`);
-
-          // Keep the drips outside the shell's clipped frame so they remain visibly on top.
-          if (tierDetailSubsection && tierDripField) {
-            const subsectionRect = tierDetailSubsection.getBoundingClientRect();
-            const dripStartX = sectionRect.left + riserX - subsectionRect.left;
-            const dripStartY = sectionRect.top + outletEndY - subsectionRect.top;
-            const funnelRect = tierFunnel.getBoundingClientRect();
-            const funnelCatchY = funnelRect.top - subsectionRect.top + 7;
-            tierDripField.style.left = `${dripStartX.toFixed(2)}px`;
-            tierDripField.style.top = `${dripStartY.toFixed(2)}px`;
-            tierDripField.style.setProperty("--rush-tier-drip-distance", `${Math.max(22, funnelCatchY - dripStartY).toFixed(2)}px`);
-          }
 
           // Funnel output uses the same tube scale and molded throat geometry as the threshold connection.
           if (tierMainFeedTrack && tierFeedSystem && tierFeedShadow && tierFeedGlass && tierFeedInner && tierFeedHighlight && tierFeedLiquid && tierFeedLiquidHighlight && tierFeedThroatShadow && tierFeedThroatGlass && tierFeedThroatInner && tierFeedThroatHighlight && tierFeedThroatLiquid && tierFeedThroatLiquidHighlight) {
@@ -15223,10 +14983,7 @@
                 tierTransferOutletLiquid.setAttribute("d", flaredTeamFeedVerticalThroatPath(funnelX, tierTransferOutletTipY - 1, tierTransferOutletEndY, liquidRadius, tierTrackLiquidRadius));
                 tierTransferOutletLiquidHighlight.setAttribute("d", `M ${funnelX.toFixed(2)} ${(tierTransferOutletTipY - 1).toFixed(2)} V ${tierTransferOutletEndY.toFixed(2)}`);
 
-                syncPlayerLeaderboardDrips(
-                  tierFeedRect.left + funnelX,
-                  tierFeedRect.top + tierTransferOutletEndY
-                );
+                syncPlayerLeaderboardTransfer(tierFeedRect.left + funnelX);
               }
             }
           }
@@ -15236,11 +14993,8 @@
 
         const firstVial = milestoneMarkers ? milestoneMarkers.querySelector(".rush-threshold-vial-shell") : null;
         const firstVialRect = firstVial ? firstVial.getBoundingClientRect() : null;
-        const dripFieldRect = tierDripField ? tierDripField.getBoundingClientRect() : null;
         const rewardBorderInset = 3;
-        const rewardLeft = dripFieldRect
-          ? Math.max(0, dripFieldRect.right - footerRect.left)
-          : Math.max(0, sectionRect.left + riserX + trackOuterRadius - footerRect.left);
+        const rewardLeft = Math.max(0, sectionRect.left + riserX + trackOuterRadius - footerRect.left);
         const rewardTop = Math.max(0, trackRect.bottom - footerRect.top);
         const rewardRight = firstVialRect
           ? Math.max(0, footerRect.right - firstVialRect.left)
@@ -15557,6 +15311,7 @@
         tierViewButtons.forEach((button) => {
           button.setAttribute("aria-pressed", String(button.dataset.tierView === selectedTierView));
         });
+        if (selectedTierView === "list" && tierListNeedsRender) renderTierList();
         positionHitsplats(selectedTierView === "cards" ? itemGrid : tierList);
         if (selectedTierView === "cards") scheduleCardShellSync();
         if (selectedTierView === "list") scheduleSettledListStarterPipeSync();
@@ -15650,7 +15405,7 @@
             return `
               <article class="rush-item-card rush-item-card--prototype${grouped ? " rush-item-card--group" : ""}" data-card-tier="${selectedTierIndex}" data-card-item="${index}" data-front-sprite="${frontSpriteKey}" data-acquired="${totalCount > 0}" data-locked="${locked}" aria-label="${displayedItem}${uniqueAria}, ${totalCount} ${totalCount === 1 ? "drop" : "drops"}, drop rate ${dropRateAria}, ${valueLabel}">
                 <div class="rush-item-card-prototype-head">
-                  <span class="rush-item-card-tier-mark"><img src="${tier.symbol}" alt=""><span>Tier ${tier.roman}</span></span>
+                  <span class="rush-item-card-tier-mark"><img src="${tier.symbol}" alt="" width="192" height="192" loading="lazy" decoding="async"><span>Tier ${tier.roman}</span></span>
                   <span class="rush-item-card-point"><small>Next drop</small><strong>${compactValue} <em>${pointUnit}</em></strong></span>
                 </div>
                 <div class="rush-item-card-prototype-body">
@@ -15787,7 +15542,8 @@
         renderMilestones();
         renderTierTabs();
         renderItems();
-        renderTierList();
+        tierListNeedsRender = true;
+        if (selectedTierView === "list") renderTierList();
         selectTierView(selectedTierView, false);
       }
 
@@ -16975,7 +16731,7 @@
         });
       });
 
-      entries = [];
+      entries = pointRushInspectionEntries;
       wheelResults = [];
       refreshEventCountdown();
       eventCountdownTimer = window.setInterval(refreshEventCountdown, 1000);
