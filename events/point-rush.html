@@ -481,6 +481,34 @@
       }
     }
 
+    .rush-team-entry.rush-blockage-panel-pulse,
+    .rush-past-drop.rush-blockage-panel-pulse {
+      animation: rush-blockage-panel-pulse 1.35s ease-in-out infinite;
+    }
+
+    .rush-past-drop.rush-blockage-panel-pulse {
+      outline: 1px solid color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 68%, #dce7da);
+      outline-offset: -1px;
+    }
+
+    @keyframes rush-blockage-panel-pulse {
+      0%, 100% {
+        filter: brightness(1);
+        box-shadow: 0 0 0 0 transparent;
+      }
+      50% {
+        filter: brightness(1.18);
+        box-shadow:
+          inset 0 0 28px color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 24%, transparent),
+          0 0 0 1px color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 65%, transparent),
+          0 0 22px color-mix(in srgb, var(--blockage-pulse-color, #a5473e) 52%, transparent);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .rush-blockage-panel-pulse { animation: none; }
+    }
+
     .rush-team-row {
       position: relative;
       width: 100%;
@@ -13472,7 +13500,7 @@
               : actionRequired ? "opponent" : typeLabel;
             const headline = `T${drop.tierIndex + 1} ${typeLabel} ${phaseLabel}: ${drop.title}`;
             return `
-              <li class="rush-past-drop rush-past-drop--mechanic${actionRequired ? " rush-past-drop--action-required" : ""}" style="--drop-team:${activityTeam.accent}">
+              <li class="rush-past-drop rush-past-drop--mechanic${actionRequired ? " rush-past-drop--action-required" : ""}" data-mechanic-id="${drop.mechanicId}" data-mechanic-type="${drop.mechanicType}" data-mechanic-phase="${drop.phase}" style="--drop-team:${activityTeam.accent}">
                 <span class="rush-drop-sprite rush-mechanic-activity-sprite" aria-hidden="true">${symbol}</span>
                 <span class="rush-past-drop-copy">
                   <strong>${headline}</strong>
@@ -13553,6 +13581,7 @@
         }).flatMap((group) => group.sort((first, second) =>
           (second.activityOrder || 0) - (first.activityOrder || 0)));
         pastDropsList.innerHTML = dropRows(activity, "No drops, mechanics, or wheel rewards have been recorded yet.", true, true);
+        syncBlockedTeamPulses();
         scheduleStandingsSurfaceSync();
       }
 
@@ -15755,6 +15784,24 @@
         window.setTimeout(() => entry.classList.remove("rush-selection-pulse"), 700);
       }
 
+      function syncBlockedTeamPulses() {
+        document.querySelectorAll(".rush-blockage-panel-pulse").forEach((target) => target.classList.remove("rush-blockage-panel-pulse"));
+        const activeBlockages = teamOrder.flatMap((teamKey) => activeMechanicsForTeam(teamKey)
+          .filter((state) => state.mechanic.type === "landmine")
+          .map((state) => ({ teamKey, state })));
+        if (prefersReducedMotion() || activeBlockages.length === 0) return;
+        activeBlockages.forEach(({ teamKey, state }) => {
+          const entry = document.getElementById(`team-entry-${teamKey}`);
+          const activityRows = Array.from(pastDropsList.querySelectorAll(
+            `[data-mechanic-id="${state.mechanic.id}"][data-mechanic-phase="triggered"], [data-mechanic-id="${state.mechanic.id}"][data-mechanic-phase="progress"]`
+          ));
+          [entry, ...activityRows].filter(Boolean).forEach((target) => {
+            target.style.setProperty("--blockage-pulse-color", teams[teamKey].bright);
+            target.classList.add("rush-blockage-panel-pulse");
+          });
+        });
+      }
+
       function updateTeamUrl(key, replace = false) {
         const url = new URL(window.location.href);
         url.searchParams.set("team", teamUrlSlugByKey[key] || key);
@@ -15774,6 +15821,7 @@
         if (updateUrl) updateTeamUrl(key);
         if (announce) {
           pulseSelectedTeam(key);
+          syncBlockedTeamPulses();
           liveStatus.textContent = `${teams[key].name} details selected.`;
         }
       }
