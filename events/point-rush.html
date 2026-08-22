@@ -12435,15 +12435,16 @@
           const mechanicKey = activity.metadata && activity.metadata.mechanicKey;
           const mechanicState = mechanicStateByKey.get(mechanicKey) || mechanicStateFor(mechanicKey);
           if (!mechanicState) return [];
+          const recordedStatus = activity.metadata && activity.metadata.status;
           const phase = activity.eventType === "mechanic_progress" ? "progress"
             : activity.eventType === "mechanic_resolved" ? "resolved"
             : activity.eventType === "mechanic_targeted" ? "targeted"
-            : mechanicState.status === "pending" ? "pending"
-            : mechanicState.status === "resolved" ? "resolved" : "triggered";
+            : recordedStatus === "pending_target" ? "pending"
+            : recordedStatus === "resolved" ? "resolved" : "triggered";
           const actor = playerById.get(activity.playerId);
           const activityTeam = teamKeyById.get(activity.teamId) || mechanicState.claimedTeam;
           const sourceEntry = entries.find((entry) => entry && entry.createdAt === activity.createdAt &&
-            (!activityTeam || entry.team === activityTeam) && (!actor || entry.player === actor.name));
+            (!activityTeam || entry.team === activityTeam));
           return [{
             id: `backend-mechanic-${activity.actionSequence}-${activity.activityOrder}`,
             type: "mechanic",
@@ -13462,10 +13463,10 @@
             const typeLabel = drop.mechanicType === "powerup" ? "Power-up" : "Blockage";
             const state = mechanicStateFor(drop.mechanicId);
             const actionRequired = drop.phase === "pending" && state && state.status === "pending";
-            const phaseLabel = actionRequired ? "action required" : drop.phase === "resolved" ? "resolved" : drop.phase === "progress" ? "progress" : drop.phase === "targeted" ? "targeted" : "revealed";
+            const phaseLabel = actionRequired ? "action required" : drop.phase === "resolved" ? "resolved" : drop.phase === "progress" ? "progress" : drop.phase === "targeted" ? "targeted" : drop.phase === "triggered" ? "triggered" : "revealed";
             const description = drop.phase === "pending" && !actionRequired && state ? mechanicDescriptionForState(state, "revealed") : drop.description;
             const symbol = drop.phase === "resolved" ? "&#10003;" : drop.phase === "targeted" ? "&#10040;" : drop.mechanicType === "powerup" ? "&#9889;" : "&#10040;";
-            const pointResult = drop.points ? formatSignedPoints(drop.points) : actionRequired ? "Choose" : drop.phase === "resolved" ? "Clear" : drop.phase === "progress" ? "Step" : "Hit";
+            const pointResult = drop.points ? formatSignedPoints(drop.points) : actionRequired ? "Choose" : drop.phase === "resolved" ? "Clear" : drop.phase === "progress" ? "Step" : drop.phase === "triggered" && drop.mechanicType === "landmine" ? "Active" : "Hit";
             const pointType = drop.points
               ? drop.mechanicType === "landmine" && drop.points < 0 ? "penalty" : state && state.mechanic.effect === "steal" ? "stolen" : "bonus"
               : actionRequired ? "opponent" : typeLabel;
