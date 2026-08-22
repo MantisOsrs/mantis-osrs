@@ -12441,10 +12441,13 @@
             : mechanicState.status === "pending" ? "pending"
             : mechanicState.status === "resolved" ? "resolved" : "triggered";
           const actor = playerById.get(activity.playerId);
+          const activityTeam = teamKeyById.get(activity.teamId) || mechanicState.claimedTeam;
+          const sourceEntry = entries.find((entry) => entry && entry.createdAt === activity.createdAt &&
+            (!activityTeam || entry.team === activityTeam) && (!actor || entry.player === actor.name));
           return [{
             id: `backend-mechanic-${activity.actionSequence}-${activity.activityOrder}`,
             type: "mechanic",
-            sourceEntryId: null,
+            sourceEntryId: sourceEntry ? sourceEntry.id : null,
             mechanicId: mechanicState.mechanic.id,
             mechanicType: mechanicState.mechanic.type,
             tierIndex: mechanicState.mechanic.tierIndex,
@@ -13546,11 +13549,8 @@
           const firstOrder = Math.max(...firstGroup.map((item) => item.activityOrder || 0));
           const secondOrder = Math.max(...secondGroup.map((item) => item.activityOrder || 0));
           return Math.floor(secondOrder / 100) - Math.floor(firstOrder / 100);
-        }).flatMap((group) => group.sort((first, second) => {
-          const typeDifference = Number(second.type === "mechanic") - Number(first.type === "mechanic");
-          if (typeDifference !== 0) return typeDifference;
-          return (second.activityOrder || 0) - (first.activityOrder || 0);
-        }));
+        }).flatMap((group) => group.sort((first, second) =>
+          (first.activityOrder || 0) - (second.activityOrder || 0)));
         pastDropsList.innerHTML = dropRows(activity, "No drops, mechanics, or wheel rewards have been recorded yet.", true, true);
         scheduleStandingsSurfaceSync();
       }
