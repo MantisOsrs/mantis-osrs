@@ -861,7 +861,7 @@
     .rush-row-threshold-number {
       position: absolute;
       left: 0;
-      top: 0;
+      top: -4px;
       color: color-mix(in srgb, var(--team-bright, var(--team)) 72%, #f2eee4);
       font: 800 8px/1 Arial, Helvetica, sans-serif;
       font-variant-numeric: tabular-nums;
@@ -9067,6 +9067,7 @@
     .rush-tier-list-sprite-square > .rush-group-cover {
       width: 70px;
       height: 70px;
+      overflow: hidden;
     }
 
     .rush-tier-list-row:not([data-state="locked"]) .rush-tier-list-item[data-acquired="false"] .rush-group-cover {
@@ -12062,8 +12063,6 @@
           wheelResults = normalizeStoredWheelResults(Array.isArray(state.wheelResults) ? state.wheelResults : []);
           rebuildBoardState();
           applyBackendAuthoritativeState(state);
-          const selectedCurrentTier = teamCurrentTier(currentTeam());
-          if (selectedTierIndex > selectedCurrentTier) selectedTierIndex = selectedCurrentTier;
           const adminCurrentTier = teamCurrentTier(adminTeam());
           if (adminTierIndex > adminCurrentTier) adminTierIndex = adminCurrentTier;
           refreshAfterDataChange(previousLeaderPoints, celebrateScaleChange);
@@ -15315,7 +15314,6 @@
         closeItemGroupModal(false);
         closeWheelModal(false);
         selectedTeamKey = key;
-        selectedTierIndex = teamCurrentTier(teams[key]);
         updateTeamButtons();
         renderAllDetails();
         if (updateUrl) updateTeamUrl(key);
@@ -16143,8 +16141,6 @@
       }
 
       function refreshAfterDataChange(previousLeaderPoints = null, celebrateScaleChange = false) {
-        const selectedCurrentTier = teamCurrentTier(currentTeam());
-        if (selectedTierIndex > selectedCurrentTier) selectedTierIndex = selectedCurrentTier;
         if (raceScaleTimer !== null && window.clearTimeout) {
           window.clearTimeout(raceScaleTimer);
           raceScaleTimer = null;
