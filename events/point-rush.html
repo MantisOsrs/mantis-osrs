@@ -11181,7 +11181,7 @@
       const previousStorageKeys = Object.freeze(["mantis-point-rush-local-board-v5", "mantis-point-rush-local-board-v4", "mantis-point-rush-local-board-v3", "mantis-point-rush-local-board-v2", "mantis-point-rush-local-board-v1"]);
       const oldPrototypeStorageKey = "mantis-point-rush-admin-prototype-v1";
       const standardWheelPointValues = Object.freeze([2, 6, -2, -6]);
-      const highTierWheelPointValues = Object.freeze([-5, 5, -10, 10]);
+      const highTierWheelPointValues = Object.freeze([2, 6, -5, -10]);
 
       function wheelPointValuesForMilestone(milestone) {
         const rewardTierIndex = tiers.findIndex((tier) => tier.unlockAt === Number(milestone));
@@ -13245,7 +13245,7 @@
         wheelConceptArt.src = wheelTeamArtwork[activeWheelTeamKey];
         if (!wheelConceptTongue.getAttribute("src")) wheelConceptTongue.src = wheelConceptTongue.dataset.src;
         prototypeWheel.querySelectorAll(".rush-wheel-sector-label").forEach((label, index) => {
-          label.textContent = `${prizeLabels[index]} PTS`;
+          label.textContent = prizeLabels[index];
         });
         prototypeWheel.style.transitionDuration = "0ms";
         prototypeWheel.style.transform = `rotate(${state.rotation}deg)`;
