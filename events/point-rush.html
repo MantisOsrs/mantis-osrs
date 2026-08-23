@@ -11180,7 +11180,17 @@
       const legacyWheelMilestones = Object.freeze([25, 40, 60, 85, 110, 140, 175]);
       const previousStorageKeys = Object.freeze(["mantis-point-rush-local-board-v5", "mantis-point-rush-local-board-v4", "mantis-point-rush-local-board-v3", "mantis-point-rush-local-board-v2", "mantis-point-rush-local-board-v1"]);
       const oldPrototypeStorageKey = "mantis-point-rush-admin-prototype-v1";
-      const wheelPointValues = Object.freeze([2, 6, -2, -6]);
+      const standardWheelPointValues = Object.freeze([2, 6, -2, -6]);
+      const highTierWheelPointValues = Object.freeze([-5, 5, -10, 10]);
+
+      function wheelPointValuesForMilestone(milestone) {
+        const rewardTierIndex = tiers.findIndex((tier) => tier.unlockAt === Number(milestone));
+        return rewardTierIndex >= 6 ? highTierWheelPointValues : standardWheelPointValues;
+      }
+
+      function wheelPrizeLabelsForMilestone(milestone) {
+        return wheelPointValuesForMilestone(milestone).map((points) => formatSignedPoints(points, true));
+      }
       const mechanicDefinitions = Object.freeze([
         Object.freeze({ id: "tier-1-powerup", tierIndex: 0, type: "powerup", effect: "double", revealedTitle: "Double Find", description: "This drop is worth double standings points." }),
         Object.freeze({ id: "tier-1-landmine", tierIndex: 0, type: "landmine", effect: "manualRequirement", requirementItem: "Immaculate mole skin", targetCount: 2, revealedTitle: "Mole Skin Lock", description: "Obtain two Immaculate mole skins before obtaining any other items." }),
@@ -11645,15 +11655,15 @@
       }
 
       function isValidWheelResult(result) {
-        return Boolean(result) &&
-          typeof result.id === "string" &&
+        if (!result || !milestones.includes(result.milestone)) return false;
+        const pointValues = wheelPointValuesForMilestone(result.milestone);
+        return typeof result.id === "string" &&
           result.type === "wheel" &&
           Object.prototype.hasOwnProperty.call(teams, result.team) &&
-          milestones.includes(result.milestone) &&
           Number.isInteger(result.resultIndex) &&
           result.resultIndex >= 0 &&
-          result.resultIndex < wheelPointValues.length &&
-          result.points === wheelPointValues[result.resultIndex] &&
+          result.resultIndex < pointValues.length &&
+          result.points === pointValues[result.resultIndex] &&
           typeof result.createdAt === "string" &&
           !Number.isNaN(new Date(result.createdAt).getTime());
       }
@@ -13124,7 +13134,6 @@
         scheduleStandingsSurfaceSync();
       }
 
-      const wheelPrizeLabels = Object.freeze(wheelPointValues.map((points) => formatSignedPoints(points, true)));
       const wheelPrizeTargetModulos = Object.freeze([315, 225, 135, 45]);
       const wheelTeamArtwork = Object.freeze({
         tide: "../images/rush-wheel-concept1-blue-nolegs.png",
@@ -13226,14 +13235,18 @@
       function renderActiveTeamWheel() {
         const state = prototypeWheelStates[activeWheelTeamKey];
         const storedResult = activeWheelMilestone === null ? null : wheelResultFor(activeWheelTeamKey, activeWheelMilestone);
+        const prizeLabels = wheelPrizeLabelsForMilestone(activeWheelMilestone);
         if (storedResult && state.resultIndex === null) {
           state.resultIndex = storedResult.resultIndex;
           state.rotation = wheelPrizeTargetModulos[storedResult.resultIndex];
         }
-        const resultLabel = storedResult ? wheelPrizeLabels[storedResult.resultIndex] : null;
+        const resultLabel = storedResult ? prizeLabels[storedResult.resultIndex] : null;
         wheelModal.dataset.team = activeWheelTeamKey;
         wheelConceptArt.src = wheelTeamArtwork[activeWheelTeamKey];
         if (!wheelConceptTongue.getAttribute("src")) wheelConceptTongue.src = wheelConceptTongue.dataset.src;
+        prototypeWheel.querySelectorAll(".rush-wheel-sector-label").forEach((label, index) => {
+          label.textContent = `${prizeLabels[index]} PTS`;
+        });
         prototypeWheel.style.transitionDuration = "0ms";
         prototypeWheel.style.transform = `rotate(${state.rotation}deg)`;
         prototypeWheelResult.dataset.state = resultLabel ? "result" : "ready";
@@ -13258,8 +13271,9 @@
       function animateBackendWheelSpin(teamKey, milestone, resultIndex, previousLeaderPoints) {
         const team = teams[teamKey];
         const state = prototypeWheelStates[teamKey];
+        const prizeLabels = wheelPrizeLabelsForMilestone(milestone);
         const safeResultIndex = Number(resultIndex);
-        if (!Number.isInteger(safeResultIndex) || safeResultIndex < 0 || safeResultIndex >= wheelPrizeLabels.length) {
+        if (!Number.isInteger(safeResultIndex) || safeResultIndex < 0 || safeResultIndex >= prizeLabels.length) {
           liveStatus.textContent = "The backend returned an invalid wheel result.";
           return;
         }
@@ -13292,7 +13306,7 @@
           prototypeWheelSpinning = false;
           prototypeWheelSpin.disabled = true;
           prototypeWheelResult.dataset.state = "result";
-          const resultLabel = wheelPrizeLabels[safeResultIndex];
+          const resultLabel = prizeLabels[safeResultIndex];
           prototypeWheelResult.textContent = resultLabel;
           const refreshFrom = pendingWheelPreviousLeaderPoints;
           pendingWheelPreviousLeaderPoints = null;
@@ -13333,14 +13347,16 @@
         }
 
         const state = prototypeWheelStates[teamKey];
-        const resultIndex = Math.floor(Math.random() * wheelPrizeLabels.length);
+        const pointValues = wheelPointValuesForMilestone(milestone);
+        const prizeLabels = wheelPrizeLabelsForMilestone(milestone);
+        const resultIndex = Math.floor(Math.random() * prizeLabels.length);
         const wheelResult = {
           id: makeWheelResultId(),
           type: "wheel",
           team: teamKey,
           milestone,
           resultIndex,
-          points: wheelPointValues[resultIndex],
+          points: pointValues[resultIndex],
           createdAt: new Date().toISOString()
         };
         const previousLeaderPoints = leadingTeamPoints();
@@ -13379,7 +13395,7 @@
           prototypeWheelSpinning = false;
           prototypeWheelSpin.disabled = true;
           prototypeWheelResult.dataset.state = "result";
-          const resultLabel = wheelPrizeLabels[resultIndex];
+          const resultLabel = prizeLabels[resultIndex];
           prototypeWheelResult.textContent = resultLabel;
           const refreshFrom = pendingWheelPreviousLeaderPoints;
           pendingWheelPreviousLeaderPoints = null;
@@ -15622,7 +15638,7 @@
           type: "wheel",
           team: result.team,
           player: "Reward wheel",
-          item: `${result.milestone} point reward vial · ${wheelPrizeLabels[result.resultIndex]}`,
+          item: `${result.milestone} point reward vial · ${wheelPrizeLabelsForMilestone(result.milestone)[result.resultIndex]}`,
           points: result.points,
           createdAt: result.createdAt,
           adminName: result.adminName,
@@ -16000,7 +16016,7 @@
           type: "wheel",
           team: wheel.team,
           player: "Reward wheel",
-          item: `${wheel.milestone} point reward vial · ${wheelPrizeLabels[wheel.resultIndex]}`,
+          item: `${wheel.milestone} point reward vial · ${wheelPrizeLabelsForMilestone(wheel.milestone)[wheel.resultIndex]}`,
           points: wheel.points,
           createdAt: wheel.createdAt
         } : null);
