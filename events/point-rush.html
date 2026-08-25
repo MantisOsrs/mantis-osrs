@@ -1138,6 +1138,12 @@
       filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .42));
     }
 
+    .rush-sprite-image[src$="zenyte-shard.webp"] {
+      scale: .8;
+      translate: 0 -10%;
+      transform-origin: center;
+    }
+
     .rush-drop-sprite .rush-sprite-image {
       width: 36px;
       height: 36px;
@@ -10164,7 +10170,9 @@
           "Hydra Claw",
           "Crystal Armor Seed",
           "Black Tourmaline Core",
-          "Araxyte Fang"
+          "Araxyte Fang",
+          "Hallowfell",
+          "Zenyte shard"
         ] },
         { roman: "V", base: 5, unlockAt: 60, symbol: "../images/point-rush/tier-emblems/tier-v.webp", items: [
           {
@@ -10231,7 +10239,13 @@
           },
           "Arcane prayer scroll",
           "Dexterous prayer scroll",
-          "Masori crafting kit"
+          "Masori crafting kit",
+          {
+            name: "Any Nightmare Weapon",
+            cover: ["Nightmare staff", "Inquisitor's mace"],
+            coverLayout: "pair",
+            variants: ["Nightmare staff", "Inquisitor's mace"]
+          }
         ] },
         { roman: "VII", base: 7, unlockAt: 120, symbol: "../images/point-rush/tier-emblems/tier-vii.webp", items: [
           {
@@ -10343,7 +10357,9 @@
         "Hydra Claw": "1/1,001",
         "Crystal Armor Seed": "1/50",
         "Black Tourmaline Core": "1/500",
-        "Araxyte Fang": "1/600"
+        "Araxyte Fang": "1/600",
+        "Hallowfell": "1/127",
+        "Zenyte shard": "1/300"
       });
 
       // Numeric Tier V rates were not supplied. Use VARIES rather than inventing values.
@@ -10381,7 +10397,8 @@
         "Any Doom Unique": "VARIES",
         "Arcane prayer scroll": "VARIES",
         "Dexterous prayer scroll": "VARIES",
-        "Masori crafting kit": "ALWAYS"
+        "Masori crafting kit": "ALWAYS",
+        "Any Nightmare Weapon": "VARIES"
       });
 
       const tierSixChildDropRates = Object.freeze({
@@ -10393,7 +10410,9 @@
         "Inquisitor's plateskirt": "1/700",
         "Mokhaiotl cloth": "VARIES",
         "Avernic treads": "VARIES",
-        "Eye of ayak": "VARIES"
+        "Eye of ayak": "VARIES",
+        "Nightmare staff": "1/507",
+        "Inquisitor's mace": "1/1,129"
       });
 
       const tierSevenDropRates = Object.freeze({
@@ -10650,7 +10669,9 @@
         "Hydra Claw": "https://oldschool.runescape.wiki/w/Hydra%27s_claw",
         "Crystal Armor Seed": "https://oldschool.runescape.wiki/w/Crystal_armour_seed",
         "Black Tourmaline Core": "https://oldschool.runescape.wiki/w/Black_tourmaline_core",
-        "Araxyte Fang": "https://oldschool.runescape.wiki/w/Araxyte_fang"
+        "Araxyte Fang": "https://oldschool.runescape.wiki/w/Araxyte_fang",
+        "Hallowfell": "https://oldschool.runescape.wiki/w/Hallowfell",
+        "Zenyte shard": "https://oldschool.runescape.wiki/w/Zenyte_shard"
       });
 
       const tierFiveWikiUrls = Object.freeze({
@@ -10707,7 +10728,10 @@
         "Eye of ayak": "https://oldschool.runescape.wiki/w/Eye_of_ayak#Uncharged",
         "Arcane prayer scroll": "https://oldschool.runescape.wiki/w/Arcane_prayer_scroll",
         "Dexterous prayer scroll": "https://oldschool.runescape.wiki/w/Dexterous_prayer_scroll",
-        "Masori crafting kit": "https://oldschool.runescape.wiki/w/Masori_crafting_kit"
+        "Masori crafting kit": "https://oldschool.runescape.wiki/w/Masori_crafting_kit",
+        "Any Nightmare Weapon": "https://oldschool.runescape.wiki/w/The_Nightmare",
+        "Nightmare staff": "https://oldschool.runescape.wiki/w/Nightmare_staff",
+        "Inquisitor's mace": "https://oldschool.runescape.wiki/w/Inquisitor%27s_mace"
       });
 
       const tierSevenWikiUrls = Object.freeze({
@@ -10978,6 +11002,8 @@
         "Crystal Armor Seed": "../images/point-rush/item-sprites/library/tier-4/single-items/crystal-armor-seed.webp",
         "Black Tourmaline Core": "../images/point-rush/item-sprites/library/tier-4/single-items/black-tourmaline-core.webp",
         "Araxyte Fang": "../images/point-rush/item-sprites/library/tier-4/single-items/araxyte-fang.webp",
+        "Hallowfell": "../images/point-rush/item-sprites/library/tier-4/single-items/hallowfell.webp",
+        "Zenyte shard": "../images/point-rush/item-sprites/library/tier-4/single-items/zenyte-shard.webp",
         "Virtus mask": "../images/point-rush/item-sprites/library/tier-5/virtus-robes/virtus-mask.webp",
         "Virtus robe top": "../images/point-rush/item-sprites/library/tier-5/virtus-robes/virtus-robe-top.webp",
         "Virtus robe bottom": "../images/point-rush/item-sprites/library/tier-5/virtus-robes/virtus-robe-bottom.webp",
@@ -11021,6 +11047,8 @@
         "Arcane prayer scroll": "../images/point-rush/item-sprites/library/tier-6/single-items/arcane-prayer-scroll.webp",
         "Dexterous prayer scroll": "../images/point-rush/item-sprites/library/tier-6/single-items/dexterous-prayer-scroll.webp",
         "Masori crafting kit": "../images/point-rush/item-sprites/library/tier-6/single-items/masori-crafting-kit.webp",
+        "Nightmare staff": "../images/point-rush/item-sprites/library/tier-6/nightmare-weapons/nightmare-staff.webp",
+        "Inquisitor's mace": "../images/point-rush/item-sprites/library/tier-6/nightmare-weapons/inquisitors-mace.webp",
         "Torva full helm": "../images/point-rush/item-sprites/library/tier-7/torva-armour/torva-full-helm.webp",
         "Torva platebody": "../images/point-rush/item-sprites/library/tier-7/torva-armour/torva-platebody.webp",
         "Torva platelegs": "../images/point-rush/item-sprites/library/tier-7/torva-armour/torva-platelegs.webp",
@@ -11466,6 +11494,9 @@
       const pointRushUrgencyThreshold = 15 * 60 * 1000;
       const pointRushScheduleLabel = "August 21, 2026 at 7:00 PM Eastern to September 5, 2026 at 7:00 PM Eastern";
       const pointRushLocalHost = location.protocol === "file:" || ["127.0.0.1", "localhost"].includes(location.hostname);
+      const pointRushLocalPreviewProgression = pointRushLocalHost
+        ? Object.freeze({ tide: 150 })
+        : Object.freeze({});
       const pointRushInspectionEntries = pointRushLocalHost
         ? [
             { id: "localhost-entry-01", team: "tide", player: "Pond Scum", tierIndex: 0, itemIndex: 0, variantIndex: 3 },
@@ -12503,6 +12534,9 @@
 
       function teamDropPoints(team) {
         const teamKey = teamOrder.find((key) => teams[key] === team);
+        if (teamKey && Object.prototype.hasOwnProperty.call(pointRushLocalPreviewProgression, teamKey)) {
+          return pointRushLocalPreviewProgression[teamKey];
+        }
         if (pointRushBackendEnabled && teamKey && backendTeamProgression && backendTeamProgression.has(teamKey)) {
           return backendTeamProgression.get(teamKey);
         }
