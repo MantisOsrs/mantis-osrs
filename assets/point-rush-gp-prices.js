@@ -172,6 +172,7 @@ window.MANTIS_POINT_RUSH_GP_PRICES = Object.freeze({
   "t4-c4-v13": 1050000,
   "t4-c4-v14": 46762,
   "t4-c4-v15": 0,
+  "t4-c4-v16": 0,
   "t4-c5-v1": 12962244,
   "t4-c5-v2": 12962244,
   "t4-c5-v3": 12962244,

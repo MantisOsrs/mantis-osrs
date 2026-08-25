@@ -10157,7 +10157,8 @@
             variants: [
               "Jar of chemicals", "Jar of darkness", "Jar of decay", "Jar of dirt", "Jar of dreams",
               "Jar of eyes", "Jar of feathers", "Jar of miasma", "Jar of sand", "Jar of smoke",
-              "Jar of souls", "Jar of spirits", "Jar of stone", "Jar of swamp", "Jar of venom"
+              "Jar of souls", "Jar of spirits", "Jar of stone", "Jar of swamp", "Jar of venom",
+              "Jar of light"
             ]
           },
           {
@@ -10661,6 +10662,7 @@
         "Jar of stone": "https://oldschool.runescape.wiki/w/Jar_of_stone",
         "Jar of swamp": "https://oldschool.runescape.wiki/w/Jar_of_swamp",
         "Jar of venom": "https://oldschool.runescape.wiki/w/Jar_of_venom",
+        "Jar of light": "https://oldschool.runescape.wiki/w/Jar_of_light",
         "Any Noxious Halberd Item": "https://oldschool.runescape.wiki/w/Noxious_halberd",
         "Noxious blade": "https://oldschool.runescape.wiki/w/Noxious_blade",
         "Noxious point": "https://oldschool.runescape.wiki/w/Noxious_point",
@@ -10994,6 +10996,7 @@
         "Jar of stone": "../images/point-rush/item-sprites/library/tier-4/boss-jars/jar-of-stone.webp",
         "Jar of swamp": "../images/point-rush/item-sprites/library/tier-4/boss-jars/jar-of-swamp.webp",
         "Jar of venom": "../images/point-rush/item-sprites/library/tier-4/boss-jars/jar-of-venom.webp",
+        "Jar of light": "../images/point-rush/item-sprites/library/tier-4/boss-jars/jar-of-light.webp",
         "Noxious blade": "../images/point-rush/item-sprites/library/tier-4/noxious-halberd/noxious-blade.webp",
         "Noxious point": "../images/point-rush/item-sprites/library/tier-4/noxious-halberd/noxious-point.webp",
         "Noxious pommel": "../images/point-rush/item-sprites/library/tier-4/noxious-halberd/noxious-pommel.webp",
@@ -12039,21 +12042,30 @@
           }
         });
 
+        const targetedMechanicKeys = new Set(backendActivity
+          .filter((activity) => activity && ["mechanic_target", "mechanic_targeted"].includes(activity.eventType))
+          .map((activity) => activity.metadata && activity.metadata.mechanicKey)
+          .filter(Boolean));
+        const resolvedMechanicActions = new Set(backendActivity
+          .filter((activity) => activity && activity.eventType === "mechanic_resolved")
+          .map((activity) => `${activity.actionSequence}:${activity.metadata && activity.metadata.mechanicKey}`));
+
         mechanicActivity = backendActivity.flatMap((activity) => {
           if (!activity || typeof activity.eventType !== "string" || !activity.eventType.startsWith("mechanic_")) return [];
           const mechanicKey = activity.metadata && activity.metadata.mechanicKey;
           const mechanicState = mechanicStateByKey.get(mechanicKey) || mechanicStateFor(mechanicKey);
           if (!mechanicState) return [];
           const recordedStatus = activity.metadata && activity.metadata.status;
+          if (activity.eventType === "mechanic_revealed" && recordedStatus === "pending_target" && targetedMechanicKeys.has(mechanicKey)) return [];
+          if (activity.eventType === "mechanic_progress" && Number(activity.metadata && activity.metadata.target) === 1 &&
+            resolvedMechanicActions.has(`${activity.actionSequence}:${mechanicKey}`)) return [];
           const phase = activity.eventType === "mechanic_progress" ? "progress"
             : activity.eventType === "mechanic_resolved" ? "resolved"
-            : activity.eventType === "mechanic_targeted" ? "targeted"
+            : ["mechanic_target", "mechanic_targeted"].includes(activity.eventType) ? "triggered"
             : recordedStatus === "pending_target" ? "pending"
             : recordedStatus === "resolved" ? "resolved" : "triggered";
           const actor = playerById.get(activity.playerId);
-          const activityTeam = teamKeyById.get(activity.teamId) || mechanicState.claimedTeam;
-          const sourceEntry = entries.find((entry) => entry && entry.createdAt === activity.createdAt &&
-            (!activityTeam || entry.team === activityTeam));
+          const sourceEntry = entries.find((entry) => entry && entry.createdAt === activity.createdAt);
           return [{
             id: `backend-mechanic-${activity.actionSequence}-${activity.activityOrder}`,
             type: "mechanic",
@@ -12377,8 +12389,12 @@
         if (["tierOnlyCount", "blockOwnHighest", "uniqueCount", "duplicateCount", "forceTierOne", "forceDuplicate", "blockHighest"].includes(mechanic.effect)) state.progress += 1;
         if (mechanic.effect === "tierOnePoints") state.progress += rawPoints;
         const required = mechanic.effect === "tierOnePoints" ? mechanic.targetPoints : mechanic.targetCount;
-        mechanicActivity.push(mechanicFeedEvent(state, "progress", entry, order, `${mechanic.revealedTitle}: ${mechanicProgressCopy(state)} complete.`));
-        if (state.progress >= required) resolveMechanic(state, entry, order + 1);
+        if (state.progress >= required && required === 1) {
+          resolveMechanic(state, entry, order + 1);
+        } else {
+          mechanicActivity.push(mechanicFeedEvent(state, "progress", entry, order, `${mechanic.revealedTitle}: ${mechanicProgressCopy(state)} complete.`));
+          if (state.progress >= required) resolveMechanic(state, entry, order + 1);
+        }
       }
 
       function activateMechanic(state, entry, targetTeam = null) {
@@ -12410,7 +12426,8 @@
           state.status = "active";
           if (mechanic.effect === "blockHighest") state.blockedTierIndex = teamCurrentTier(teams[targetTeam]);
         }
-        mechanicActivity.push(mechanicFeedEvent(state, "targeted", entry, order));
+        mechanicActivity = mechanicActivity.filter((activity) => activity.mechanicId !== state.mechanic.id || activity.phase !== "pending");
+        mechanicActivity.push(mechanicFeedEvent(state, "triggered", entry, order));
       }
 
       function rebuildBoardState() {
@@ -12438,8 +12455,12 @@
             derivedDrops.push({ ...entry, type: "requirement", points: 0, activityOrder, suppressed: !accepted, suppressedReason: accepted ? "" : "Requirement is not currently active" });
             if (!accepted) return;
             state.progress += 1;
-            mechanicActivity.push(mechanicFeedEvent(state, "progress", entry, activityOrder + 1, `${entry.item}: ${mechanicProgressCopy(state)} complete.`));
-            if (state.progress >= state.mechanic.targetCount) resolveMechanic(state, entry, activityOrder + 2);
+            if (state.progress >= state.mechanic.targetCount && state.mechanic.targetCount === 1) {
+              resolveMechanic(state, entry, activityOrder + 2);
+            } else {
+              mechanicActivity.push(mechanicFeedEvent(state, "progress", entry, activityOrder + 1, `${entry.item}: ${mechanicProgressCopy(state)} complete.`));
+              if (state.progress >= state.mechanic.targetCount) resolveMechanic(state, entry, activityOrder + 2);
+            }
             return;
           }
 
