@@ -266,5 +266,6 @@ window.MANTIS_POINT_RUSH_GP_PRICES = Object.freeze({
   "t8-c7-v1": 116194073,
   "t8-c8-v1": 79887625,
   "t8-c9-v1": 0,
-  "t8-c9-v2": 0
+  "t8-c9-v2": 0,
+  "t8-c10-v1": 9900000
 });
