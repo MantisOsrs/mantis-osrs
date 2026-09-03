@@ -258,6 +258,39 @@
       pointer-events: none;
     }
 
+    .rush-data-notice {
+      position: relative;
+      z-index: 7;
+      margin: 8px 12px 2px;
+      padding: 9px 12px;
+      border: 1px solid rgba(126, 153, 128, .42);
+      border-left: 3px solid #809c82;
+      background:
+        linear-gradient(90deg, rgba(69, 103, 73, .18), transparent 52%),
+        rgba(7, 11, 8, .94);
+      color: #c8d0c7;
+      font: 700 11px/1.45 Arial, sans-serif;
+      letter-spacing: .035em;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+    }
+
+    .rush-data-notice[data-state="stale"] {
+      border-left-color: #b49755;
+      color: #e0cf9f;
+    }
+
+    .rush-data-notice[data-state="unavailable"] {
+      border-left-color: #a34b43;
+      color: #e2b1aa;
+    }
+
+    body.rush-no-event-data .rush-standings-shared-surface,
+    body.rush-no-event-data .rush-standings-column-labels,
+    body.rush-no-event-data .rush-standings-layout,
+    body.rush-no-event-data .rush-standings-threshold-footer {
+      display: none;
+    }
+
     .rush-standings-column-label {
       position: relative;
       justify-self: center;
@@ -9249,7 +9282,7 @@
 
 </style>
 </head>
-<body class="v161-event-page v169-clean-event v170-event-polish rush-page">
+<body class="v161-event-page v169-clean-event v170-event-polish rush-page rush-no-event-data">
   <header class="v160-nav-shell" aria-label="Site navigation">
     <div class="v170-nav-context">
       <a class="v160-brand" href="../index.html" aria-label="Mantis OSRS home">
@@ -9385,6 +9418,7 @@
           <span class="rush-standings-column-label">Select a team bar to view details</span>
           <span class="rush-standings-column-label rush-standings-column-label--recent">Recent Drops</span>
         </div>
+        <div class="rush-data-notice" id="rush-data-notice" data-state="loading" role="status">Loading confirmed event scores&hellip;</div>
         <div class="rush-standings-layout">
           <div class="rush-standings-board">
         <div class="rush-team-list" role="group" aria-label="Select a team to view its details">
@@ -11263,6 +11297,7 @@
       const standingsHeader = document.querySelector(".rush-standings-frame-header");
       const standingsLayout = document.querySelector(".rush-standings-layout");
       const standingsFooter = document.querySelector(".rush-standings-threshold-footer");
+      const pointRushDataNotice = document.getElementById("rush-data-notice");
       const standingsTitleMount = document.getElementById("rush-standings-title-mount");
       const lootCounter = document.getElementById("rush-loot-counter");
       const lootCounterValue = document.getElementById("rush-loot-counter-value");
@@ -11526,16 +11561,26 @@
             mechanicsEligible: false
           }))
         : [];
-      const pointRushProductionBackendUrl = "https://lpkieolbvwpdckazjrel.supabase.co/functions/v1/point-rush-admin-action";
-      const pointRushBackendUrl = pointRushLocalHost
-        ? "http://127.0.0.1:54321/functions/v1/point-rush-admin-action"
-        : pointRushProductionBackendUrl;
+      const pointRushProductionProjectUrl = "https://ceweyhoemcaiqworruno.supabase.co";
+      const pointRushProductionPublicApiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNld2V5aG9lbWNhaXF3b3JydW5vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgzOTczMjIsImV4cCI6MjEwMzk3MzMyMn0.P0oqKFWdoBUkkwi9Rq-wv6dhFPZhPu3EPHNz7g2bHh0";
+      const pointRushProjectUrl = pointRushLocalHost ? "http://127.0.0.1:54321" : pointRushProductionProjectUrl;
+      const pointRushPublicApiKey = pointRushLocalHost ? "" : pointRushProductionPublicApiKey;
+      const pointRushBackendUrl = `${pointRushProjectUrl}/functions/v1/point-rush-admin-action`;
+      const pointRushPublicRpcUrl = `${pointRushProjectUrl}/rest/v1/rpc`;
       const pointRushBackendConfigured = Boolean(pointRushBackendUrl);
+      const pointRushDirectPublicReads = Boolean(pointRushPublicApiKey);
       const pointRushBackendEnabled = true;
+      const pointRushSnapshotCacheKey = `mantis-point-rush-public-snapshot-v1:${pointRushBackendEventId}`;
+      const pointRushPollBaseDelay = 20_000;
+      const pointRushPollMaximumDelay = 300_000;
       let pointRushBackendRevision = -1;
       let pointRushBackendRosterRevision = -1;
       let pointRushBackendSyncing = false;
       let pointRushBackendPollTimer = null;
+      let pointRushBackendFailureCount = 0;
+      let pointRushLastSyncFailed = false;
+      let pointRushHasConfirmedState = false;
+      let pointRushLastConfirmedAt = null;
       let eventCountdownTimer = null;
       let pendingPinAction = null;
       const requestedTeam = pageParameters.get("team");
@@ -11942,6 +11987,92 @@
         return body;
       }
 
+      async function pointRushPublicRpcFetch(functionName) {
+        if (!pointRushDirectPublicReads) {
+          const mode = functionName === "point_rush_public_revision" ? "&mode=revision" : "";
+          return pointRushBackendFetch(`${pointRushBackendUrl}?eventId=${encodeURIComponent(pointRushBackendEventId)}${mode}`);
+        }
+        return pointRushBackendFetch(`${pointRushPublicRpcUrl}/${functionName}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: pointRushPublicApiKey
+          },
+          body: JSON.stringify({ p_event_id: pointRushBackendEventId })
+        });
+      }
+
+      function isConfirmedPointRushState(state) {
+        const revision = Number(state && state.revision);
+        const rosterRevision = Number(state && state.rosterRevision);
+        return Boolean(state && state.ok !== false &&
+          Number.isSafeInteger(revision) && revision >= 0 &&
+          Number.isSafeInteger(rosterRevision) && rosterRevision >= 0 &&
+          Array.isArray(state.players) && Array.isArray(state.entries) &&
+          Array.isArray(state.wheelResults) && Array.isArray(state.teamStates) &&
+          Array.isArray(state.playerStates) && Array.isArray(state.mechanicStates) &&
+          Array.isArray(state.activity));
+      }
+
+      function persistPointRushSnapshot(state) {
+        if (pointRushLocalHost || !isConfirmedPointRushState(state)) return;
+        try {
+          window.localStorage.setItem(pointRushSnapshotCacheKey, JSON.stringify({
+            savedAt: new Date().toISOString(),
+            state
+          }));
+        } catch (error) {
+          // A full browser cache is non-fatal; the authoritative database remains unchanged.
+        }
+      }
+
+      function cachedPointRushSnapshot() {
+        if (pointRushLocalHost) return null;
+        try {
+          const stored = window.localStorage.getItem(pointRushSnapshotCacheKey);
+          if (!stored) return null;
+          const cached = JSON.parse(stored);
+          const savedAt = Date.parse(cached && cached.savedAt);
+          if (!Number.isFinite(savedAt) || !isConfirmedPointRushState(cached && cached.state)) {
+            window.localStorage.removeItem(pointRushSnapshotCacheKey);
+            return null;
+          }
+          return { savedAt, state: cached.state };
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function pointRushConfirmedTimeLabel(timestamp) {
+        if (!Number.isFinite(timestamp)) return "an earlier visit";
+        return new Date(timestamp).toLocaleString([], {
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit"
+        });
+      }
+
+      function setPointRushConnectionState(state, message = "") {
+        if (pointRushLocalHost) {
+          pointRushDataNotice.hidden = true;
+          document.body.classList.remove("rush-no-event-data");
+          return;
+        }
+        const noConfirmedData = !pointRushHasConfirmedState;
+        document.body.classList.toggle("rush-no-event-data", noConfirmedData);
+        if (state === "connected") {
+          pointRushDataNotice.hidden = true;
+          pointRushDataNotice.dataset.state = "connected";
+          liveStatus.textContent = message || "Point Rush event data connected.";
+          return;
+        }
+        pointRushDataNotice.hidden = false;
+        pointRushDataNotice.dataset.state = state;
+        pointRushDataNotice.textContent = message;
+        liveStatus.textContent = message;
+      }
+
       async function pointRushAdminAction(payload, pin) {
         const submissionKey = payload.submissionKey || pendingPinAction?.submissionKey || makeBackendSubmissionKey();
         return pointRushBackendFetch(pointRushBackendUrl, {
@@ -12098,31 +12229,82 @@
         if (Number.isSafeInteger(backendLootValue) && backendLootValue >= 0) lootValueGp = backendLootValue;
       }
 
+      function applyPointRushSnapshot(state, previousLeaderPoints = null, celebrateScaleChange = false, cacheSnapshot = true, confirmedAt = Date.now()) {
+        if (!isConfirmedPointRushState(state)) throw new Error("Point Rush returned an invalid public snapshot.");
+        pointRushBackendRevision = Number(state.revision);
+        pointRushBackendRosterRevision = Number(state.rosterRevision);
+        applyBackendPlayerRoster(state.players);
+        entries = normalizeStoredEntries(state.entries);
+        wheelResults = normalizeStoredWheelResults(state.wheelResults);
+        rebuildBoardState();
+        applyBackendAuthoritativeState(state);
+        const adminCurrentTier = teamCurrentTier(adminTeam());
+        if (adminTierIndex > adminCurrentTier) adminTierIndex = adminCurrentTier;
+        refreshAfterDataChange(previousLeaderPoints, celebrateScaleChange);
+        pointRushHasConfirmedState = true;
+        pointRushLastConfirmedAt = confirmedAt;
+        if (cacheSnapshot) persistPointRushSnapshot(state);
+      }
+
       async function syncPointRushBackend(force = false, previousLeaderPoints = null, celebrateScaleChange = false) {
         if (!pointRushBackendEnabled || pointRushBackendSyncing || prototypeWheelSpinning || pendingPinAction) return false;
         pointRushBackendSyncing = true;
         try {
-          const state = await pointRushBackendFetch(`${pointRushBackendUrl}?eventId=${encodeURIComponent(pointRushBackendEventId)}`);
-          const revision = Number(state.revision ?? 0);
-          const rosterRevision = Number(state.rosterRevision ?? 0);
-          if (!force && revision === pointRushBackendRevision && rosterRevision === pointRushBackendRosterRevision) return false;
-          pointRushBackendRevision = revision;
-          pointRushBackendRosterRevision = rosterRevision;
-          applyBackendPlayerRoster(state.players);
-          entries = normalizeStoredEntries(Array.isArray(state.entries) ? state.entries : []);
-          wheelResults = normalizeStoredWheelResults(Array.isArray(state.wheelResults) ? state.wheelResults : []);
-          rebuildBoardState();
-          applyBackendAuthoritativeState(state);
-          const adminCurrentTier = teamCurrentTier(adminTeam());
-          if (adminTierIndex > adminCurrentTier) adminTierIndex = adminCurrentTier;
-          refreshAfterDataChange(previousLeaderPoints, celebrateScaleChange);
+          if (!force && pointRushBackendRevision >= 0) {
+            const current = await pointRushPublicRpcFetch("point_rush_public_revision");
+            const revision = Number(current && current.revision);
+            const rosterRevision = Number(current && current.rosterRevision);
+            if (current && current.ok !== false && Number.isSafeInteger(revision) && Number.isSafeInteger(rosterRevision) &&
+              revision === pointRushBackendRevision && rosterRevision === pointRushBackendRosterRevision) {
+              pointRushBackendFailureCount = 0;
+              pointRushLastSyncFailed = false;
+              setPointRushConnectionState("connected");
+              return false;
+            }
+          }
+          const state = await pointRushPublicRpcFetch("point_rush_public_state");
+          applyPointRushSnapshot(state, previousLeaderPoints, celebrateScaleChange);
+          pointRushBackendFailureCount = 0;
+          pointRushLastSyncFailed = false;
+          setPointRushConnectionState("connected");
           return true;
         } catch (error) {
-          if (force || pointRushBackendRevision < 0) liveStatus.textContent = `Event data unavailable: ${error.message}`;
+          pointRushBackendFailureCount += 1;
+          pointRushLastSyncFailed = true;
+          if (pointRushHasConfirmedState) {
+            setPointRushConnectionState("stale", `Live updates are temporarily unavailable. Showing scores confirmed ${pointRushConfirmedTimeLabel(pointRushLastConfirmedAt)}.`);
+          } else {
+            setPointRushConnectionState("unavailable", "Live scores are temporarily unavailable. No confirmed scoreboard data is available on this device.");
+          }
           return false;
         } finally {
           pointRushBackendSyncing = false;
         }
+      }
+
+      function pointRushNextPollDelay() {
+        if (!pointRushLastSyncFailed) return pointRushPollBaseDelay;
+        return Math.min(pointRushPollBaseDelay * (2 ** Math.min(pointRushBackendFailureCount, 4)), pointRushPollMaximumDelay);
+      }
+
+      function schedulePointRushBackendPoll(delay = pointRushNextPollDelay()) {
+        if (pointRushBackendPollTimer !== null) window.clearTimeout(pointRushBackendPollTimer);
+        pointRushBackendPollTimer = null;
+        if (document.hidden || !pointRushBackendConfigured) return;
+        pointRushBackendPollTimer = window.setTimeout(async () => {
+          pointRushBackendPollTimer = null;
+          await syncPointRushBackend(false);
+          schedulePointRushBackendPoll();
+        }, delay);
+      }
+
+      function handlePointRushVisibilityChange() {
+        if (document.hidden) {
+          if (pointRushBackendPollTimer !== null) window.clearTimeout(pointRushBackendPollTimer);
+          pointRushBackendPollTimer = null;
+          return;
+        }
+        syncPointRushBackend(false).finally(() => schedulePointRushBackendPoll());
       }
 
       function openPinAuthorization(options) {
@@ -16522,22 +16704,25 @@
       scheduleStandingsSurfaceSync();
 
       if (pointRushBackendConfigured) {
-        liveStatus.textContent = "Connecting to Point Rush event data…";
-        syncPointRushBackend(true).then((loaded) => {
-          if (loaded) liveStatus.textContent = "Point Rush event data connected.";
-        });
-        pointRushBackendPollTimer = window.setInterval(() => {
-          if (!document.hidden) syncPointRushBackend(false);
-        }, 5000);
+        const cachedSnapshot = cachedPointRushSnapshot();
+        if (cachedSnapshot) {
+          applyPointRushSnapshot(cachedSnapshot.state, null, false, false, cachedSnapshot.savedAt);
+          setPointRushConnectionState("stale", `Checking for updates. Showing scores confirmed ${pointRushConfirmedTimeLabel(cachedSnapshot.savedAt)}.`);
+        } else {
+          setPointRushConnectionState("loading", "Loading confirmed event scores…");
+        }
+        syncPointRushBackend(!cachedSnapshot).finally(() => schedulePointRushBackendPoll());
+        document.addEventListener("visibilitychange", handlePointRushVisibilityChange);
         window.addEventListener("beforeunload", () => {
-          if (pointRushBackendPollTimer !== null) window.clearInterval(pointRushBackendPollTimer);
+          if (pointRushBackendPollTimer !== null) window.clearTimeout(pointRushBackendPollTimer);
+          document.removeEventListener("visibilitychange", handlePointRushVisibilityChange);
         });
       } else {
         adminOpenButton.disabled = true;
         adminOpenButton.textContent = "Event unavailable";
         adminOpenButton.title = "Point Rush event data is temporarily unavailable.";
         adminOpenButton.setAttribute("aria-disabled", "true");
-        liveStatus.textContent = "Point Rush event data is temporarily unavailable.";
+        setPointRushConnectionState("unavailable", "Point Rush event data is temporarily unavailable.");
       }
     })();
   </script>
