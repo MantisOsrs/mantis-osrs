@@ -719,127 +719,1393 @@
         0 1px 10px rgba(0,0,0,.28);
     }
 
+  
+
+    /* Bingo drop leaderboard */
+    .bingo-score-note {
+      margin:0 0 12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .bingo-score-card {
+      overflow:hidden;
+      border:1px solid #3c4b3f;
+      border-radius:14px;
+      color:#eef4eb;
+      background:#121915;
+      box-shadow:0 10px 24px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.025);
+    }
+
+    .bingo-score-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 12px;
+      color:#172019;
+      font-weight:800;
+      font-size:14px;
+      line-height:1.2;
+    }
+
+    .bingo-score-head.red { background:#f2d0cf; }
+    .bingo-score-head.blue { background:#d6e4f8; }
+
+    .bingo-team-total {
+      font-size:12px;
+      font-weight:800;
+      opacity:.75;
+      white-space:nowrap;
+    }
+
+    .bingo-score-table {
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    .bingo-score-table th,
+    .bingo-score-table td {
+      padding:7px 11px;
+      border-top:1px solid #26332a;
+      font-size:13px;
+      line-height:1.25;
+    }
+
+    .bingo-score-table th {
+      color:#9fb09f;
+      background:#0f1612;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+
+    .bingo-score-table th:first-child,
+    .bingo-score-table td:first-child { text-align:left; }
+
+    .bingo-score-table th:last-child,
+    .bingo-score-table td:last-child {
+      width:64px;
+      text-align:right;
+      font-variant-numeric:tabular-nums;
+    }
+
+    .bingo-score-table tbody tr:hover { background:#18221b; }
+
+    .bingo-player-btn {
+      appearance:none;
+      border:0;
+      padding:0;
+      margin:0;
+      background:none;
+      color:#eef4eb;
+      font:inherit;
+      font-weight:700;
+      text-align:left;
+      cursor:pointer;
+      text-decoration:underline;
+      text-decoration-color:rgba(211,243,189,.42);
+      text-underline-offset:3px;
+    }
+
+    .bingo-player-btn:hover,
+    .bingo-player-btn:focus-visible { color:#d3f3bd; }
+
+    .bingo-player-score { font-weight:800; }
+    .bingo-player-score.zero { color:#718071; font-weight:700; }
+
+    .bingo-player-modal-backdrop {
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:2500;
+      background:rgba(0,0,0,.72);
+      backdrop-filter:blur(5px);
+    }
+
+    .bingo-player-modal-backdrop.show { display:flex; }
+
+    .bingo-player-modal {
+      width:min(680px,94vw);
+      max-height:min(760px,86vh);
+      overflow:hidden;
+      display:grid;
+      grid-template-rows:auto auto minmax(0,1fr);
+      border:1px solid #4b6150;
+      border-radius:18px;
+      color:#eef4eb;
+      background:linear-gradient(145deg,#1b281e,#111914);
+      box-shadow:0 28px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+
+    .bingo-player-modal-head {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      padding:16px 18px 13px;
+      border-bottom:1px solid #354639;
+      background:#17221a;
+    }
+
+    .bingo-player-modal-title {
+      margin:0;
+      color:#eef4eb;
+      font-size:19px;
+      font-weight:800;
+      line-height:1.2;
+    }
+
+    .bingo-player-modal-sub {
+      margin-top:4px;
+      color:#a7b4a5;
+      font-size:12px;
+    }
+
+    .bingo-player-modal-close {
+      flex:0 0 auto;
+      border:1px solid #506454;
+      border-radius:9px;
+      padding:7px 10px;
+      color:#d3f3bd;
+      background:#101712;
+      font:inherit;
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .bingo-player-modal-close:hover { background:#213026; }
+
+    .bingo-player-modal-stats {
+      padding:10px 18px;
+      border-bottom:1px solid #354639;
+      color:#d3f3bd;
+      background:#131c16;
+      font-size:13px;
+    }
+
+    .bingo-player-modal-list {
+      min-height:0;
+      overflow:auto;
+      padding:10px 18px 18px;
+    }
+
+    .bingo-player-drop {
+      display:grid;
+      grid-template-columns:32px minmax(0,1fr);
+      gap:8px;
+      align-items:start;
+      padding:9px 0;
+      border-bottom:1px solid #2d3b30;
+      font-size:13px;
+    }
+
+    .bingo-player-drop:last-child { border-bottom:0; }
+    .bingo-player-drop-number { color:#7f927f; font-variant-numeric:tabular-nums; font-weight:800; }
+
+    .bingo-player-empty {
+      padding:18px 0 4px;
+      color:#a7b4a5;
+      text-align:center;
+      font-size:13px;
+    }
+
+    @media(max-width:640px) {
+      .bingo-score-table th,
+      .bingo-score-table td { padding:8px 10px; }
+      .bingo-player-modal-backdrop { padding:10px; }
+      .bingo-player-modal { max-height:90vh; border-radius:14px; }
+      .bingo-player-modal-head { padding:14px 14px 11px; }
+      .bingo-player-modal-stats { padding:9px 14px; }
+      .bingo-player-modal-list { padding:8px 14px 14px; }
+    }
+
   </style>
   <link rel="stylesheet" href="../assets/v160.css">
   <link rel="stylesheet" href="../assets/v169-event-clean.css">
   <link rel="stylesheet" href="../assets/v170-event-detail.css">
   <link rel="stylesheet" href="../assets/v171-polish.css">
   <link rel="stylesheet" href="../assets/v172-polish.css">
+  <link rel="stylesheet" href="../assets/site-nav-v71331.css">
+  <style id="bingo-v812-refresh">
+    /* v8.12: bring Bingo onto the refreshed Tile Wars interface system. */
+    body.v161-event-page.site-nav-v71331 > .v160-nav-shell {
+      width: min(1060px, calc(100% - 28px)) !important;
+      min-height: 58px !important;
+      margin: 0 auto !important;
+      padding: 4px 0 7px !important;
+      gap: 22px !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand {
+      position: relative !important;
+      isolation: isolate !important;
+      overflow: hidden !important;
+      background: rgba(4, 7, 5, .86) !important;
+      border-color: rgba(150, 148, 94, .50) !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(224, 224, 186, .024),
+        0 5px 14px rgba(0, 0, 0, .15) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand::after {
+      content: "" !important;
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+      opacity: 1 !important;
+      background-image:
+        linear-gradient(90deg, rgba(2,4,3,.64) 0%, rgba(2,4,3,.56) 30%, rgba(2,4,3,.48) 62%, rgba(2,4,3,.48) 100%),
+        url("../images/home-button-botanical-v6398.webp") !important;
+      background-repeat: no-repeat, no-repeat !important;
+      background-size: 100% 100%, cover !important;
+      background-position: center, 72% 48% !important;
+      filter: saturate(.76) brightness(.98) contrast(1.035) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand:hover,
+    body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible {
+      color: #fff !important;
+      background: rgba(10, 16, 11, .94) !important;
+      border-color: rgba(184, 180, 112, .66) !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(224, 224, 186, .032),
+        0 6px 18px rgba(0, 0, 0, .20) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand:hover::after,
+    body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible::after {
+      background-image:
+        linear-gradient(90deg, rgba(2,4,3,.56) 0%, rgba(2,4,3,.48) 30%, rgba(2,4,3,.40) 62%, rgba(2,4,3,.40) 100%),
+        url("../images/home-button-botanical-v6398.webp") !important;
+      filter: saturate(.80) brightness(1.03) contrast(1.035) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand > * {
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    body.v161-event-page .bingo-wrap {
+      width: min(1060px, calc(100% - 28px)) !important;
+      margin: 0 auto !important;
+      padding: 8px 0 28px !important;
+    }
+
+    body.v161-event-page .bingo-page-shell {
+      width: min(980px, 100%) !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .event-page-header {
+      position: relative !important;
+      z-index: 200 !important;
+      display: grid !important;
+      grid-template-columns: minmax(230px, 1fr) minmax(126px, 160px) !important;
+      grid-template-areas:
+        "date date"
+        "title info"
+        "credit credit" !important;
+      align-items: center !important;
+      column-gap: 12px !important;
+      row-gap: 0 !important;
+      overflow: visible !important;
+      margin: 0 0 10px !important;
+      padding: 12px 16px 11px !important;
+      border: 1px solid rgba(150, 148, 94, .50) !important;
+      border-radius: 0 !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg, rgba(79, 96, 69, .072) 0%, rgba(52, 65, 47, .044) 58%, rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg, rgba(14, 21, 16, .998) 0%, rgba(7, 12, 9, .998) 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215, 216, 179, .052),
+        inset 0 -1px 0 rgba(150, 146, 96, .10),
+        inset 0 -12px 25px rgba(0, 0, 0, .16),
+        0 12px 28px rgba(0, 0, 0, .18) !important;
+      isolation: isolate !important;
+    }
+
+    body.v161-event-page .event-page-header::before,
+    body.v161-event-page .event-page-header::after,
+    body.v161-event-page .event-page-header .v170-header-ornament {
+      content: none !important;
+      display: none !important;
+    }
+
+    body.v161-event-page .event-page-header .event-page-date {
+      grid-area: date !important;
+      margin: 0 0 4px !important;
+      color: #c7c0aa !important;
+      font: 800 10px/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .18em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .event-page-header h1 {
+      grid-area: title !important;
+      min-width: 0 !important;
+      margin: 3px 0 4px !important;
+      color: #eee8d2 !important;
+      font-family: Georgia, "Times New Roman", serif !important;
+      font-size: clamp(24px, 3vw, 34px) !important;
+      font-weight: 400 !important;
+      line-height: 1.08 !important;
+      letter-spacing: .01em !important;
+      text-shadow: 0 10px 26px rgba(0, 0, 0, .28) !important;
+    }
+
+    body.v161-event-page .event-page-header .event-page-credit {
+      grid-area: credit !important;
+      margin: 0 !important;
+      color: #95ad7c !important;
+      font: 400 12px/1.35 Arial, Helvetica, sans-serif !important;
+    }
+
+    body.v161-event-page .event-page-header .creator-name {
+      color: #b5d88f !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+      font-weight: 800 !important;
+    }
+
+    body.v161-event-page .event-page-header .event-info-grid {
+      grid-area: info !important;
+      position: relative !important;
+      z-index: 210 !important;
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      gap: 6px !important;
+      overflow: visible !important;
+      border: 0 !important;
+      background: transparent !important;
+    }
+
+    body.v161-event-page .event-info-panel {
+      position: relative !important;
+      z-index: 211 !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+      border: 1px solid #4e6651 !important;
+      border-radius: 0 !important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.022), rgba(255,255,255,0)),
+        rgba(10,16,12,.58) !important;
+      box-shadow: 0 7px 16px rgba(0,0,0,.16) !important;
+      outline: 0 !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] {
+      z-index: 220 !important;
+    }
+
+    body.v161-event-page .event-info-panel summary {
+      position: relative !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 5px !important;
+      min-height: 34px !important;
+      padding: 7px 8px !important;
+      color: #d3f3bd !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font: 800 10px/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .10em !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
+      cursor: pointer !important;
+      list-style: none !important;
+      transition: color .16s ease, background .16s ease !important;
+    }
+
+    body.v161-event-page .event-info-panel summary::-webkit-details-marker {
+      display: none !important;
+    }
+
+    body.v161-event-page .event-info-panel summary::after {
+      content: "+" !important;
+      flex: 0 0 auto !important;
+      color: #9fbe94 !important;
+      font: 500 15px/1 Arial, Helvetica, sans-serif !important;
+      transition: transform .16s ease !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] summary,
+    body.v161-event-page .event-info-panel summary:hover,
+    body.v161-event-page .event-info-panel summary:focus-visible {
+      color: #efffe7 !important;
+      background: rgba(106,145,95,.10) !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] summary::after {
+      transform: rotate(45deg) !important;
+    }
+
+    body.v161-event-page .event-info-content {
+      position: absolute !important;
+      z-index: 230 !important;
+      top: calc(100% + 10px) !important;
+      right: 0 !important;
+      width: min(440px, calc(100vw - 28px)) !important;
+      max-height: min(68vh, 560px) !important;
+      overflow: auto !important;
+      padding: 12px 13px 14px !important;
+      color: #c2cec0 !important;
+      border: 1px solid rgba(166, 158, 99, .28) !important;
+      border-radius: 0 !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg, rgba(79, 96, 69, .072) 0%, rgba(52, 65, 47, .044) 58%, rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg, rgba(14, 21, 16, .998) 0%, rgba(7, 12, 9, .998) 100%) !important;
+      box-shadow: 0 18px 38px rgba(0, 0, 0, .34) !important;
+      font-size: 12px !important;
+      line-height: 1.55 !important;
+    }
+
+    body.v161-event-page .event-info-content ol,
+    body.v161-event-page .event-info-content ul {
+      margin: 0 !important;
+      padding-left: 18px !important;
+    }
+
+    body.v161-event-page .event-info-content li + li {
+      margin-top: 8px !important;
+    }
+
+    body.v161-event-page .event-info-content strong {
+      color: #eef5eb !important;
+    }
+
+    body.v161-event-page .scoreboard-outside-help {
+      width: min(900px, 100%) !important;
+      margin: 0 auto 5px !important;
+      color: #758278 !important;
+      font: 400 .7rem/1.35 Arial, Helvetica, sans-serif !important;
+      text-align: left !important;
+    }
+
+    body.v161-event-page .bingo-scoreboard-panel {
+      position: relative !important;
+      z-index: 1 !important;
+      width: min(900px, 100%) !important;
+      margin: 0 auto 10px !important;
+      padding: 10px 14px 11px !important;
+      border: 1px solid rgba(150, 148, 94, .50) !important;
+      border-radius: 0 !important;
+      background:
+        linear-gradient(180deg, rgba(79, 96, 69, .072) 0%, rgba(52, 65, 47, .044) 58%, rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg, rgba(14, 21, 16, .998) 0%, rgba(7, 12, 9, .998) 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215,216,179,.035),
+        0 12px 28px rgba(0,0,0,.18) !important;
+    }
+
+    body.v161-event-page .bingo-scoreboard-panel.teams-section {
+      margin-top: 0 !important;
+    }
+
+    body.v161-event-page .bingo-scoreboard-panel .teams-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      align-items: start !important;
+      gap: 0 !important;
+      margin: 0 !important;
+    }
+
+    body.v161-event-page .bingo-score-card {
+      min-width: 0 !important;
+      overflow: visible !important;
+      padding: 8px 18px 6px !important;
+      color: #eef4eb !important;
+      border: 0 !important;
+      border-right: 1px solid rgba(139,159,135,.16) !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .bingo-score-card:first-child {
+      padding-left: 2px !important;
+    }
+
+    body.v161-event-page .bingo-score-card:last-child {
+      padding-right: 2px !important;
+      border-right: 0 !important;
+    }
+
+    body.v161-event-page .bingo-score-head {
+      position: relative !important;
+      display: flex !important;
+      align-items: baseline !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      margin: 0 0 4px !important;
+      padding: 0 0 6px 13px !important;
+      color: #e7eee4 !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(144,165,140,.14) !important;
+      background: transparent !important;
+      text-shadow: none !important;
+      font: 700 .82rem/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .02em !important;
+    }
+
+    body.v161-event-page .bingo-score-head::before {
+      content: "" !important;
+      position: absolute !important;
+      left: 0 !important;
+      top: 1px !important;
+      bottom: 6px !important;
+      width: 3px !important;
+    }
+
+    body.v161-event-page .bingo-score-head.red::before { background: #a85854 !important; }
+    body.v161-event-page .bingo-score-head.blue::before { background: #6489ad !important; }
+
+    body.v161-event-page .bingo-team-total {
+      color: #89968b !important;
+      font-size: .64rem !important;
+      font-weight: 800 !important;
+      letter-spacing: .035em !important;
+      text-transform: uppercase !important;
+      opacity: 1 !important;
+    }
+
+    body.v161-event-page .bingo-score-table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .bingo-score-table thead {
+      display: none !important;
+    }
+
+    body.v161-event-page .bingo-score-table td {
+      padding: 4px 2px !important;
+      color: #cbd4c9 !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139,159,135,.11) !important;
+      background: transparent !important;
+      font-size: .75rem !important;
+    }
+
+    body.v161-event-page .bingo-score-table tbody tr:last-child td {
+      border-bottom: 0 !important;
+    }
+
+    body.v161-event-page .bingo-score-table tbody tr:hover {
+      background: transparent !important;
+    }
+
+    body.v161-event-page .bingo-player-btn {
+      color: #d9e2d6 !important;
+      text-decoration: none !important;
+    }
+
+    body.v161-event-page .bingo-player-btn:hover,
+    body.v161-event-page .bingo-player-btn:focus-visible {
+      color: #b5d88f !important;
+      text-decoration: underline !important;
+      text-underline-offset: 3px !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .bingo-player-score {
+      color: #cbd4c9 !important;
+      font-weight: 800 !important;
+    }
+
+    body.v161-event-page .bingo-player-score.zero {
+      color: #657168 !important;
+      font-weight: 700 !important;
+    }
+
+    body.v161-event-page .bingo-board-frame {
+      position: relative !important;
+      z-index: 1 !important;
+      display: flex !important;
+      width: min(900px, 100%) !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      border: 1px solid #4e6651 !important;
+      border-radius: 0 !important;
+      background: #0d140f !important;
+      box-shadow:
+        0 14px 34px rgba(0,0,0,.24),
+        inset 0 0 0 1px rgba(134,202,112,.045),
+        inset 0 1px 0 rgba(255,255,255,.02) !important;
+    }
+
+    body.v161-event-page .bingo-board-frame a,
+    body.v161-event-page .bingo-board-frame img {
+      display: block !important;
+      width: 100% !important;
+      max-width: 900px !important;
+      height: auto !important;
+      max-height: none !important;
+      margin: 0 auto !important;
+      object-fit: contain !important;
+    }
+
+    /* Tile Wars style player detail window. */
+    body.v161-event-page .bingo-player-modal-backdrop {
+      background: rgba(2, 6, 3, .78) !important;
+      backdrop-filter: blur(5px) !important;
+      -webkit-backdrop-filter: blur(5px) !important;
+    }
+
+    body.v161-event-page .bingo-player-modal {
+      position: relative !important;
+      display: flex !important;
+      flex-direction: column !important;
+      width: min(700px, 92vw) !important;
+      height: min(520px, calc(100vh - 48px)) !important;
+      max-height: none !important;
+      overflow: hidden !important;
+      color: #cbd4c9 !important;
+      border: 1px solid rgba(150, 148, 94, .52) !important;
+      border-radius: 0 !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg, rgba(79, 96, 69, .075), rgba(28, 37, 29, .02)),
+        linear-gradient(180deg, rgba(14, 21, 16, .998), rgba(7, 12, 9, .998)) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215, 216, 179, .05),
+        inset 0 -1px 0 rgba(150, 146, 96, .10),
+        0 24px 60px rgba(0, 0, 0, .48) !important;
+    }
+
+    body.v161-event-page .bingo-player-modal::before {
+      content: "" !important;
+      position: absolute !important;
+      z-index: 2 !important;
+      top: -1px !important;
+      left: -1px !important;
+      right: -1px !important;
+      height: 3px !important;
+      background: #72a766 !important;
+      pointer-events: none !important;
+    }
+
+    body.v161-event-page .bingo-player-modal[data-team="red"]::before { background: #a85854 !important; }
+    body.v161-event-page .bingo-player-modal[data-team="blue"]::before { background: #6489ad !important; }
+
+    body.v161-event-page .bingo-player-modal-head {
+      flex: 0 0 auto !important;
+      display: flex !important;
+      align-items: flex-start !important;
+      justify-content: space-between !important;
+      gap: 18px !important;
+      padding: 19px 20px 14px !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139,159,135,.16) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .bingo-player-modal-title {
+      margin: 0 !important;
+      color: #eee8d2 !important;
+      font: 700 1.34rem/1.1 Georgia, "Times New Roman", serif !important;
+      letter-spacing: .01em !important;
+      text-shadow: none !important;
+    }
+
+    body.v161-event-page .bingo-player-modal-sub {
+      display: none !important;
+    }
+
+    body.v161-event-page .bingo-player-modal-close {
+      flex: 0 0 auto !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 7px 10px !important;
+      color: #d8e2d4 !important;
+      border: 1px solid rgba(150, 148, 94, .36) !important;
+      border-radius: 0 !important;
+      background: rgba(255,255,255,.025) !important;
+      box-shadow: none !important;
+      font: 800 .61rem/1 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .09em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .bingo-player-modal-close:hover,
+    body.v161-event-page .bingo-player-modal-close:focus-visible {
+      color: #efffe7 !important;
+      border-color: rgba(181,216,143,.50) !important;
+      background: rgba(106,145,95,.10) !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .bingo-player-modal-stats {
+      flex: 0 0 auto !important;
+      display: flex !important;
+      align-items: baseline !important;
+      min-height: 0 !important;
+      padding: 10px 20px !important;
+      color: #89968b !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139,159,135,.12) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font: 600 .7rem/1.3 Arial, Helvetica, sans-serif !important;
+    }
+
+    body.v161-event-page .bingo-player-modal-stats strong {
+      color: #d9e2d6 !important;
+      font-weight: 800 !important;
+    }
+
+    body.v161-event-page .bingo-player-modal-list {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain !important;
+      scrollbar-gutter: stable !important;
+      padding: 4px 20px 14px !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .bingo-player-drop {
+      display: grid !important;
+      grid-template-columns: 32px minmax(0,1fr) !important;
+      gap: 8px !important;
+      align-items: baseline !important;
+      margin: 0 !important;
+      padding: 9px 0 !important;
+      color: #cbd4c9 !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139,159,135,.105) !important;
+      background: transparent !important;
+      font: 400 .76rem/1.35 Arial, Helvetica, sans-serif !important;
+    }
+
+    body.v161-event-page .bingo-player-drop:last-child {
+      border-bottom: 0 !important;
+    }
+
+    body.v161-event-page .bingo-player-drop-number {
+      color: #78867b !important;
+      font-size: .66rem !important;
+      font-weight: 800 !important;
+      letter-spacing: .03em !important;
+    }
+
+    body.v161-event-page .bingo-player-empty {
+      padding: 18px 0 8px !important;
+      color: #89968b !important;
+      text-align: left !important;
+      font: 400 .76rem/1.45 Arial, Helvetica, sans-serif !important;
+    }
+
+    @media (max-width: 760px) {
+      body.v161-event-page.site-nav-v71331 > .v160-nav-shell {
+        width: calc(100% - 18px) !important;
+        gap: 14px !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+
+      body.v161-event-page .bingo-wrap {
+        width: calc(100% - 18px) !important;
+        padding-top: 8px !important;
+      }
+
+      body.v161-event-page .event-page-header {
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+          "date"
+          "title"
+          "info"
+          "credit" !important;
+        padding: 13px 14px 12px !important;
+      }
+
+      body.v161-event-page .event-page-header h1 {
+        font-size: 25px !important;
+      }
+
+      body.v161-event-page .event-page-header .event-info-grid {
+        width: 100% !important;
+        margin: 4px 0 5px !important;
+        padding: 4px 0 0 !important;
+      }
+
+      body.v161-event-page .event-info-panel summary {
+        min-height: 32px !important;
+        padding: 6px 7px !important;
+        font-size: 9px !important;
+        letter-spacing: .07em !important;
+      }
+
+      body.v161-event-page .event-info-content {
+        position: fixed !important;
+        top: 74px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-height: calc(100vh - 94px) !important;
+      }
+
+      body.v161-event-page .bingo-scoreboard-panel {
+        padding: 9px 11px 10px !important;
+      }
+
+      body.v161-event-page .bingo-score-card {
+        padding-top: 7px !important;
+        padding-bottom: 5px !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body.v161-event-page .bingo-scoreboard-panel .teams-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      body.v161-event-page .bingo-score-card,
+      body.v161-event-page .bingo-score-card:first-child,
+      body.v161-event-page .bingo-score-card:last-child {
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+        border-right: 0 !important;
+      }
+
+      body.v161-event-page .bingo-score-card + .bingo-score-card {
+        margin-top: 8px !important;
+        padding-top: 10px !important;
+        border-top: 1px solid rgba(139,159,135,.16) !important;
+      }
+
+      body.v161-event-page .bingo-player-modal-backdrop {
+        padding: 10px !important;
+      }
+
+      body.v161-event-page .bingo-player-modal {
+        width: min(700px, calc(100vw - 20px)) !important;
+        height: min(520px, calc(100vh - 24px)) !important;
+      }
+
+      body.v161-event-page .bingo-player-modal-head {
+        padding: 16px 15px 12px !important;
+      }
+
+      body.v161-event-page .bingo-player-modal-stats {
+        padding: 9px 15px !important;
+      }
+
+      body.v161-event-page .bingo-player-modal-list {
+        padding: 3px 15px 12px !important;
+      }
+
+      body.v161-event-page .bingo-player-drop {
+        padding: 8px 0 !important;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body.v161-event-page.site-nav-v71331 > .v160-nav-shell {
+        gap: 10px !important;
+      }
+    }
+  </style>
+
+<style id="bingo-v813-modal-position-fix">
+  /* v8.13: explicitly anchor the dynamically-created Bingo modal to the viewport. */
+  body.v161-event-page .bingo-player-modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 18px !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10000 !important;
+    transform: none !important;
+  }
+  body.v161-event-page .bingo-player-modal-backdrop.show { display: flex !important; }
+  body.v161-event-page .bingo-player-modal {
+    position: relative !important;
+    margin: 0 !important;
+    inset: auto !important;
+    transform: none !important;
+  }
+  @media (max-width: 640px) {
+    body.v161-event-page .bingo-player-modal-backdrop { padding: 10px !important; }
+  }
+</style>
+
+
+  <style id="bingo-v814-team-glow-board-hint">
+    /* v8.14: restore team-color emphasis to only the leaderboard name bars
+       and restore the small board-open instruction outside the board. */
+    body.v161-event-page .bingo-score-head {
+      box-sizing: border-box !important;
+      align-items: center !important;
+      min-height: 38px !important;
+      padding: 7px 10px 7px 13px !important;
+      border: 1px solid rgba(139,159,135,.18) !important;
+      border-radius: 0 !important;
+      color: #eef4eb !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,.72) !important;
+    }
+
+    body.v161-event-page .bingo-score-head::before {
+      top: 0 !important;
+      bottom: 0 !important;
+      width: 3px !important;
+    }
+
+    body.v161-event-page .bingo-score-head.red {
+      border-color: rgba(215,84,73,.34) !important;
+      background: linear-gradient(90deg, rgba(215,84,73,.22), rgba(168,88,84,.10) 72%, rgba(168,88,84,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(215,84,73,.08), 0 0 13px rgba(215,84,73,.16) !important;
+    }
+
+    body.v161-event-page .bingo-score-head.blue {
+      border-color: rgba(100,137,173,.40) !important;
+      background: linear-gradient(90deg, rgba(100,137,173,.24), rgba(100,137,173,.10) 72%, rgba(100,137,173,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(100,137,173,.09), 0 0 13px rgba(100,137,173,.17) !important;
+    }
+
+    body.v161-event-page .board-outside-help {
+      width: min(900px, 100%) !important;
+      margin: 0 auto 5px !important;
+      padding: 0 !important;
+      color: #758278 !important;
+      font: 400 .7rem/1.35 Arial, Helvetica, sans-serif !important;
+      text-align: left !important;
+    }
+
+    body.v161-event-page .board-outside-help + .bingo-board-frame {
+      margin-top: 0 !important;
+    }
+
+    @media (max-width: 680px) {
+      body.v161-event-page .board-outside-help {
+        margin-bottom: 4px !important;
+        padding: 0 1px !important;
+        font-size: .66rem !important;
+      }
+    }
+  </style>
+
+
+<style id="v815-creator-color-consistency">
+  .event-page-credit {
+    color: #95ad7c !important;
+  }
+  .event-page-credit .creator-name {
+    color: #eee8d2 !important;
+  }
+</style>
+
+<style id="v818-event-creator-name-white">
+  body.v161-event-page .event-page-header .event-page-credit {
+    color: #95ad7c !important;
+  }
+  body.v161-event-page .event-page-header .event-page-credit .creator-name {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+</style>
+
+<style id="v819-event-creator-standard">
+  body.v161-event-page .event-page-header .event-page-credit {
+    color: #95ad7c !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 1.35 !important;
+  }
+  body.v161-event-page .event-page-header .event-page-credit .creator-name {
+    color: #eee8d2 !important;
+    -webkit-text-fill-color: #eee8d2 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+  }
+</style>
 </head>
-<body class="v161-event-page v169-clean-event v170-event-polish">
+<body class="v161-event-page v169-clean-event v170-event-polish site-nav-v71331">
 <div class="v161-event-dots" aria-hidden="true"></div>
-<header class="v160-nav-shell" aria-label="Site navigation">
-  <div class="v170-nav-context">
-  <a class="v160-brand" href="../index.html" aria-label="Mantis OSRS home">
-    <span class="v160-brand-icon" aria-hidden="true"><img src="../images/mantis-head-mark.svg" alt=""></span>
-    <span class="v160-brand-wordmark"><span class="mantis-word">Mantis</span><span class="osrs-word">OSRS</span></span>
+<header class="wrap v160-nav-shell" aria-label="Site navigation">
+  <a class="home-brand-final v160-brand" href="../index.html" aria-label="Mantis OSRS home">
+    <span class="home-brand-icon v160-brand-icon" aria-hidden="true"><img src="../images/mantis-head-mark.svg" alt=""></span>
+    <span class="home-brand-wordmark v160-brand-wordmark"><span class="mantis-word">Mantis</span><span class="osrs-word">OSRS</span></span>
   </a>
-    <div class="v170-page-label" aria-label="Current page: Bingo"><span>ARCHIVE 03</span><strong>BINGO</strong></div>
-  </div>
-  <nav class="v160-nav-links" aria-label="Clan links">
-    <a href="../about.html">About Us</a>
+  <nav class="site-links v160-nav-links" aria-label="Clan links">
+    <a href="../about.html">About</a>
     <a href="https://discord.gg/YaPqtQWQ7N" target="_blank" rel="noopener noreferrer">Discord</a>
     <a href="https://wiseoldman.net/groups/6808" target="_blank" rel="noopener noreferrer">Wise Old Man</a>
-    <a href="https://oldschool.runescape.wiki/" target="_blank" rel="noopener noreferrer">WIKI</a>
+    <a href="https://oldschool.runescape.wiki/" target="_blank" rel="noopener noreferrer">Wiki</a>
   </nav>
 </header>
-<main class="wrap">
-    <section class="panel">
-      <header class="event-page-header">
-      <span class="v170-header-ornament" aria-hidden="true"></span>
-        <div class="event-page-date">ARCHIVE • JANUARY 2026</div>
-        <h1>Bingo</h1>
-        <p class="event-page-credit">Created by <span class="creator-name">TheDog</span> &amp; <span class="creator-name">Pond Scum</span></p>
+<div class="wrap bingo-wrap">
+  <section class="bingo-page-shell">
+    <header class="event-page-header" aria-labelledby="bingo-page-title">
+      <div class="event-page-date">ARCHIVE • JANUARY 2026</div>
+      <h1 id="bingo-page-title">Bingo</h1>
+      <p class="event-page-credit">Created by <span class="creator-name">TheDog</span> &amp; <span class="creator-name">Pond Scum</span></p>
+      <div aria-label="Bingo event information" class="event-info-grid v170-single-info">
+<details class="event-info-panel">
+<summary>Rules</summary>
+<div class="event-info-content">
+<ol>
+<li>The event will run for <strong>two weeks</strong>.</li>
+<li>Teams will compete using traditional Bingo rules by completing tiles and forming Bingos on the event board.</li>
+<li>A team that completes the <strong>entire board</strong> within the two-week event period wins immediately.</li>
+<li>If no team completes the full board, the team with the <strong>most completed Bingos</strong> at the end of the event wins.</li>
+<li>If teams are tied in completed Bingos, the winner will be determined by the <strong>total number of individual tiles completed</strong>.</li>
+</ol>
+</div>
+</details>
+</div>
+    </header>
 
-        <div class="event-info-grid v170-single-info" aria-label="Bingo event information">
-          <details class="event-info-panel">
-            <summary>Rules</summary>
-            <div class="event-info-content">
-              <ol>
-                <li>The event will run for <strong>two weeks</strong>.</li>
-                <li>Teams will compete using traditional Bingo rules by completing tiles and forming Bingos on the event board.</li>
-                <li>A team that completes the <strong>entire board</strong> within the two-week event period wins immediately.</li>
-                <li>If no team completes the full board, the team with the <strong>most completed Bingos</strong> at the end of the event wins.</li>
-                <li>If teams are tied in completed Bingos, the winner will be determined by the <strong>total number of individual tiles completed</strong>.</li>
-              </ol>
-            </div>
-          </details>
-        </div>
-      </header>
-
-      <h2 class="event-section-title">Final Board</h2>
-
-      <div class="board-frame">
-        <a href="../images/BINGO_WIN11.png" target="_blank" rel="noopener">
-          <img src="../images/BINGO_WIN11.png" alt="Final board for the 2026 Mantis Bingo event">
-        </a>
-      </div>
-
-      <div class="hint">Click the board to open the full-size image.</div>
-
-      <section class="teams-section" aria-labelledby="teams-heading">
-        <h2 class="teams-title" id="teams-heading">Teams</h2>
-        <div class="teams-grid">
-          <article class="roster-card">
-            <div class="roster-head red">Muddogs</div>
-            <ul class="roster-list">
-              <li>Pond Scum</li>
-              <li>Shoulders</li>
-              <li>Meat jun</li>
-              <li>Big Baby Boy</li>
-              <li>Iron Vikings</li>
-              <li>Pyros</li>
-              <li>Reggie Tales</li>
-              <li>TFresh</li>
-              <li>Waves117</li>
-              <li>Cpt 1ns4an0</li>
-              <li>Vycra</li>
-              <li>Gary Salty</li>
-              <li>YeetMyLoad</li>
-              <li>Sha q</li>
-              <li>Gingerbihh</li>
-              <li>TheRealParbs</li>
-              <li>Durzohn</li>
-              <li>Meleikturtle</li>
-              <li>ChronicPurp</li>
-              <li>Ottertoebean</li>
-              <li>GhrimReapr</li>
-              <li>Third leg</li>
-              <li>Trippie Rett</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head blue">Off Each Other</div>
-            <ul class="roster-list">
-              <li>TheDog</li>
-              <li>Kyle Stanley</li>
-              <li>Cnyr</li>
-              <li>C D C D C D</li>
-              <li>Ie John Fux</li>
-              <li>Dhampir007</li>
-              <li>l3enjie</li>
-              <li>Iron Hogey</li>
-              <li>dudboy</li>
-              <li>rskru</li>
-              <li>P4pa Swag</li>
-              <li>Nutzach00</li>
-              <li>Wuze</li>
-              <li>Tacticaljokr</li>
-              <li>BIGCOKCOWBOY</li>
-              <li>ImFatMatt</li>
-              <li>Crispy12</li>
-              <li>Im Owned</li>
-              <li>23 Questions</li>
-              <li>Busta Beans</li>
-              <li>Juice Solo</li>
-              <li>Zodiac Zack</li>
-              <li>Vernonwormer</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
+    <p class="bingo-score-note scoreboard-outside-help">Select a player to view every drop they received throughout the event.</p>
+    <section class="teams-section bingo-scoreboard-panel" aria-label="Player scores">
+      <div class="teams-grid">
+<article class="bingo-score-card">
+<div class="bingo-score-head red">
+<span>Muddogs</span>
+<span class="bingo-team-total">54 drops</span>
+</div>
+<table class="bingo-score-table">
+<thead><tr><th scope="col">Player</th><th scope="col">Score</th></tr></thead>
+<tbody>
+<tr>
+<td><button class="bingo-player-btn" data-player="Pyros" type="button">Pyros</button></td>
+<td class="bingo-player-score">8</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Meat jun" type="button">Meat jun</button></td>
+<td class="bingo-player-score">7</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Big Baby Boy" type="button">Big Baby Boy</button></td>
+<td class="bingo-player-score">6</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Third leg" type="button">Third leg</button></td>
+<td class="bingo-player-score">6</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Pond Scum" type="button">Pond Scum</button></td>
+<td class="bingo-player-score">4</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Shoulders" type="button">Shoulders</button></td>
+<td class="bingo-player-score">4</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="TFresh" type="button">TFresh</button></td>
+<td class="bingo-player-score">4</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Vycra" type="button">Vycra</button></td>
+<td class="bingo-player-score">4</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Cpt 1ns4an0" type="button">Cpt 1ns4an0</button></td>
+<td class="bingo-player-score">3</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Sha q" type="button">Sha q</button></td>
+<td class="bingo-player-score">3</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Waves117" type="button">Waves117</button></td>
+<td class="bingo-player-score">2</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Iron Vikings" type="button">Iron Vikings</button></td>
+<td class="bingo-player-score">1</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="YeetMyLoad" type="button">YeetMyLoad</button></td>
+<td class="bingo-player-score">1</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Durzohn" type="button">Durzohn</button></td>
+<td class="bingo-player-score">1</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Reggie Tales" type="button">Reggie Tales</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Gary Salty" type="button">Gary Salty</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Gingerbihh" type="button">Gingerbihh</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="TheRealParbs" type="button">TheRealParbs</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Meleikturtle" type="button">Meleikturtle</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="ChronicPurp" type="button">ChronicPurp</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Ottertoebean" type="button">Ottertoebean</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="GhrimReapr" type="button">GhrimReapr</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Trippie Rett" type="button">Trippie Rett</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+</tbody>
+</table>
+</article>
+<article class="bingo-score-card">
+<div class="bingo-score-head blue">
+<span>Off Each Other</span>
+<span class="bingo-team-total">68 drops</span>
+</div>
+<table class="bingo-score-table">
+<thead><tr><th scope="col">Player</th><th scope="col">Score</th></tr></thead>
+<tbody>
+<tr>
+<td><button class="bingo-player-btn" data-player="TheDog" type="button">TheDog</button></td>
+<td class="bingo-player-score">11</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Ie John Fux" type="button">Ie John Fux</button></td>
+<td class="bingo-player-score">9</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Cnyr" type="button">Cnyr</button></td>
+<td class="bingo-player-score">8</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Iron Hogey" type="button">Iron Hogey</button></td>
+<td class="bingo-player-score">6</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Im Owned" type="button">Im Owned</button></td>
+<td class="bingo-player-score">6</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="l3enjie" type="button">l3enjie</button></td>
+<td class="bingo-player-score">5</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Kyle Stanley" type="button">Kyle Stanley</button></td>
+<td class="bingo-player-score">4</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Wuze" type="button">Wuze</button></td>
+<td class="bingo-player-score">4</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="C D C D C D" type="button">C D C D C D</button></td>
+<td class="bingo-player-score">2</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Dhampir007" type="button">Dhampir007</button></td>
+<td class="bingo-player-score">2</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="dudboy" type="button">dudboy</button></td>
+<td class="bingo-player-score">2</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="BIGCOKCOWBOY" type="button">BIGCOKCOWBOY</button></td>
+<td class="bingo-player-score">2</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="ImFatMatt" type="button">ImFatMatt</button></td>
+<td class="bingo-player-score">2</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Vernonwormer" type="button">Vernonwormer</button></td>
+<td class="bingo-player-score">2</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="rskru" type="button">rskru</button></td>
+<td class="bingo-player-score">1</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Juice Solo" type="button">Juice Solo</button></td>
+<td class="bingo-player-score">1</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Zodiac Zack" type="button">Zodiac Zack</button></td>
+<td class="bingo-player-score">1</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="P4pa Swag" type="button">P4pa Swag</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Nutzach00" type="button">Nutzach00</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Tacticaljokr" type="button">Tacticaljokr</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Crispy12" type="button">Crispy12</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="23 Questions" type="button">23 Questions</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+<tr>
+<td><button class="bingo-player-btn" data-player="Busta Beans" type="button">Busta Beans</button></td>
+<td class="bingo-player-score zero">0</td>
+</tr>
+</tbody>
+</table>
+</article>
+</div>
     </section>
-  </main>
+
+    <p class="scoreboard-outside-help board-outside-help">Click the board to open the full-size image.</p>
+    <div class="board-frame bingo-board-frame">
+      <a href="../images/BINGO_WIN11.png" target="_blank" rel="noopener">
+        <img src="../images/BINGO_WIN11.png" alt="Final board for the 2026 Mantis Bingo event">
+      </a>
+    </div>
+  </section>
+</div>
+
+<script>
+const BINGO_PLAYER_DATA = {"Pond Scum":{"team":"Muddogs","drops":["Torva full helm (Nex)","Zaryte vambraces (Nex)","Dom pet","Zenyte shard"]},"Shoulders":{"team":"Muddogs","drops":["Arcane prayer scroll (CoX)","Dexterous prayer scroll (CoX)","Imbued heart","Volatile orb"]},"Meat jun":{"team":"Muddogs","drops":["Virtus robe top","Arcane prayer scroll (CoX)","Dragon hunter wand","Bludgeon piece","Bludgeon piece","Bludgeon piece","Vorki pet"]},"Big Baby Boy":{"team":"Muddogs","drops":["Araxyte fang","Zamorakian spear","Belles Folly","Zenyte shard","Tormented synapse","Volatile orb (Nightmare)"]},"Iron Vikings":{"team":"Muddogs","drops":["Tormented synapse"]},"Pyros":{"team":"Muddogs","drops":["Justiciar faceguard (ToB)","Sanguinesti staff (ToB)","Avernic defender hilt (ToB)","Tanzanite fang (Zulrah)","Blood moon chestplate (Moons)","Dual macuahuitl (Moons)","Blood moon helm (Moons)","Blood moon tassets (Moons)"]},"Reggie Tales":{"team":"Muddogs","drops":[]},"TFresh":{"team":"Muddogs","drops":["Magic fang (Zulrah)","Fire crown","Ice crown","Zenyte shard"]},"Waves117":{"team":"Muddogs","drops":["Primordial crystal","Pegasian crystal"]},"Cpt 1ns4an0":{"team":"Muddogs","drops":["Bottled storm","Broken dragon hook","Hydra leather"]},"Vycra":{"team":"Muddogs","drops":["Guthan's warspear (Barrows)","Eternal crystal","Dragon pickaxe","Enhanced crystal weapon seed"]},"Gary Salty":{"team":"Muddogs","drops":[]},"YeetMyLoad":{"team":"Muddogs","drops":["Serpentine visage (Zulrah)"]},"Sha q":{"team":"Muddogs","drops":["Eye of Ayak","DK pet","Black tourmaline core"]},"Gingerbihh":{"team":"Muddogs","drops":[]},"TheRealParbs":{"team":"Muddogs","drops":[]},"Durzohn":{"team":"Muddogs","drops":["Viggora's chainmace"]},"Meleikturtle":{"team":"Muddogs","drops":[]},"ChronicPurp":{"team":"Muddogs","drops":[]},"Ottertoebean":{"team":"Muddogs","drops":[]},"GhrimReapr":{"team":"Muddogs","drops":[]},"Third leg":{"team":"Muddogs","drops":["Bandos chestplate (GWD)","Saradomin's light (GWD)","Armadyl helmet (GWD)","Guthan's platebody (Barrows)","Guthan's chainskirt (Barrows)","Guthan's helm (Barrows)"]},"Trippie Rett":{"team":"Muddogs","drops":[]},"TheDog":{"team":"Off Each Other","drops":["Bandos boots (GWD)","Warrior ring (DKs)","Archers ring (DKs)","Berserker ring (DKs)","Seers ring (DKs)","Dom pet (Doom)","Bryophyta's essence","Broken dragon hook","Bottled storm","Inquisitor's mace","Inquisitor's great helm"]},"Kyle Stanley":{"team":"Off Each Other","drops":["Oath chest (Yama)","Eclipse atlatl (Moons)","Nihil horn","Dexterous prayer scroll"]},"Cnyr":{"team":"Off Each Other","drops":["Justiciar faceguard (ToB)","Avernic defender hilt (ToB)","Virtus robe bottom","Imbued heart","ToA pet","Torva platelegs","Arcane prayer scroll (CoX)","Bludgeon piece"]},"C D C D C D":{"team":"Off Each Other","drops":["Armadyl helmet (GWD)","Zenyte"]},"Ie John Fux":{"team":"Off Each Other","drops":["Zamorakian spear (GWD)","Dragon pickaxe","Zenyte","Pet snakeling (Zulrah)","Vorki (Vorkath pet)","Viggora's chainmace","Enhanced crystal weapon seed","Bludgeon piece","Bludgeon piece"]},"Dhampir007":{"team":"Off Each Other","drops":["Eclipse moon helm (Moons)","Fire crown"]},"l3enjie":{"team":"Off Each Other","drops":["Soulflame horn (Yama)","Verac's flail (Barrows)","Verac's brassard (Barrows)","Verac's plateskirt (Barrows)","Eclipse moon tassets (Moons)"]},"Iron Hogey":{"team":"Off Each Other","drops":["Belles Folly","Hydra claw","Pegasian crystal (Cerberus)","Primordial crystal (Cerberus)","Noon pet (Grotesque Guardians)","Arcane sigil"]},"dudboy":{"team":"Off Each Other","drops":["Venator shard","Venator shard"]},"rskru":{"team":"Off Each Other","drops":["Nid (Araxxor pet)"]},"P4pa Swag":{"team":"Off Each Other","drops":[]},"Nutzach00":{"team":"Off Each Other","drops":[]},"Wuze":{"team":"Off Each Other","drops":["Tome of water","Verac's helm (Barrows)","Venator shard","Dragon hunter wand"]},"Tacticaljokr":{"team":"Off Each Other","drops":[]},"BIGCOKCOWBOY":{"team":"Off Each Other","drops":["Tome of fire","Armadyl crossbow (GWD)"]},"ImFatMatt":{"team":"Off Each Other","drops":["Venator shard","Venator shard"]},"Crispy12":{"team":"Off Each Other","drops":[]},"Im Owned":{"team":"Off Each Other","drops":["Tormented synapse","Scythe of vitur","Eternal crystal","Zenyte","Ice crown","Ancestral hat"]},"23 Questions":{"team":"Off Each Other","drops":[]},"Busta Beans":{"team":"Off Each Other","drops":[]},"Juice Solo":{"team":"Off Each Other","drops":["Vet'ion jr. pet"]},"Zodiac Zack":{"team":"Off Each Other","drops":["Eclipse moon chestplate (Moons)"]},"Vernonwormer":{"team":"Off Each Other","drops":["Aqunite tendon","Tormented synapse"]}};
+let bingoModalPlayer = null;
+let bingoModalEls = null;
+
+function bingoEscapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[char]));
+}
+
+function ensureBingoPlayerModal() {
+  if (bingoModalEls) return bingoModalEls;
+
+  const backdrop = document.createElement("div");
+  backdrop.className = "bingo-player-modal-backdrop";
+  backdrop.setAttribute("aria-hidden", "true");
+  backdrop.innerHTML = `
+    <div class="bingo-player-modal" role="dialog" aria-modal="true" aria-labelledby="bingoPlayerModalTitle">
+      <div class="bingo-player-modal-head">
+        <div>
+          <h2 id="bingoPlayerModalTitle" class="bingo-player-modal-title">Player</h2>
+        </div>
+        <button id="bingoPlayerModalClose" class="bingo-player-modal-close" type="button">Close</button>
+      </div>
+      <div id="bingoPlayerModalStats" class="bingo-player-modal-stats"></div>
+      <div id="bingoPlayerModalList" class="bingo-player-modal-list"></div>
+    </div>`;
+  document.body.appendChild(backdrop);
+
+  bingoModalEls = {
+    backdrop,
+    modal: backdrop.querySelector(".bingo-player-modal"),
+    title: backdrop.querySelector("#bingoPlayerModalTitle"),
+    stats: backdrop.querySelector("#bingoPlayerModalStats"),
+    list: backdrop.querySelector("#bingoPlayerModalList"),
+    close: backdrop.querySelector("#bingoPlayerModalClose")
+  };
+
+  bingoModalEls.close.addEventListener("click", closeBingoPlayerModal);
+  backdrop.addEventListener("click", event => {
+    if (event.target === backdrop) closeBingoPlayerModal();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && bingoModalPlayer) closeBingoPlayerModal();
+  });
+  return bingoModalEls;
+}
+
+function openBingoPlayerModal(player) {
+  const record = BINGO_PLAYER_DATA[player];
+  if (!record) return;
+
+  bingoModalPlayer = player;
+  const els = ensureBingoPlayerModal();
+  els.title.textContent = player;
+  els.modal.dataset.team = record.team === "Muddogs" ? "red" : "blue";
+  els.stats.innerHTML = `<strong>Total drops:</strong> ${record.drops.length}`;
+
+  if (!record.drops.length) {
+    els.list.innerHTML = `<div class="bingo-player-empty">No recorded drops during the event.</div>`;
+  } else {
+    els.list.innerHTML = record.drops.map((drop, index) => `
+      <div class="bingo-player-drop">
+        <div class="bingo-player-drop-number">${index + 1}.</div>
+        <div>${bingoEscapeHtml(drop)}</div>
+      </div>`).join("");
+  }
+
+  els.backdrop.classList.add("show");
+  els.backdrop.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  els.close.focus();
+}
+
+function closeBingoPlayerModal() {
+  bingoModalPlayer = null;
+  if (!bingoModalEls) return;
+  bingoModalEls.backdrop.classList.remove("show");
+  bingoModalEls.backdrop.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("click", event => {
+  const button = event.target.closest(".bingo-player-btn");
+  if (!button) return;
+  openBingoPlayerModal(button.dataset.player);
+});
+</script>
+
 </body>
 </html>

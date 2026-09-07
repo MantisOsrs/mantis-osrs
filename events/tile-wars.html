@@ -1836,22 +1836,1799 @@
   <link rel="stylesheet" href="../assets/v171-polish.css">
   <link rel="stylesheet" href="../assets/v172-polish.css">
   <link rel="stylesheet" href="../assets/v179-player-modal.css">
+  <link rel="stylesheet" href="../assets/site-nav-v71331.css">
+  <style id="tile-wars-v802-redesign">
+    /* v8.02: modern, open Tile Wars archive layout matched to the current landing page. */
+    body.v161-event-page {
+      --tw-line: rgba(145, 169, 139, .22);
+      --tw-line-strong: rgba(164, 190, 155, .34);
+      --tw-muted: #9ca99d;
+      --tw-soft: #c6d1c4;
+      --tw-green: #d3f3bd;
+    }
+
+    body.v161-event-page > div.wrap {
+      width: min(1060px, calc(100% - 28px)) !important;
+      margin: 0 auto !important;
+    }
+
+    /* Remove the old nested-panel look from the archive page. */
+    body.v161-event-page .original-board-panel {
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 42px 0 58px !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+    }
+
+    body.v161-event-page .original-board-panel::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* Editorial event heading, with compact information controls beside the title. */
+    body.v161-event-page .event-page-header {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      grid-template-areas:
+        "date date"
+        "title info"
+        "credit info" !important;
+      align-items: end !important;
+      column-gap: 34px !important;
+      row-gap: 0 !important;
+      margin: 0 0 34px !important;
+      padding: 0 0 24px !important;
+      border: 0 !important;
+      border-bottom: 1px solid var(--tw-line) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      isolation: auto !important;
+    }
+
+    body.v161-event-page .event-page-header::before,
+    body.v161-event-page .event-page-header::after,
+    body.v161-event-page .event-page-header .v170-header-ornament {
+      content: none !important;
+      display: none !important;
+    }
+
+    body.v161-event-page .event-page-header .event-page-date {
+      grid-area: date !important;
+      margin: 0 0 9px !important;
+      color: #93a890 !important;
+      font: 800 .66rem/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .18em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .event-page-header .original-board-title {
+      grid-area: title !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      color: #eef4eb !important;
+      font: 400 clamp(2.75rem, 6vw, 4.9rem)/.9 Georgia, "Times New Roman", serif !important;
+      letter-spacing: -.055em !important;
+    }
+
+    body.v161-event-page .event-page-header .event-page-credit {
+      grid-area: credit !important;
+      margin: 11px 0 0 !important;
+      color: var(--tw-muted) !important;
+      font-size: .78rem !important;
+      line-height: 1.3 !important;
+    }
+
+    body.v161-event-page .event-page-header .creator-name {
+      color: #c9d7c5 !important;
+    }
+
+    body.v161-event-page .event-page-header .event-info-grid {
+      grid-area: info !important;
+      display: grid !important;
+      grid-template-columns: repeat(3, auto) !important;
+      align-items: end !important;
+      gap: 20px !important;
+      width: auto !important;
+      margin: 0 0 1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+    }
+
+    body.v161-event-page .event-info-panel {
+      position: relative !important;
+      min-width: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .event-info-panel summary {
+      min-height: 0 !important;
+      padding: 6px 0 7px !important;
+      gap: 7px !important;
+      color: #aebcaf !important;
+      border: 0 !important;
+      border-bottom: 1px solid transparent !important;
+      background: transparent !important;
+      font: 700 .67rem/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .13em !important;
+      text-transform: uppercase !important;
+      transition: color .16s ease, border-color .16s ease !important;
+    }
+
+    body.v161-event-page .event-info-panel summary::after {
+      content: "+" !important;
+      color: #6f8970 !important;
+      font: 400 .9rem/1 Arial, Helvetica, sans-serif !important;
+      transition: transform .16s ease !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] summary,
+    body.v161-event-page .event-info-panel summary:hover,
+    body.v161-event-page .event-info-panel summary:focus-visible {
+      color: #e6f0e2 !important;
+      border-bottom-color: rgba(188, 210, 178, .5) !important;
+      background: transparent !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] summary::after {
+      transform: rotate(45deg) !important;
+    }
+
+    body.v161-event-page .event-info-content {
+      position: absolute !important;
+      z-index: 80 !important;
+      top: calc(100% + 12px) !important;
+      right: 0 !important;
+      width: min(430px, calc(100vw - 28px)) !important;
+      max-height: min(62vh, 520px) !important;
+      overflow: auto !important;
+      padding: 18px 20px 19px !important;
+      color: #c7d1c5 !important;
+      border: 1px solid rgba(133, 157, 128, .32) !important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.018), rgba(255,255,255,0)),
+        rgba(10, 15, 11, .98) !important;
+      box-shadow: 0 20px 48px rgba(0,0,0,.42) !important;
+      font-size: .78rem !important;
+      line-height: 1.58 !important;
+    }
+
+    body.v161-event-page .event-info-panel:nth-child(1) .event-info-content {
+      right: auto !important;
+      left: 0 !important;
+    }
+
+    body.v161-event-page .event-info-content li + li {
+      margin-top: 8px !important;
+    }
+
+    /* Simple section dividers instead of card headers. */
+    body.v161-event-page .event-section-title,
+    body.v161-event-page .board-scoreboard-panel .teams-title {
+      display: flex !important;
+      align-items: center !important;
+      gap: 13px !important;
+      margin: 0 0 15px !important;
+      color: #b9d8a9 !important;
+      font: 800 .67rem/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .17em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .event-section-title::after,
+    body.v161-event-page .board-scoreboard-panel .teams-title::after {
+      content: "" !important;
+      flex: 1 !important;
+      height: 1px !important;
+      background: linear-gradient(90deg, var(--tw-line-strong), transparent) !important;
+      box-shadow: none !important;
+    }
+
+    /* Board is the single dominant surface on the page. */
+    body.v161-event-page .original-board-frame {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 1px solid rgba(139, 161, 134, .27) !important;
+      background: #080c09 !important;
+      box-shadow: 0 24px 55px rgba(0,0,0,.28) !important;
+      overflow: hidden !important;
+    }
+
+    body.v161-event-page .original-board-frame a,
+    body.v161-event-page .original-board-frame img {
+      display: block !important;
+      width: 100% !important;
+    }
+
+    body.v161-event-page .original-board-hint {
+      margin: 9px 0 0 !important;
+      color: #758278 !important;
+      font-size: .7rem !important;
+      text-align: right !important;
+    }
+
+    /* Scoreboard becomes three open columns instead of three nested cards. */
+    body.v161-event-page .board-scoreboard-panel {
+      width: 100% !important;
+      margin: 44px 0 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .board-header {
+      margin: 0 0 18px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .scoreboard-help {
+      max-width: 610px !important;
+      margin-top: -8px !important;
+      color: #869389 !important;
+      font-size: .76rem !important;
+      line-height: 1.45 !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .leaders {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+      align-items: start !important;
+      gap: 0 !important;
+      margin: 20px 0 0 !important;
+      border-top: 1px solid var(--tw-line) !important;
+      border-bottom: 1px solid var(--tw-line) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-card {
+      min-width: 0 !important;
+      padding: 18px 22px 17px !important;
+      border: 0 !important;
+      border-right: 1px solid var(--tw-line) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-card:first-child {
+      padding-left: 0 !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-card:last-child {
+      padding-right: 0 !important;
+      border-right: 0 !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head {
+      position: relative !important;
+      margin: 0 0 12px !important;
+      padding: 0 0 10px 13px !important;
+      color: #e7eee4 !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(144, 165, 140, .14) !important;
+      background: transparent !important;
+      text-shadow: none !important;
+      font: 700 .82rem/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .02em !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head::before {
+      content: "" !important;
+      position: absolute !important;
+      left: 0 !important;
+      top: 1px !important;
+      bottom: 10px !important;
+      width: 3px !important;
+      background: #718873 !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head.red::before { background: #a85854 !important; }
+    body.v161-event-page .board-scoreboard-panel .team-head.yellow::before { background: #b59a45 !important; }
+    body.v161-event-page .board-scoreboard-panel .team-head.green::before { background: #72a766 !important; }
+
+    body.v161-event-page .board-scoreboard-panel table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel th,
+    body.v161-event-page .board-scoreboard-panel td {
+      padding: 7px 2px !important;
+      color: #cbd4c9 !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139, 159, 135, .11) !important;
+      background: transparent !important;
+      font-size: .75rem !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel th {
+      padding-top: 2px !important;
+      color: #758078 !important;
+      font-size: .62rem !important;
+      font-weight: 800 !important;
+      letter-spacing: .1em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel tbody tr:nth-child(even),
+    body.v161-event-page .board-scoreboard-panel tbody tr:hover {
+      background: transparent !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .player-name-btn {
+      color: #d9e2d6 !important;
+      text-decoration: none !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .player-name-btn:hover,
+    body.v161-event-page .board-scoreboard-panel .player-name-btn:focus-visible {
+      color: var(--tw-green) !important;
+      text-decoration: underline !important;
+      text-underline-offset: 3px !important;
+    }
+
+    body.v161-event-page .board-page-nav {
+      display: flex !important;
+      justify-content: flex-end !important;
+      margin: 23px 0 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+    }
+
+    body.v161-event-page .board-page-nav a {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      min-height: 0 !important;
+      padding: 7px 0 !important;
+      color: #a9b8a6 !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(181, 205, 171, .28) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font-size: .68rem !important;
+      letter-spacing: .14em !important;
+      text-decoration: none !important;
+    }
+
+    body.v161-event-page .board-page-nav a::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    body.v161-event-page .board-page-nav a:hover,
+    body.v161-event-page .board-page-nav a:focus-visible {
+      color: #edf4e9 !important;
+      border-bottom-color: rgba(211, 243, 189, .65) !important;
+      background: transparent !important;
+      outline: none !important;
+    }
+
+    @media (max-width: 900px) {
+      body.v161-event-page .event-page-header {
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+          "date"
+          "title"
+          "credit"
+          "info" !important;
+        align-items: start !important;
+        row-gap: 0 !important;
+      }
+
+      body.v161-event-page .event-page-header .event-info-grid {
+        margin-top: 18px !important;
+      }
+
+      body.v161-event-page .board-scoreboard-panel .leaders {
+        grid-template-columns: 1fr !important;
+      }
+
+      body.v161-event-page .board-scoreboard-panel .team-card,
+      body.v161-event-page .board-scoreboard-panel .team-card:first-child,
+      body.v161-event-page .board-scoreboard-panel .team-card:last-child {
+        padding: 18px 0 !important;
+        border-right: 0 !important;
+        border-bottom: 1px solid var(--tw-line) !important;
+      }
+
+      body.v161-event-page .board-scoreboard-panel .team-card:last-child {
+        border-bottom: 0 !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body.v161-event-page > div.wrap {
+        width: min(100% - 20px, 1060px) !important;
+      }
+
+      body.v161-event-page .original-board-panel {
+        padding-top: 30px !important;
+      }
+
+      body.v161-event-page .event-page-header {
+        margin-bottom: 27px !important;
+        padding-bottom: 20px !important;
+      }
+
+      body.v161-event-page .event-page-header .original-board-title {
+        font-size: clamp(2.7rem, 15vw, 4rem) !important;
+      }
+
+      body.v161-event-page .event-page-header .event-info-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 13px !important;
+        width: 100% !important;
+      }
+
+      body.v161-event-page .event-info-panel summary {
+        justify-content: flex-start !important;
+        gap: 5px !important;
+        font-size: .59rem !important;
+        letter-spacing: .08em !important;
+        white-space: nowrap !important;
+      }
+
+      body.v161-event-page .event-info-content,
+      body.v161-event-page .event-info-panel:nth-child(1) .event-info-content {
+        position: fixed !important;
+        top: 74px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-height: calc(100vh - 94px) !important;
+      }
+
+      body.v161-event-page .original-board-hint {
+        text-align: left !important;
+      }
+
+      body.v161-event-page .board-scoreboard-panel {
+        margin-top: 36px !important;
+      }
+    }
+  </style>
+
+  <style id="tile-wars-v803-header-refine">
+    /* v8.03: restore the compact pre-redesign Tile Wars header sizing in one unified nav-toned surface. */
+
+    /* The shared nav owns its own sizing. Tile Wars page layout rules must not alter it. */
+    body.v161-event-page > .v160-nav-shell {
+      width: min(1060px, calc(100% - 28px)) !important;
+      margin: 0 auto !important;
+    }
+
+    body.v161-event-page .event-page-header {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 360px) !important;
+      grid-template-areas:
+        "date date"
+        "title info"
+        "credit credit" !important;
+      align-items: center !important;
+      column-gap: 16px !important;
+      row-gap: 0 !important;
+      overflow: visible !important;
+      margin: 0 0 34px !important;
+      padding: 12px 16px 11px !important;
+      border: 1px solid rgba(166, 158, 99, .30) !important;
+      border-radius: 0 !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg,
+          rgba(79, 96, 69, .072) 0%,
+          rgba(52, 65, 47, .044) 58%,
+          rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg,
+          rgba(14, 21, 16, .998) 0%,
+          rgba(7, 12, 9, .998) 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215, 216, 179, .052),
+        inset 0 -1px 0 rgba(150, 146, 96, .10),
+        0 12px 28px rgba(0, 0, 0, .18) !important;
+      isolation: isolate !important;
+    }
+
+    body.v161-event-page .event-page-header::before,
+    body.v161-event-page .event-page-header::after,
+    body.v161-event-page .event-page-header .v170-header-ornament {
+      content: none !important;
+      display: none !important;
+    }
+
+    body.v161-event-page .event-page-header .event-page-date {
+      grid-area: date !important;
+      margin: 0 0 4px !important;
+      color: #a9c99d !important;
+      font: 800 10px/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .18em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .event-page-header .original-board-title {
+      grid-area: title !important;
+      min-width: 0 !important;
+      margin: 3px 0 4px !important;
+      color: #f0f5ed !important;
+      font-family: Georgia, "Times New Roman", serif !important;
+      font-size: clamp(24px, 3vw, 34px) !important;
+      font-weight: 400 !important;
+      line-height: 1.08 !important;
+      letter-spacing: .01em !important;
+      text-shadow: 0 10px 26px rgba(0, 0, 0, .28) !important;
+    }
+
+    body.v161-event-page .event-page-header .event-page-credit {
+      grid-area: credit !important;
+      margin: 0 !important;
+      color: #9fac9d !important;
+      font-size: 12px !important;
+      line-height: 1.35 !important;
+    }
+
+    body.v161-event-page .event-page-header .creator-name {
+      color: #d3f3bd !important;
+      font-weight: 800 !important;
+    }
+
+    /* One header surface. The three information controls no longer have their own card boxes. */
+    body.v161-event-page .event-page-header .event-info-grid {
+      grid-area: info !important;
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      align-items: center !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 0 0 12px !important;
+      gap: 0 !important;
+      border: 0 !important;
+      border-left: 1px solid rgba(166, 158, 99, .20) !important;
+      background: transparent !important;
+    }
+
+    body.v161-event-page .event-info-panel {
+      position: relative !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .event-info-panel + .event-info-panel {
+      border-left: 1px solid rgba(166, 158, 99, .16) !important;
+    }
+
+    body.v161-event-page .event-info-panel summary {
+      position: relative !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 5px !important;
+      min-height: 34px !important;
+      padding: 7px 8px !important;
+      color: #d3f3bd !important;
+      border: 0 !important;
+      background: transparent !important;
+      font: 800 10px/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .10em !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
+      cursor: pointer !important;
+      transition: color .16s ease, background .16s ease !important;
+    }
+
+    body.v161-event-page .event-info-panel summary::after {
+      content: "+" !important;
+      flex: 0 0 auto !important;
+      color: #9fbe94 !important;
+      font: 500 15px/1 Arial, Helvetica, sans-serif !important;
+      transition: transform .16s ease !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] summary,
+    body.v161-event-page .event-info-panel summary:hover,
+    body.v161-event-page .event-info-panel summary:focus-visible {
+      color: #efffe7 !important;
+      border: 0 !important;
+      background: rgba(106, 145, 95, .08) !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] summary::after {
+      transform: rotate(45deg) !important;
+    }
+
+    /* Expanded copy keeps the earlier readable sizing while using the same nav treatment. */
+    body.v161-event-page .event-info-content {
+      position: absolute !important;
+      z-index: 80 !important;
+      top: calc(100% + 10px) !important;
+      right: 0 !important;
+      width: min(440px, calc(100vw - 28px)) !important;
+      max-height: min(68vh, 560px) !important;
+      overflow: auto !important;
+      padding: 12px 13px 14px !important;
+      color: #c2cec0 !important;
+      border: 1px solid rgba(166, 158, 99, .28) !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg,
+          rgba(79, 96, 69, .072) 0%,
+          rgba(52, 65, 47, .044) 58%,
+          rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg,
+          rgba(14, 21, 16, .998) 0%,
+          rgba(7, 12, 9, .998) 100%) !important;
+      box-shadow: 0 18px 38px rgba(0, 0, 0, .34) !important;
+      font-size: 12px !important;
+      line-height: 1.55 !important;
+    }
+
+    body.v161-event-page .event-info-panel:nth-child(1) .event-info-content {
+      left: 0 !important;
+      right: auto !important;
+    }
+
+    body.v161-event-page .event-info-content ul,
+    body.v161-event-page .event-info-content ol {
+      margin: 0 !important;
+      padding-left: 18px !important;
+    }
+
+    body.v161-event-page .event-info-content li + li {
+      margin-top: 8px !important;
+    }
+
+    body.v161-event-page .event-info-content strong {
+      color: #eef5eb !important;
+    }
+
+    body.v161-event-page .event-info-subheading {
+      margin: 14px 0 7px !important;
+      color: #a9c99d !important;
+      font-size: 10px !important;
+      font-weight: 800 !important;
+      letter-spacing: .13em !important;
+      text-transform: uppercase !important;
+    }
+
+    @media (max-width: 760px) {
+      body.v161-event-page .event-page-header {
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+          "date"
+          "title"
+          "info"
+          "credit" !important;
+        margin-bottom: 27px !important;
+        padding: 13px 14px 12px !important;
+      }
+
+      body.v161-event-page .event-page-header .original-board-title {
+        font-size: 25px !important;
+      }
+
+      body.v161-event-page .event-page-header .event-info-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        width: 100% !important;
+        margin: 4px 0 5px !important;
+        padding: 4px 0 0 !important;
+        border-left: 0 !important;
+        border-top: 1px solid rgba(166, 158, 99, .18) !important;
+      }
+
+      body.v161-event-page .event-info-panel summary {
+        min-height: 32px !important;
+        padding: 6px 7px !important;
+        gap: 4px !important;
+        font-size: 9px !important;
+        letter-spacing: .07em !important;
+      }
+
+      body.v161-event-page .event-info-content,
+      body.v161-event-page .event-info-panel:nth-child(1) .event-info-content {
+        position: fixed !important;
+        top: 74px !important;
+        left: 10px !important;
+        right: 10px !important;
+        width: auto !important;
+        max-height: calc(100vh - 94px) !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v804-refine">
+    /* v8.04: match the landing-page Home control, restore compact info cards,
+       use the nav material in the event header, and return the archive content
+       to its earlier, smaller scale without changing board/scoreboard structure. */
+
+    /* The landing page has a final botanical texture layer on the Home control
+       that is intentionally separate from the shared nav stylesheet. Mirror it
+       here so the control does not visually change between Home and Tile Wars. */
+    body.v161-event-page.site-nav-v71331 .v160-brand {
+      isolation: isolate !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand::after {
+      content: "" !important;
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+      opacity: 1 !important;
+      background-image:
+        linear-gradient(90deg, rgba(3,5,4,.50), rgba(3,5,4,.34) 45%, rgba(3,5,4,.44)),
+        url("../images/home-button-botanical-v6398.webp") !important;
+      background-repeat: no-repeat, no-repeat !important;
+      background-size: 100% 100%, cover !important;
+      background-position: center, 72% 48% !important;
+      filter: none !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand > * {
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand:hover::after,
+    body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible::after {
+      background-image:
+        linear-gradient(90deg, rgba(3,5,4,.43), rgba(3,5,4,.27) 45%, rgba(3,5,4,.36)),
+        url("../images/home-button-botanical-v6398.webp") !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand-wordmark,
+    body.v161-event-page.site-nav-v71331 .v160-brand-icon {
+      text-shadow:
+        0 1px 3px rgba(0,0,0,.96),
+        0 0 7px rgba(0,0,0,.56) !important;
+    }
+
+    /* Return the archive surface to the earlier compact width. */
+    body.v161-event-page .original-board-panel {
+      width: min(980px, 100%) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    /* Use the exact material stack from the shared nav background. Keeping it
+       on a pseudo-layer prevents earlier event-header backgrounds from masking it. */
+    body.v161-event-page .event-page-header {
+      position: relative !important;
+      isolation: isolate !important;
+      background: #070c09 !important;
+      border-color: rgba(150, 148, 94, .50) !important;
+    }
+
+    body.v161-event-page .event-page-header::before {
+      content: "" !important;
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+      border: 0 !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg,
+          rgba(79, 96, 69, .072) 0%,
+          rgba(52, 65, 47, .044) 58%,
+          rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg,
+          rgba(14, 21, 16, .998) 0%,
+          rgba(7, 12, 9, .998) 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215, 216, 179, .052),
+        inset 0 -1px 0 rgba(150, 146, 96, .10),
+        inset 0 -12px 25px rgba(0, 0, 0, .16) !important;
+    }
+
+    body.v161-event-page .event-page-header > * {
+      position: relative !important;
+      z-index: 1 !important;
+    }
+
+    /* Restore the three compact bordered controls from the pre-redesign header. */
+    body.v161-event-page .event-page-header .event-info-grid {
+      gap: 6px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+    }
+
+    body.v161-event-page .event-info-panel,
+    body.v161-event-page .event-info-panel + .event-info-panel {
+      position: relative !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 1px solid #4e6651 !important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0)),
+        rgba(10,16,12,.72) !important;
+      box-shadow:
+        0 9px 20px rgba(0,0,0,.18),
+        inset 0 0 0 4px rgba(134,202,112,.018) !important;
+    }
+
+    body.v161-event-page .event-info-panel summary {
+      min-height: 34px !important;
+      padding: 7px 8px !important;
+      gap: 5px !important;
+      color: #d3f3bd !important;
+      border: 0 !important;
+      background: transparent !important;
+      font: 800 10px/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .10em !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] summary {
+      border-bottom: 1px solid rgba(150,214,128,.12) !important;
+      background: rgba(106,145,95,.07) !important;
+    }
+
+    body.v161-event-page .event-info-panel summary:hover,
+    body.v161-event-page .event-info-panel summary:focus-visible {
+      color: #efffe7 !important;
+      background: rgba(106,145,95,.10) !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .event-info-panel summary::after {
+      color: #9fbe94 !important;
+      font: 500 15px/1 Arial, Helvetica, sans-serif !important;
+    }
+
+    /* Earlier board preview scale, with the current visual treatment preserved. */
+    body.v161-event-page .original-board-frame {
+      width: min(900px, 100%) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    body.v161-event-page .original-board-frame a,
+    body.v161-event-page .original-board-frame img {
+      width: 100% !important;
+      max-width: 900px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    body.v161-event-page .original-board-hint {
+      width: min(900px, 100%) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    @media (max-width: 760px) {
+      body.v161-event-page .event-page-header .event-info-grid {
+        gap: 6px !important;
+        padding-top: 4px !important;
+        border-top: 0 !important;
+      }
+
+      body.v161-event-page .event-info-panel summary {
+        min-height: 32px !important;
+        padding: 6px 7px !important;
+        font-size: 9px !important;
+        letter-spacing: .07em !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v805-texture-nav-fix">
+    /* v8.05: make the Tile Wars nav Home control visually identical to the
+       landing-page control, make the header itself carry the nav grain, and
+       keep the three info controls as single-border boxes rather than nested
+       or inset double-box treatments. */
+
+    /* Match the landing page's final Home-control texture calibration. */
+    /* Cancel the older Tile Wars width override so the shared nav keeps the
+       same geometry as the landing page at every breakpoint. */
+    body.v161-event-page.site-nav-v71331 > .v160-nav-shell {
+      width: min(1060px, calc(100% - 28px)) !important;
+      min-height: 58px !important;
+      margin: 0 auto !important;
+      padding: 4px 0 7px !important;
+      gap: 22px !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand {
+      position: relative !important;
+      isolation: isolate !important;
+      overflow: hidden !important;
+      background: rgba(4, 7, 5, .86) !important;
+      border-color: rgba(150, 148, 94, .50) !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(224, 224, 186, .024),
+        0 5px 14px rgba(0, 0, 0, .15) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand::after {
+      content: "" !important;
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+      opacity: 1 !important;
+      background-image:
+        linear-gradient(90deg,
+          rgba(2,4,3,.64) 0%,
+          rgba(2,4,3,.56) 30%,
+          rgba(2,4,3,.48) 62%,
+          rgba(2,4,3,.48) 100%),
+        url("../images/home-button-botanical-v6398.webp") !important;
+      background-repeat: no-repeat, no-repeat !important;
+      background-size: 100% 100%, cover !important;
+      background-position: center, 72% 48% !important;
+      filter: saturate(.76) brightness(.98) contrast(1.035) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand:hover,
+    body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible {
+      color: #fff !important;
+      background: rgba(10, 16, 11, .94) !important;
+      border-color: rgba(184, 180, 112, .66) !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(224, 224, 186, .032),
+        0 6px 18px rgba(0, 0, 0, .20) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand:hover::after,
+    body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible::after {
+      background-image:
+        linear-gradient(90deg,
+          rgba(2,4,3,.56) 0%,
+          rgba(2,4,3,.48) 30%,
+          rgba(2,4,3,.40) 62%,
+          rgba(2,4,3,.40) 100%),
+        url("../images/home-button-botanical-v6398.webp") !important;
+      filter: saturate(.80) brightness(1.03) contrast(1.035) !important;
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand > * {
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+    /* Put the same fuzzy paper-grain material used by the site nav directly
+       on the Tile Wars header. No hidden pseudo-surface is required. */
+    body.v161-event-page .event-page-header {
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg,
+          rgba(79, 96, 69, .072) 0%,
+          rgba(52, 65, 47, .044) 58%,
+          rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg,
+          rgba(14, 21, 16, .998) 0%,
+          rgba(7, 12, 9, .998) 100%) !important;
+      border-color: rgba(150, 148, 94, .50) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215, 216, 179, .052),
+        inset 0 -1px 0 rgba(150, 146, 96, .10),
+        inset 0 -12px 25px rgba(0, 0, 0, .16),
+        0 12px 28px rgba(0, 0, 0, .18) !important;
+    }
+
+    /* Earlier refinements used a second full-size layer. Disable it so the
+       header reads as one textured box rather than two stacked surfaces. */
+    body.v161-event-page .event-page-header::before,
+    body.v161-event-page .event-page-header::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* One clean box per information control. Keep the established styling,
+       but remove the inset frame that made each control look double-boxed. */
+    body.v161-event-page .event-info-panel,
+    body.v161-event-page .event-info-panel + .event-info-panel {
+      border: 1px solid #4e6651 !important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.022), rgba(255,255,255,0)),
+        rgba(10,16,12,.58) !important;
+      box-shadow: 0 7px 16px rgba(0,0,0,.16) !important;
+      outline: 0 !important;
+    }
+
+    body.v161-event-page .event-info-panel summary {
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    @media (max-width: 760px) {
+      body.v161-event-page.site-nav-v71331 > .v160-nav-shell {
+        width: calc(100% - 18px) !important;
+        gap: 14px !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body.v161-event-page.site-nav-v71331 > .v160-nav-shell {
+        gap: 10px !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v806-spacing-scoreboard-box">
+    /* v8.06: remove redundant section labels, bring the board and scoreboard
+       together, and place the existing scoreboard inside one nav-material box. */
+
+    /* With the Final Board label removed, keep the board close to the event header. */
+    body.v161-event-page .event-page-header {
+      margin-bottom: 14px !important;
+    }
+
+    /* Keep the board and its contents exactly as they are, only tightening the gap below. */
+    body.v161-event-page .original-board-hint {
+      margin-top: 7px !important;
+    }
+
+    /* One outer surface for the existing scoreboard. The leaderboard columns,
+       tables and player controls retain their current styling and structure. */
+    body.v161-event-page .board-scoreboard-panel {
+      width: min(900px, 100%) !important;
+      margin: 12px auto 0 !important;
+      padding: 14px 16px 16px !important;
+      border: 1px solid rgba(150, 148, 94, .50) !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg,
+          rgba(79, 96, 69, .072) 0%,
+          rgba(52, 65, 47, .044) 58%,
+          rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg,
+          rgba(14, 21, 16, .998) 0%,
+          rgba(7, 12, 9, .998) 100%) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215, 216, 179, .052),
+        inset 0 -1px 0 rgba(150, 146, 96, .10),
+        inset 0 -12px 25px rgba(0, 0, 0, .16),
+        0 12px 28px rgba(0, 0, 0, .18) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .board-header {
+      margin: 0 0 8px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .scoreboard-help {
+      margin: 0 !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .leaders {
+      margin-top: 10px !important;
+    }
+
+    @media (max-width: 760px) {
+      body.v161-event-page .event-page-header {
+        margin-bottom: 12px !important;
+      }
+
+      body.v161-event-page .board-scoreboard-panel {
+        margin-top: 10px !important;
+        padding: 12px 12px 14px !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v807-header-replay-scoreboard-cleanup">
+    /* v8.07: bring Replay into the Tile Wars header, remove obsolete scoreboard
+       header/footer rows, and keep the scoreboard as one flat dark surface. */
+
+    /* Give the information/action row more room so it begins farther left and
+       Rules, Powers, Land Mines and Replay fit beside the title. */
+    body.v161-event-page .event-page-header {
+      grid-template-columns: minmax(230px, 1fr) minmax(430px, 500px) !important;
+      column-gap: 12px !important;
+    }
+
+    body.v161-event-page .event-page-header .event-info-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) auto !important;
+      gap: 6px !important;
+      padding-left: 8px !important;
+    }
+
+    /* Replay sits immediately after Land Mines with one vertical separator. */
+    body.v161-event-page .event-replay-link {
+      align-self: stretch !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 5px !important;
+      min-width: 92px !important;
+      margin-left: 2px !important;
+      padding: 0 2px 0 10px !important;
+      color: #d3f3bd !important;
+      border: 0 !important;
+      border-left: 1px solid rgba(166, 158, 99, .34) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font: 800 10px/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .09em !important;
+      text-transform: uppercase !important;
+      text-decoration: none !important;
+      white-space: nowrap !important;
+      transition: color .16s ease, background .16s ease !important;
+    }
+
+    body.v161-event-page .event-replay-link:hover,
+    body.v161-event-page .event-replay-link:focus-visible {
+      color: #efffe7 !important;
+      background: rgba(106,145,95,.08) !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .event-replay-link .v171-replay-arrow {
+      font-size: 12px !important;
+      line-height: 1 !important;
+    }
+
+    /* The obsolete scoreboard intro and bottom replay rows are gone. Start the
+       leaderboard immediately inside one simple flat box. */
+    body.v161-event-page .board-scoreboard-panel {
+      padding: 14px 16px 16px !important;
+      background: #0c130e !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215,216,179,.035),
+        0 12px 28px rgba(0,0,0,.18) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .leaders {
+      margin-top: 0 !important;
+    }
+
+    /* Restore the leaderboard accent bars to the actual team colors. */
+    body.v161-event-page .board-scoreboard-panel .team-head.red::before {
+      background: var(--red) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head.yellow::before {
+      background: var(--yellow) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head.green::before {
+      background: var(--green) !important;
+    }
+
+    @media (max-width: 760px) {
+      body.v161-event-page .event-page-header {
+        grid-template-columns: 1fr !important;
+      }
+
+      body.v161-event-page .event-page-header .event-info-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) auto !important;
+        gap: 4px !important;
+        padding-left: 0 !important;
+      }
+
+      body.v161-event-page .event-replay-link {
+        min-width: 76px !important;
+        padding-left: 7px !important;
+        font-size: 8px !important;
+        letter-spacing: .05em !important;
+      }
+    }
+
+    @media (max-width: 430px) {
+      body.v161-event-page .event-page-header .event-info-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) 72px !important;
+      }
+
+      body.v161-event-page .event-info-panel summary {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        font-size: 8px !important;
+        letter-spacing: .045em !important;
+      }
+
+      body.v161-event-page .event-replay-link {
+        min-width: 0 !important;
+        padding-left: 6px !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v808-scoreboard-header-type-refine">
+    /* v8.08: match the scoreboard tone to the Tile Wars header without adding
+       grain, simplify leaderboard chrome, and use the current landing-card
+       typography colors while preserving every existing header text size. */
+
+    /* Match the header's underlying dark/green tone, but intentionally omit
+       the paper-grain image so the scoreboard remains a clean flat surface. */
+    body.v161-event-page .board-scoreboard-panel {
+      padding: 10px 14px 11px !important;
+      background:
+        linear-gradient(180deg,
+          rgba(79, 96, 69, .072) 0%,
+          rgba(52, 65, 47, .044) 58%,
+          rgba(28, 37, 29, .018) 100%),
+        linear-gradient(180deg,
+          rgba(14, 21, 16, .998) 0%,
+          rgba(7, 12, 9, .998) 100%) !important;
+      border-color: rgba(150, 148, 94, .50) !important;
+    }
+
+    /* Remove the outer rules above and below the three leaderboard columns. */
+    body.v161-event-page .board-scoreboard-panel .leaders {
+      margin: 0 !important;
+      border-top: 0 !important;
+      border-bottom: 0 !important;
+    }
+
+    /* Tighten the columns after removing the table header row. */
+    body.v161-event-page .board-scoreboard-panel .team-card {
+      padding-top: 8px !important;
+      padding-bottom: 6px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head {
+      margin-bottom: 4px !important;
+      padding-top: 0 !important;
+      padding-bottom: 6px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head::before {
+      bottom: 6px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel td {
+      padding-top: 4px !important;
+      padding-bottom: 4px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel tbody tr:last-child td {
+      border-bottom: 0 !important;
+    }
+
+    /* Current landing-page archive card typography. Sizes are deliberately
+       omitted here so Tile Wars keeps its existing v8.07 sizing. */
+    body.v161-event-page .event-page-header .event-page-date {
+      color: #c7c0aa !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    body.v161-event-page .event-page-header .original-board-title {
+      color: #eee8d2 !important;
+      font-family: Georgia, "Times New Roman", serif !important;
+    }
+
+    body.v161-event-page .event-page-header .event-page-credit {
+      color: #95ad7c !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    body.v161-event-page .event-page-header .creator-name {
+      color: #b5d88f !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+    }
+
+    @media (max-width: 760px) {
+      body.v161-event-page .board-scoreboard-panel {
+        padding: 9px 11px 10px !important;
+      }
+
+      body.v161-event-page .board-scoreboard-panel .team-card {
+        padding-top: 7px !important;
+        padding-bottom: 5px !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v809-scoreboard-first">
+    /* v8.09: place the leaderboard directly below the Tile Wars header, restore
+       the player helper copy, and move the board-open hint into the same utility row. */
+    body.v161-event-page .event-page-header {
+      margin-bottom: 10px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel {
+      margin: 0 auto 10px !important;
+    }
+
+    body.v161-event-page .scoreboard-utility-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      margin: 0 0 6px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .scoreboard-help,
+    body.v161-event-page .board-scoreboard-panel .original-board-hint {
+      width: auto !important;
+      max-width: none !important;
+      margin: 0 !important;
+      color: #758278 !important;
+      font-size: .7rem !important;
+      line-height: 1.35 !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .scoreboard-help {
+      text-align: left !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .original-board-hint {
+      text-align: right !important;
+      white-space: nowrap !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .leaders {
+      margin-top: 0 !important;
+    }
+
+    body.v161-event-page .original-board-frame {
+      margin-top: 0 !important;
+    }
+
+    @media (max-width: 700px) {
+      body.v161-event-page .scoreboard-utility-row {
+        align-items: flex-start !important;
+        gap: 5px 10px !important;
+        flex-wrap: wrap !important;
+      }
+
+      body.v161-event-page .board-scoreboard-panel .original-board-hint {
+        margin-left: auto !important;
+        white-space: normal !important;
+      }
+    }
+  </style>
+
+  <style id="tile-wars-v810-player-modal-refine">
+    /* v8.10: move leaderboard guidance outside the scoreboard and restyle
+       player drop details as one clean Tile Wars interface surface. */
+
+    body.v161-event-page .scoreboard-outside-help {
+      width: min(900px, 100%) !important;
+      margin: 0 auto 5px !important;
+      color: #758278 !important;
+      font: 400 .7rem/1.35 Arial, Helvetica, sans-serif !important;
+      text-align: left !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel {
+      margin-top: 0 !important;
+    }
+
+    /* One modal surface, using the same dark green/parchment language as the
+       refreshed Tile Wars header without nested card chrome. */
+    body.v161-event-page .player-modal-backdrop {
+      background: rgba(2, 6, 3, .78) !important;
+      backdrop-filter: blur(5px) !important;
+      -webkit-backdrop-filter: blur(5px) !important;
+    }
+
+    body.v161-event-page .player-modal {
+      position: relative !important;
+      width: min(700px, 92vw) !important;
+      color: #cbd4c9 !important;
+      border: 1px solid rgba(150, 148, 94, .52) !important;
+      border-radius: 0 !important;
+      background:
+        url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+        linear-gradient(180deg, rgba(79, 96, 69, .075), rgba(28, 37, 29, .02)),
+        linear-gradient(180deg, rgba(14, 21, 16, .998), rgba(7, 12, 9, .998)) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(215, 216, 179, .05),
+        inset 0 -1px 0 rgba(150, 146, 96, .10),
+        0 24px 60px rgba(0, 0, 0, .48) !important;
+    }
+
+    body.v161-event-page .player-modal::before {
+      content: "" !important;
+      position: absolute !important;
+      z-index: 2 !important;
+      top: -1px !important;
+      left: -1px !important;
+      right: -1px !important;
+      height: 3px !important;
+      background: #72a766 !important;
+      pointer-events: none !important;
+    }
+
+    body.v161-event-page .player-modal[data-team="red"]::before { background: var(--red) !important; }
+    body.v161-event-page .player-modal[data-team="yellow"]::before { background: var(--yellow) !important; }
+    body.v161-event-page .player-modal[data-team="green"]::before { background: var(--green) !important; }
+
+    body.v161-event-page .player-modal-head {
+      display: flex !important;
+      align-items: flex-start !important;
+      justify-content: space-between !important;
+      gap: 18px !important;
+      padding: 19px 20px 14px !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139, 159, 135, .16) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .player-modal-title {
+      margin: 0 !important;
+      color: #eee8d2 !important;
+      font: 700 1.34rem/1.1 Georgia, "Times New Roman", serif !important;
+      letter-spacing: .01em !important;
+      text-shadow: none !important;
+    }
+
+    body.v161-event-page .player-modal-sub {
+      margin-top: 5px !important;
+      color: #95ad7c !important;
+      font: 700 .67rem/1.35 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .055em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .player-modal-close {
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 7px 10px !important;
+      color: #d8e2d4 !important;
+      border: 1px solid rgba(150, 148, 94, .36) !important;
+      border-radius: 0 !important;
+      background: rgba(255,255,255,.025) !important;
+      box-shadow: none !important;
+      font: 800 .61rem/1 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .09em !important;
+      text-transform: uppercase !important;
+    }
+
+    body.v161-event-page .player-modal-close:hover,
+    body.v161-event-page .player-modal-close:focus-visible {
+      color: #efffe7 !important;
+      border-color: rgba(181, 216, 143, .50) !important;
+      background: rgba(106, 145, 95, .10) !important;
+      outline: none !important;
+    }
+
+    body.v161-event-page .player-modal-stats {
+      display: flex !important;
+      align-items: baseline !important;
+      min-height: 0 !important;
+      padding: 10px 20px !important;
+      color: #89968b !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139, 159, 135, .12) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font: 600 .7rem/1.3 Arial, Helvetica, sans-serif !important;
+    }
+
+    body.v161-event-page .player-modal-stats strong {
+      color: #d9e2d6 !important;
+      font-weight: 800 !important;
+    }
+
+    body.v161-event-page .player-modal-list {
+      padding: 4px 20px 14px !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    body.v161-event-page .player-modal-row {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      align-items: baseline !important;
+      gap: 16px !important;
+      margin: 0 !important;
+      padding: 9px 0 !important;
+      color: #cbd4c9 !important;
+      border: 0 !important;
+      border-bottom: 1px solid rgba(139, 159, 135, .105) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      font: 400 .76rem/1.35 Arial, Helvetica, sans-serif !important;
+    }
+
+    body.v161-event-page .player-modal-row:last-child {
+      border-bottom: 0 !important;
+    }
+
+    body.v161-event-page .player-modal-row strong {
+      display: inline-block !important;
+      min-width: 25px !important;
+      color: #78867b !important;
+      font-size: .66rem !important;
+      font-weight: 800 !important;
+      letter-spacing: .03em !important;
+    }
+
+    body.v161-event-page .player-modal-move {
+      color: #7f8d82 !important;
+      font: 700 .63rem/1.2 Arial, Helvetica, sans-serif !important;
+      letter-spacing: .05em !important;
+      text-transform: uppercase !important;
+      white-space: nowrap !important;
+    }
+
+    body.v161-event-page .player-modal-empty {
+      padding: 18px 0 8px !important;
+      color: #89968b !important;
+      border: 0 !important;
+      background: transparent !important;
+      text-align: left !important;
+      font: 400 .76rem/1.45 Arial, Helvetica, sans-serif !important;
+    }
+
+    @media (max-width: 680px) {
+      body.v161-event-page .scoreboard-outside-help {
+        margin-bottom: 4px !important;
+        padding: 0 1px !important;
+        font-size: .66rem !important;
+      }
+
+      body.v161-event-page .player-modal-head {
+        padding: 16px 15px 12px !important;
+      }
+
+      body.v161-event-page .player-modal-stats {
+        padding: 9px 15px !important;
+      }
+
+      body.v161-event-page .player-modal-list {
+        padding: 3px 15px 12px !important;
+      }
+
+      body.v161-event-page .player-modal-row {
+        gap: 10px !important;
+        padding: 8px 0 !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v811-modal-size-overlay-fix">
+    /* v8.11: keep every player details view the same size, scroll only the
+       drop list when needed, and ensure event information panels stack above
+       all following Tile Wars content. */
+
+    /* The header itself must sit in a higher stacking context than the
+       leaderboard and board. Child z-index values alone cannot escape the
+       header's stacking context. */
+    body.v161-event-page .event-page-header {
+      position: relative !important;
+      z-index: 200 !important;
+      overflow: visible !important;
+    }
+
+    body.v161-event-page .event-page-header .event-info-grid {
+      position: relative !important;
+      z-index: 210 !important;
+      overflow: visible !important;
+    }
+
+    body.v161-event-page .event-info-panel {
+      position: relative !important;
+      z-index: 211 !important;
+      overflow: visible !important;
+    }
+
+    body.v161-event-page .event-info-panel[open] {
+      z-index: 220 !important;
+    }
+
+    body.v161-event-page .event-info-content {
+      z-index: 230 !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel,
+    body.v161-event-page .original-board-frame {
+      position: relative !important;
+      z-index: 1 !important;
+    }
+
+    /* Consistent player window. The header, total and Close control remain
+       stationary because only the list below them owns vertical scrolling. */
+    body.v161-event-page .player-modal {
+      display: flex !important;
+      flex-direction: column !important;
+      width: min(700px, 92vw) !important;
+      height: min(520px, calc(100vh - 48px)) !important;
+      max-height: none !important;
+      overflow: hidden !important;
+    }
+
+    body.v161-event-page .player-modal-head,
+    body.v161-event-page .player-modal-stats {
+      flex: 0 0 auto !important;
+    }
+
+    body.v161-event-page .player-modal-list {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain !important;
+      scrollbar-gutter: stable !important;
+    }
+
+    /* Team descriptor copy was intentionally removed from the refreshed modal. */
+    body.v161-event-page .player-modal-sub {
+      display: none !important;
+    }
+
+    @media (max-width: 680px) {
+      body.v161-event-page .player-modal {
+        width: min(700px, calc(100vw - 20px)) !important;
+        height: min(520px, calc(100vh - 24px)) !important;
+      }
+    }
+  </style>
+
+
+  <style id="tile-wars-v814-team-glow-board-hint-spacing">
+    /* v8.14: align Tile Wars with the refreshed event spacing, restore
+       team-color emphasis to the team-name bars, and restore board guidance. */
+    body.v161-event-page .original-board-panel {
+      padding-top: 8px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head {
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+      min-height: 36px !important;
+      margin: 0 0 5px !important;
+      padding: 7px 10px 7px 13px !important;
+      color: #eef4eb !important;
+      border: 1px solid rgba(139,159,135,.18) !important;
+      border-radius: 0 !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,.72) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head::before {
+      top: 0 !important;
+      bottom: 0 !important;
+      width: 3px !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head.red {
+      border-color: rgba(215,84,73,.34) !important;
+      background: linear-gradient(90deg, rgba(215,84,73,.22), rgba(168,88,84,.10) 72%, rgba(168,88,84,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(215,84,73,.08), 0 0 13px rgba(215,84,73,.16) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head.yellow {
+      border-color: rgba(231,183,46,.38) !important;
+      background: linear-gradient(90deg, rgba(231,183,46,.23), rgba(181,154,69,.10) 72%, rgba(181,154,69,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(231,183,46,.08), 0 0 13px rgba(231,183,46,.16) !important;
+    }
+
+    body.v161-event-page .board-scoreboard-panel .team-head.green {
+      border-color: rgba(80,184,104,.36) !important;
+      background: linear-gradient(90deg, rgba(80,184,104,.22), rgba(114,167,102,.10) 72%, rgba(114,167,102,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(80,184,104,.08), 0 0 13px rgba(80,184,104,.16) !important;
+    }
+
+    body.v161-event-page .board-outside-help {
+      width: min(900px, 100%) !important;
+      margin: 0 auto 5px !important;
+      padding: 0 !important;
+      color: #758278 !important;
+      font: 400 .7rem/1.35 Arial, Helvetica, sans-serif !important;
+      text-align: left !important;
+    }
+
+    body.v161-event-page .board-outside-help + .original-board-frame {
+      margin-top: 0 !important;
+    }
+
+    @media (max-width: 680px) {
+      body.v161-event-page .original-board-panel {
+        padding-top: 8px !important;
+      }
+      body.v161-event-page .board-outside-help {
+        margin-bottom: 4px !important;
+        padding: 0 1px !important;
+        font-size: .66rem !important;
+      }
+    }
+  </style>
+
+
+<style id="v815-creator-color-consistency">
+  .event-page-credit {
+    color: #95ad7c !important;
+  }
+  .event-page-credit .creator-name {
+    color: #eee8d2 !important;
+  }
+</style>
+
+<style id="tile-wars-v815-total-drops-restore">
+  body.v161-event-page .player-modal-stats {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+</style>
+
+<style id="tile-wars-v816-team-drop-totals">
+  body.v161-event-page .board-scoreboard-panel .team-head {
+    justify-content: space-between !important;
+    gap: 10px !important;
+  }
+
+  body.v161-event-page .board-scoreboard-panel .team-head-title {
+    min-width: 0;
+  }
+
+  body.v161-event-page .board-scoreboard-panel .team-head-total {
+    flex: 0 0 auto;
+    color: rgba(238,244,235,.82) !important;
+    font: 700 .68rem/1 Arial, Helvetica, sans-serif !important;
+    letter-spacing: .035em !important;
+    text-transform: none !important;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0,0,0,.72) !important;
+  }
+</style>
+
+
+<style id="v818-event-creator-name-white">
+  body.v161-event-page .event-page-header .event-page-credit {
+    color: #95ad7c !important;
+  }
+  body.v161-event-page .event-page-header .event-page-credit .creator-name {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+</style>
+
+<style id="v819-event-creator-standard">
+  body.v161-event-page .event-page-header .event-page-credit {
+    color: #95ad7c !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 1.35 !important;
+  }
+  body.v161-event-page .event-page-header .event-page-credit .creator-name {
+    color: #eee8d2 !important;
+    -webkit-text-fill-color: #eee8d2 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+  }
+</style>
 </head>
-<body class="v161-event-page v169-clean-event v170-event-polish">
+<body class="v161-event-page v169-clean-event v170-event-polish site-nav-v71331">
 <div class="v161-event-dots" aria-hidden="true"></div>
-<header class="v160-nav-shell" aria-label="Site navigation">
-  <div class="v170-nav-context">
-  <a class="v160-brand" href="../index.html" aria-label="Mantis OSRS home">
-    <span class="v160-brand-icon" aria-hidden="true"><img src="../images/mantis-head-mark.svg" alt=""></span>
-    <span class="v160-brand-wordmark"><span class="mantis-word">Mantis</span><span class="osrs-word">OSRS</span></span>
+<header class="wrap v160-nav-shell" aria-label="Site navigation">
+  <a class="home-brand-final v160-brand" href="../index.html" aria-label="Mantis OSRS home">
+    <span class="home-brand-icon v160-brand-icon" aria-hidden="true"><img src="../images/mantis-head-mark.svg" alt=""></span>
+    <span class="home-brand-wordmark v160-brand-wordmark"><span class="mantis-word">Mantis</span><span class="osrs-word">OSRS</span></span>
   </a>
-    <div class="v170-page-label" aria-label="Current page: Tile Wars"><span>ARCHIVE 04</span><strong>TILE WARS</strong></div>
-  </div>
-  <nav class="v160-nav-links" aria-label="Clan links">
-    <a href="../about.html">About Us</a>
+  <nav class="site-links v160-nav-links" aria-label="Clan links">
+    <a href="../about.html">About</a>
     <a href="https://discord.gg/YaPqtQWQ7N" target="_blank" rel="noopener noreferrer">Discord</a>
     <a href="https://wiseoldman.net/groups/6808" target="_blank" rel="noopener noreferrer">Wise Old Man</a>
-    <a href="https://oldschool.runescape.wiki/" target="_blank" rel="noopener noreferrer">WIKI</a>
+    <a href="https://oldschool.runescape.wiki/" target="_blank" rel="noopener noreferrer">Wiki</a>
   </nav>
 </header>
 <div class="wrap">
@@ -1908,30 +3685,19 @@
             </ol>
           </div>
         </details>
+
+        <a class="event-replay-link" href="tile-wars-replay.html">
+          <span>View Replay</span><span class="v171-replay-arrow" aria-hidden="true">↗</span>
+        </a>
       </div>
     </header>
 
-    <h2 class="event-section-title">Final Board</h2>
-    <div class="original-board-frame">
-      <a href="../images/tile-wars-board.png" target="_blank" rel="noopener">
-        <img src="../images/tile-wars-board.png" alt="Original Mantis Tile Wars board and final placements">
-      </a>
-    </div>
-    <div class="original-board-hint">Click the board to open the full-size image.</div>
-
-    <section class="board-scoreboard-panel teams-section" aria-labelledby="scoreboard-heading">
-      <div class="board-header scoreboard-header">
-        <div>
-          <h2 class="teams-title" id="scoreboard-heading">Final Scoreboard</h2>
-          <div class="subtitle scoreboard-help">Select a player to view every drop they received throughout the event.</div>
-        </div>
-      </div>
-
+    <div class="subtitle scoreboard-outside-help">Select a player to view every drop they received throughout the event.</div>
+    <section class="board-scoreboard-panel teams-section" aria-label="Final scoreboard">
     <div class="leaders">
       <div class="team-card">
-        <div class="team-head red">Red leaderboard</div>
+        <div class="team-head red"><span class="team-head-title">Red leaderboard</span><span class="team-head-total">197 drops</span></div>
         <table>
-          <thead><tr><th>Player</th><th class="score">Score</th></tr></thead>
           <tbody>
               <tr>
                 <td><button type="button" class="player-name-btn" data-player="Vycra">Vycra</button></td>
@@ -1982,9 +3748,8 @@
       </div>
 
       <div class="team-card">
-        <div class="team-head yellow">Yellow leaderboard</div>
+        <div class="team-head yellow"><span class="team-head-title">Yellow leaderboard</span><span class="team-head-total">190 drops</span></div>
         <table>
-          <thead><tr><th>Player</th><th class="score">Score</th></tr></thead>
           <tbody>
               <tr>
                 <td><button type="button" class="player-name-btn" data-player="KrystalOS">KrystalOS</button></td>
@@ -2039,9 +3804,8 @@
       </div>
 
       <div class="team-card">
-        <div class="team-head green">Green leaderboard</div>
+        <div class="team-head green"><span class="team-head-title">Green leaderboard</span><span class="team-head-total">110 drops</span></div>
         <table>
-          <thead><tr><th>Player</th><th class="score">Score</th></tr></thead>
           <tbody>
               <tr>
                 <td><button type="button" class="player-name-btn" data-player="Big Baby Boy">Big Baby Boy</button></td>
@@ -2096,10 +3860,14 @@
       </div>
     </div>
 
-      <div class="board-page-nav">
-        <a href="tile-wars-replay.html"><span>VIEW REPLAY</span><span class="v171-replay-arrow" aria-hidden="true">↗</span></a>
-      </div>
     </section>
+
+    <p class="subtitle scoreboard-outside-help board-outside-help">Click the board to open the full-size image.</p>
+    <div class="original-board-frame">
+      <a href="../images/tile-wars-board.png" target="_blank" rel="noopener">
+        <img src="../images/tile-wars-board.png" alt="Original Mantis Tile Wars board and final placements">
+      </a>
+    </div>
   </section>
 </div>
 
@@ -2131,7 +3899,6 @@ function ensurePlayerModal() {
       <div class="player-modal-head">
         <div>
           <div id="playerModalTitle" class="player-modal-title">Player</div>
-          <div id="playerModalSub" class="player-modal-sub">Drops received during the event</div>
         </div>
         <button id="playerModalClose" class="player-modal-close" type="button">Close</button>
       </div>
@@ -2143,8 +3910,8 @@ function ensurePlayerModal() {
 
   const elements = {
     backdrop,
+    modal: backdrop.querySelector(".player-modal"),
     title: backdrop.querySelector("#playerModalTitle"),
-    sub: backdrop.querySelector("#playerModalSub"),
     stats: backdrop.querySelector("#playerModalStats"),
     list: backdrop.querySelector("#playerModalList"),
     close: backdrop.querySelector("#playerModalClose")
@@ -2169,10 +3936,8 @@ function renderPlayerModal() {
   const record = PLAYER_DROP_DATA[modalPlayer];
   const team = record ? record.team : "unknown";
   const drops = record ? record.drops : [];
-  const teamLabel = team.charAt(0).toUpperCase() + team.slice(1);
-
+  elements.modal.dataset.team = team;
   elements.title.textContent = modalPlayer;
-  elements.sub.textContent = `${teamLabel} team · all drops received during the event`;
   elements.stats.innerHTML = `<div><strong>Total drops:</strong> ${drops.length}</div>`;
 
   if (!drops.length) {

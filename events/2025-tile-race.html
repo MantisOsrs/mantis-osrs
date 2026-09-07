@@ -1,11 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="../images/mantis-head-mark.svg" type="image/svg+xml">
-  <title>Tile Race — Mantis OSRS</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="../images/mantis-head-mark.svg" rel="icon" type="image/svg+xml"/>
+<title>Tile Race — Mantis OSRS</title>
+<style>
     :root {
       --bg:#dfe8dc;
       --paper:#edf3ea;
@@ -706,133 +707,1046 @@
     }
 
   </style>
-  <link rel="stylesheet" href="../assets/v160.css">
-  <link rel="stylesheet" href="../assets/v169-event-clean.css">
-  <link rel="stylesheet" href="../assets/v170-event-detail.css">
-  <link rel="stylesheet" href="../assets/v171-polish.css">
-  <link rel="stylesheet" href="../assets/v172-polish.css">
+<link href="../assets/v160.css" rel="stylesheet"/>
+<link href="../assets/v169-event-clean.css" rel="stylesheet"/>
+<link href="../assets/v170-event-detail.css" rel="stylesheet"/>
+<link href="../assets/v171-polish.css" rel="stylesheet"/>
+<link href="../assets/v172-polish.css" rel="stylesheet"/>
+<link href="../assets/site-nav-v71331.css" rel="stylesheet"/>
+<style>
+
+  /* Tile Race drop leaderboard */
+  .drop-score-note {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .drop-score-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+  }
+  .drop-score-table th,
+  .drop-score-table td {
+    padding: 7px 11px;
+    border-top: 1px solid rgba(235,229,214,.16);
+    font-size: 13px;
+    line-height: 1.25;
+  }
+  .drop-score-table thead th {
+    color: #a7b4a5;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-weight: 800;
+    background: rgba(255,255,255,.025);
+  }
+  .drop-score-table th:first-child,
+  .drop-score-table td:first-child { text-align: left; }
+  .drop-score-table th:last-child,
+  .drop-score-table td:last-child {
+    width: 58px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+  }
+  .drop-score-table tbody tr:nth-child(even) { background: rgba(255,255,255,.018); }
+  .drop-score-table tbody tr:hover { background: rgba(180,255,173,.055); }
+  .drop-player-btn {
+    appearance: none;
+    border: 0;
+    background: none;
+    padding: 0;
+    margin: 0;
+    color: #eef4eb;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: left;
+    text-decoration: underline;
+    text-decoration-color: rgba(211,243,189,.38);
+    text-underline-offset: 3px;
+  }
+  .drop-player-btn:hover,
+  .drop-player-btn:focus-visible { color: #d3f3bd; }
+  .drop-player-btn:focus-visible {
+    outline: 2px solid #86b77f;
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+  .drop-zero .drop-player-btn { color: #9aa69a; font-weight: 600; }
+  .roster-head .team-drop-total {
+    float: right;
+    font-size: 12px;
+    font-weight: 800;
+    opacity: .72;
+  }
+  .additional-player-card { grid-column: 1 / -1; }
+  .roster-head.gray { color: #172019; }
+
+  .drop-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(2,5,3,.78);
+    backdrop-filter: blur(5px);
+  }
+  .drop-modal-backdrop.show { display: flex; }
+  .drop-modal {
+    width: min(560px, 100%);
+    max-height: min(760px, calc(100vh - 40px));
+    overflow: hidden;
+    border: 1px solid #4a604f;
+    border-radius: 16px;
+    background: linear-gradient(145deg,#1b281e,#111914);
+    color: #eef4eb;
+    box-shadow: 0 28px 80px rgba(0,0,0,.48);
+  }
+  .drop-modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #344439;
+  }
+  .drop-modal-title { margin: 0; font-size: 20px; line-height: 1.15; }
+  .drop-modal-sub { margin-top: 4px; color: #a7b4a5; font-size: 12px; }
+  .drop-modal-close {
+    border: 1px solid #526655;
+    border-radius: 9px;
+    background: #1c2820;
+    color: #eef4eb;
+    padding: 7px 10px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .drop-modal-close:hover { background: #263529; }
+  .drop-modal-stats {
+    padding: 10px 18px;
+    color: #d3f3bd;
+    border-bottom: 1px solid #344439;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .drop-modal-list {
+    max-height: min(570px, calc(100vh - 190px));
+    overflow: auto;
+    padding: 12px 18px 18px;
+  }
+  .drop-modal-row {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(82,102,85,.38);
+    font-size: 13px;
+  }
+  .drop-modal-row:last-child { border-bottom: 0; }
+  .drop-modal-num { color: #839283; font-variant-numeric: tabular-nums; }
+  .drop-modal-empty { color: #a7b4a5; padding: 8px 0; }
+  body.drop-modal-open { overflow: hidden; }
+
+  @media (max-width: 640px) {
+    .drop-score-table th,
+    .drop-score-table td { padding: 8px 10px; }
+    .drop-modal-backdrop { padding: 10px; }
+    .drop-modal { max-height: calc(100vh - 20px); border-radius: 12px; }
+    .drop-modal-list { max-height: calc(100vh - 180px); }
+  }
+
+</style>
+
+<style id="event-v813-refresh">
+  /* v8.13: shared refreshed event-page interface, based on the finished Tile Wars/Bingo system. */
+  body.event-refresh-v813.site-nav-v71331 > .v160-nav-shell {
+    width: min(1060px, calc(100% - 28px)) !important;
+    min-height: 58px !important;
+    margin: 0 auto !important;
+    padding: 4px 0 7px !important;
+    gap: 22px !important;
+  }
+
+  body.event-refresh-v813.site-nav-v71331 .v160-brand {
+    position: relative !important;
+    isolation: isolate !important;
+    overflow: hidden !important;
+    background: rgba(4, 7, 5, .86) !important;
+    border-color: rgba(150, 148, 94, .50) !important;
+    box-shadow: inset 0 0 0 1px rgba(224,224,186,.024), 0 5px 14px rgba(0,0,0,.15) !important;
+  }
+
+  body.event-refresh-v813.site-nav-v71331 .v160-brand::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    opacity: 1 !important;
+    background-image:
+      linear-gradient(90deg, rgba(2,4,3,.64) 0%, rgba(2,4,3,.56) 30%, rgba(2,4,3,.48) 62%, rgba(2,4,3,.48) 100%),
+      url("../images/home-button-botanical-v6398.webp") !important;
+    background-repeat: no-repeat, no-repeat !important;
+    background-size: 100% 100%, cover !important;
+    background-position: center, 72% 48% !important;
+    filter: saturate(.76) brightness(.98) contrast(1.035) !important;
+  }
+
+  body.event-refresh-v813.site-nav-v71331 .v160-brand:hover,
+  body.event-refresh-v813.site-nav-v71331 .v160-brand:focus-visible {
+    color: #fff !important;
+    background: rgba(10,16,11,.94) !important;
+    border-color: rgba(184,180,112,.66) !important;
+    box-shadow: inset 0 0 0 1px rgba(224,224,186,.032), 0 6px 18px rgba(0,0,0,.20) !important;
+  }
+
+  body.event-refresh-v813.site-nav-v71331 .v160-brand:hover::after,
+  body.event-refresh-v813.site-nav-v71331 .v160-brand:focus-visible::after {
+    background-image:
+      linear-gradient(90deg, rgba(2,4,3,.56) 0%, rgba(2,4,3,.48) 30%, rgba(2,4,3,.40) 62%, rgba(2,4,3,.40) 100%),
+      url("../images/home-button-botanical-v6398.webp") !important;
+    filter: saturate(.80) brightness(1.03) contrast(1.035) !important;
+  }
+
+  body.event-refresh-v813.site-nav-v71331 .v160-brand > * {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  body.event-refresh-v813 .event-refresh-wrap {
+    width: min(1060px, calc(100% - 28px)) !important;
+    margin: 0 auto !important;
+    padding: 8px 0 28px !important;
+  }
+
+  body.event-refresh-v813 .event-page-shell {
+    width: min(980px, 100%) !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    color: inherit !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  body.event-refresh-v813 .event-page-header {
+    position: relative !important;
+    z-index: 200 !important;
+    display: grid !important;
+    grid-template-columns: minmax(230px, 1fr) minmax(126px, 160px) !important;
+    grid-template-areas: "date date" "title info" "credit credit" !important;
+    align-items: center !important;
+    column-gap: 12px !important;
+    row-gap: 0 !important;
+    overflow: visible !important;
+    margin: 0 0 10px !important;
+    padding: 12px 16px 11px !important;
+    border: 1px solid rgba(150,148,94,.50) !important;
+    border-radius: 0 !important;
+    background:
+      url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+      linear-gradient(180deg, rgba(79,96,69,.072) 0%, rgba(52,65,47,.044) 58%, rgba(28,37,29,.018) 100%),
+      linear-gradient(180deg, rgba(14,21,16,.998) 0%, rgba(7,12,9,.998) 100%) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(215,216,179,.052),
+      inset 0 -1px 0 rgba(150,146,96,.10),
+      inset 0 -12px 25px rgba(0,0,0,.16),
+      0 12px 28px rgba(0,0,0,.18) !important;
+    isolation: isolate !important;
+  }
+
+  body.event-refresh-v813 .event-page-header::before,
+  body.event-refresh-v813 .event-page-header::after,
+  body.event-refresh-v813 .event-page-header .v170-header-ornament {
+    content: none !important;
+    display: none !important;
+  }
+
+  body.event-refresh-v813 .event-page-date {
+    grid-area: date !important;
+    margin: 0 0 4px !important;
+    color: #c7c0aa !important;
+    font: 800 10px/1.2 Arial, Helvetica, sans-serif !important;
+    letter-spacing: .18em !important;
+    text-transform: uppercase !important;
+  }
+
+  body.event-refresh-v813 .event-page-header h1 {
+    grid-area: title !important;
+    min-width: 0 !important;
+    margin: 3px 0 4px !important;
+    color: #eee8d2 !important;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: clamp(24px, 3vw, 34px) !important;
+    font-weight: 400 !important;
+    line-height: 1.08 !important;
+    letter-spacing: .01em !important;
+    text-shadow: 0 10px 26px rgba(0,0,0,.28) !important;
+  }
+
+  body.event-refresh-v813 .event-page-credit {
+    grid-area: credit !important;
+    margin: 0 !important;
+    color: #95ad7c !important;
+    font: 400 .72rem/1.35 Arial, Helvetica, sans-serif !important;
+    letter-spacing: .02em !important;
+  }
+
+  body.event-refresh-v813 .event-page-credit .creator-name {
+    color: #c5d1bf !important;
+    font-weight: 700 !important;
+  }
+
+  body.event-refresh-v813 .event-info-grid {
+    grid-area: info !important;
+    position: relative !important;
+    z-index: 210 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.event-refresh-v813 .event-info-panel {
+    position: relative !important;
+    z-index: 211 !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body.event-refresh-v813 .event-info-panel[open] { z-index: 220 !important; }
+
+  body.event-refresh-v813 .event-info-panel summary {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    min-height: 34px !important;
+    padding: 7px 9px !important;
+    color: #d9e2d6 !important;
+    border: 1px solid rgba(150,148,94,.36) !important;
+    border-radius: 0 !important;
+    background: rgba(255,255,255,.025) !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+    list-style: none !important;
+    font: 800 9px/1.1 Arial, Helvetica, sans-serif !important;
+    letter-spacing: .085em !important;
+    text-transform: uppercase !important;
+  }
+
+  body.event-refresh-v813 .event-info-panel summary::-webkit-details-marker { display: none !important; }
+  body.event-refresh-v813 .event-info-panel summary::after {
+    content: "+" !important;
+    margin-left: 8px !important;
+    color: #82927f !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+    transition: transform .16s ease !important;
+  }
+  body.event-refresh-v813 .event-info-panel[open] summary::after { transform: rotate(45deg) !important; }
+  body.event-refresh-v813 .event-info-panel[open] summary,
+  body.event-refresh-v813 .event-info-panel summary:hover,
+  body.event-refresh-v813 .event-info-panel summary:focus-visible {
+    color: #efffe7 !important;
+    border-color: rgba(181,216,143,.50) !important;
+    background: rgba(106,145,95,.10) !important;
+    outline: none !important;
+  }
+
+  body.event-refresh-v813 .event-info-content {
+    position: absolute !important;
+    z-index: 230 !important;
+    top: calc(100% + 6px) !important;
+    right: 0 !important;
+    width: min(520px, calc(100vw - 28px)) !important;
+    max-height: min(480px, calc(100vh - 110px)) !important;
+    margin: 0 !important;
+    padding: 14px 16px !important;
+    overflow: auto !important;
+    color: #cbd4c9 !important;
+    border: 1px solid rgba(150,148,94,.50) !important;
+    border-radius: 0 !important;
+    background:
+      url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+      linear-gradient(180deg, rgba(79,96,69,.072), rgba(28,37,29,.018)),
+      linear-gradient(180deg, rgba(14,21,16,.998), rgba(7,12,9,.998)) !important;
+    box-shadow: 0 18px 42px rgba(0,0,0,.42) !important;
+    font: 400 .76rem/1.48 Arial, Helvetica, sans-serif !important;
+  }
+  body.event-refresh-v813 .event-info-content ol,
+  body.event-refresh-v813 .event-info-content ul { margin: 0 !important; padding-left: 19px !important; }
+  body.event-refresh-v813 .event-info-content li + li { margin-top: 8px !important; }
+  body.event-refresh-v813 .event-info-content strong { color: #eef5eb !important; }
+
+  body.event-refresh-v813 .scoreboard-outside-help {
+    width: min(900px, 100%) !important;
+    margin: 0 auto 5px !important;
+    color: #758278 !important;
+    font: 400 .7rem/1.35 Arial, Helvetica, sans-serif !important;
+    text-align: left !important;
+  }
+
+  body.event-refresh-v813 .event-scoreboard-panel {
+    position: relative !important;
+    z-index: 1 !important;
+    width: min(900px, 100%) !important;
+    margin: 0 auto 10px !important;
+    padding: 10px 14px 11px !important;
+    border: 1px solid rgba(150,148,94,.50) !important;
+    border-radius: 0 !important;
+    background:
+      linear-gradient(180deg, rgba(79,96,69,.072) 0%, rgba(52,65,47,.044) 58%, rgba(28,37,29,.018) 100%),
+      linear-gradient(180deg, rgba(14,21,16,.998) 0%, rgba(7,12,9,.998) 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(215,216,179,.035), 0 12px 28px rgba(0,0,0,.18) !important;
+  }
+
+  body.event-refresh-v813 .event-scoreboard-panel.teams-section { margin-top: 0 !important; }
+  body.event-refresh-v813 .event-scoreboard-panel .teams-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(156px, 1fr)) !important;
+    align-items: start !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+
+  body.event-refresh-v813 .event-team-card {
+    min-width: 0 !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 8px 12px 6px !important;
+    color: #eef4eb !important;
+    border: 0 !important;
+    border-right: 1px solid rgba(139,159,135,.16) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  body.event-refresh-v813 .event-team-card:last-child { border-right: 0 !important; }
+
+  body.event-refresh-v813 .event-team-card .roster-head {
+    position: relative !important;
+    display: flex !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    margin: 0 0 4px !important;
+    padding: 0 0 6px 13px !important;
+    color: #e7eee4 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(144,165,140,.14) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    text-shadow: none !important;
+    font: 700 .78rem/1.2 Arial, Helvetica, sans-serif !important;
+    letter-spacing: .015em !important;
+  }
+  body.event-refresh-v813 .event-team-card .roster-head::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 1px !important;
+    bottom: 6px !important;
+    width: 3px !important;
+    background: #7b8a7d !important;
+  }
+  body.event-refresh-v813 .event-team-card .roster-head.red::before { background: #a85854 !important; }
+  body.event-refresh-v813 .event-team-card .roster-head.green::before,
+  body.event-refresh-v813 .event-team-card .roster-head.sage::before,
+  body.event-refresh-v813 .event-team-card .roster-head.moss::before { background: #72a766 !important; }
+  body.event-refresh-v813 .event-team-card .roster-head.blue::before { background: #6489ad !important; }
+  body.event-refresh-v813 .event-team-card .roster-head.yellow::before { background: #b59a45 !important; }
+  body.event-refresh-v813 .event-team-card .roster-head.purple::before { background: #8d6f91 !important; }
+  body.event-refresh-v813 .event-team-card .roster-head.gray::before { background: #89918c !important; }
+
+  body.event-refresh-v813 .event-team-card .team-drop-total {
+    color: #89968b !important;
+    font-size: .58rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .025em !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+  }
+
+  body.event-refresh-v813 .drop-score-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  body.event-refresh-v813 .drop-score-table thead { display: none !important; }
+  body.event-refresh-v813 .drop-score-table td {
+    padding: 4px 2px !important;
+    color: #cbd4c9 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(139,159,135,.11) !important;
+    background: transparent !important;
+    font-size: .72rem !important;
+  }
+  body.event-refresh-v813 .drop-score-table tbody tr:last-child td { border-bottom: 0 !important; }
+  body.event-refresh-v813 .drop-score-table tbody tr:hover,
+  body.event-refresh-v813 .drop-score-table tbody tr:nth-child(even) { background: transparent !important; }
+  body.event-refresh-v813 .drop-player-btn {
+    color: #d9e2d6 !important;
+    text-decoration: none !important;
+  }
+  body.event-refresh-v813 .drop-player-btn:hover,
+  body.event-refresh-v813 .drop-player-btn:focus-visible {
+    color: #b5d88f !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    outline: none !important;
+  }
+  body.event-refresh-v813 .drop-zero td { color: #657168 !important; }
+
+  body.event-refresh-v813 .roster-list {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+  body.event-refresh-v813 .roster-list li {
+    margin: 0 !important;
+    padding: 4px 2px !important;
+    color: #cbd4c9 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(139,159,135,.11) !important;
+    background: transparent !important;
+    font: 400 .72rem/1.3 Arial, Helvetica, sans-serif !important;
+  }
+  body.event-refresh-v813 .roster-list li:last-child { border-bottom: 0 !important; }
+  body.event-refresh-v813 .roster-list li:nth-child(even) { background: transparent !important; }
+
+  body.event-refresh-v813 .event-board-frame {
+    position: relative !important;
+    z-index: 1 !important;
+    display: flex !important;
+    width: min(900px, 100%) !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border: 1px solid #4e6651 !important;
+    border-radius: 0 !important;
+    background: #0d140f !important;
+    box-shadow: 0 14px 34px rgba(0,0,0,.24), inset 0 0 0 1px rgba(134,202,112,.045), inset 0 1px 0 rgba(255,255,255,.02) !important;
+  }
+  body.event-refresh-v813 .event-board-frame a,
+  body.event-refresh-v813 .event-board-frame img {
+    display: block !important;
+    width: 100% !important;
+    max-width: 900px !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 auto !important;
+    object-fit: contain !important;
+  }
+
+  /* Tile Race player modal, matching the fixed Tile Wars player window. */
+  body.event-refresh-v813 .drop-modal-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 18px !important;
+    z-index: 10000 !important;
+    transform: none !important;
+    background: rgba(2,6,3,.78) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+  }
+  body.event-refresh-v813 .drop-modal-backdrop.show { display: flex !important; }
+  body.event-refresh-v813 .drop-modal {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    width: min(700px, 92vw) !important;
+    height: min(520px, calc(100dvh - 48px)) !important;
+    max-height: none !important;
+    overflow: hidden !important;
+    color: #cbd4c9 !important;
+    border: 1px solid rgba(150,148,94,.52) !important;
+    border-radius: 0 !important;
+    background:
+      url("../images/paper-grain-v760.png") center / 256px 256px repeat,
+      linear-gradient(180deg, rgba(79,96,69,.075), rgba(28,37,29,.02)),
+      linear-gradient(180deg, rgba(14,21,16,.998), rgba(7,12,9,.998)) !important;
+    box-shadow: inset 0 1px 0 rgba(215,216,179,.05), inset 0 -1px 0 rgba(150,146,96,.10), 0 24px 60px rgba(0,0,0,.48) !important;
+  }
+  body.event-refresh-v813 .drop-modal::before {
+    content: "" !important;
+    position: absolute !important;
+    z-index: 2 !important;
+    top: -1px !important;
+    left: -1px !important;
+    right: -1px !important;
+    height: 3px !important;
+    background: #72a766 !important;
+    pointer-events: none !important;
+  }
+  body.event-refresh-v813 .drop-modal[data-team="red"]::before { background: #a85854 !important; }
+  body.event-refresh-v813 .drop-modal[data-team="green"]::before { background: #72a766 !important; }
+  body.event-refresh-v813 .drop-modal[data-team="blue"]::before { background: #6489ad !important; }
+  body.event-refresh-v813 .drop-modal[data-team="yellow"]::before { background: #b59a45 !important; }
+  body.event-refresh-v813 .drop-modal[data-team="purple"]::before { background: #8d6f91 !important; }
+  body.event-refresh-v813 .drop-modal-head {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 18px !important;
+    padding: 19px 20px 14px !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(139,159,135,.16) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  body.event-refresh-v813 .drop-modal-title {
+    margin: 0 !important;
+    color: #eee8d2 !important;
+    font: 700 1.34rem/1.1 Georgia, "Times New Roman", serif !important;
+  }
+  body.event-refresh-v813 .drop-modal-sub { display: none !important; }
+  body.event-refresh-v813 .drop-modal-close {
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 7px 10px !important;
+    color: #d8e2d4 !important;
+    border: 1px solid rgba(150,148,94,.36) !important;
+    border-radius: 0 !important;
+    background: rgba(255,255,255,.025) !important;
+    box-shadow: none !important;
+    font: 800 .61rem/1 Arial, Helvetica, sans-serif !important;
+    letter-spacing: .09em !important;
+    text-transform: uppercase !important;
+  }
+  body.event-refresh-v813 .drop-modal-close:hover,
+  body.event-refresh-v813 .drop-modal-close:focus-visible {
+    color: #efffe7 !important;
+    border-color: rgba(181,216,143,.50) !important;
+    background: rgba(106,145,95,.10) !important;
+    outline: none !important;
+  }
+  body.event-refresh-v813 .drop-modal-stats {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: baseline !important;
+    min-height: 0 !important;
+    padding: 10px 20px !important;
+    color: #89968b !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(139,159,135,.12) !important;
+    background: transparent !important;
+    font: 600 .7rem/1.3 Arial, Helvetica, sans-serif !important;
+  }
+  body.event-refresh-v813 .drop-modal-stats strong { color: #d9e2d6 !important; font-weight: 800 !important; }
+  body.event-refresh-v813 .drop-modal-list {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    scrollbar-gutter: stable !important;
+    padding: 4px 20px 14px !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  body.event-refresh-v813 .drop-modal-row {
+    display: grid !important;
+    grid-template-columns: 32px minmax(0,1fr) !important;
+    gap: 8px !important;
+    align-items: baseline !important;
+    margin: 0 !important;
+    padding: 9px 0 !important;
+    color: #cbd4c9 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(139,159,135,.105) !important;
+    background: transparent !important;
+    font: 400 .76rem/1.35 Arial, Helvetica, sans-serif !important;
+  }
+  body.event-refresh-v813 .drop-modal-row:last-child { border-bottom: 0 !important; }
+  body.event-refresh-v813 .drop-modal-num { color: #78867b !important; font-size: .66rem !important; font-weight: 800 !important; }
+  body.event-refresh-v813 .drop-modal-empty { padding: 18px 0 8px !important; color: #89968b !important; font: 400 .76rem/1.45 Arial, Helvetica, sans-serif !important; }
+
+  @media (max-width: 760px) {
+    body.event-refresh-v813.site-nav-v71331 > .v160-nav-shell {
+      width: calc(100% - 18px) !important;
+      gap: 14px !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+    body.event-refresh-v813 .event-refresh-wrap { width: calc(100% - 18px) !important; padding-top: 8px !important; }
+    body.event-refresh-v813 .event-page-header {
+      grid-template-columns: 1fr !important;
+      grid-template-areas: "date" "title" "info" "credit" !important;
+      padding: 13px 14px 12px !important;
+    }
+    body.event-refresh-v813 .event-page-header h1 { font-size: 25px !important; }
+    body.event-refresh-v813 .event-info-grid { width: 100% !important; margin: 4px 0 5px !important; padding: 4px 0 0 !important; }
+    body.event-refresh-v813 .event-info-panel summary { min-height: 32px !important; padding: 6px 7px !important; font-size: 9px !important; }
+    body.event-refresh-v813 .event-info-content {
+      position: fixed !important;
+      top: 74px !important;
+      left: 10px !important;
+      right: 10px !important;
+      width: auto !important;
+      max-height: calc(100vh - 94px) !important;
+    }
+    body.event-refresh-v813 .event-scoreboard-panel { padding: 9px 11px 10px !important; }
+    body.event-refresh-v813 .event-team-card { padding-left: 9px !important; padding-right: 9px !important; }
+  }
+
+  @media (max-width: 640px) {
+    body.event-refresh-v813 .event-scoreboard-panel .teams-grid { grid-template-columns: 1fr !important; }
+    body.event-refresh-v813 .event-team-card,
+    body.event-refresh-v813 .event-team-card:last-child {
+      padding-left: 2px !important;
+      padding-right: 2px !important;
+      border-right: 0 !important;
+    }
+    body.event-refresh-v813 .event-team-card + .event-team-card {
+      margin-top: 8px !important;
+      padding-top: 10px !important;
+      border-top: 1px solid rgba(139,159,135,.16) !important;
+    }
+    body.event-refresh-v813 .drop-modal-backdrop { padding: 10px !important; }
+    body.event-refresh-v813 .drop-modal { width: min(700px, calc(100vw - 20px)) !important; height: min(520px, calc(100dvh - 24px)) !important; }
+    body.event-refresh-v813 .drop-modal-head { padding: 16px 15px 12px !important; }
+    body.event-refresh-v813 .drop-modal-stats { padding: 9px 15px !important; }
+    body.event-refresh-v813 .drop-modal-list { padding: 3px 15px 12px !important; }
+    body.event-refresh-v813 .drop-modal-row { padding: 8px 0 !important; }
+  }
+</style>
+
+
+  <style id="tile-race-v814-team-alignment-glow-board-hint">
+    /* v8.14: reserve equal vertical space for every Tile Race team name,
+       restore team-color emphasis to the name bars, and restore board guidance. */
+    body.event-refresh-v813 .event-team-card .roster-head {
+      box-sizing: border-box !important;
+      align-items: center !important;
+      min-height: 44px !important;
+      margin: 0 0 5px !important;
+      padding: 6px 8px 6px 13px !important;
+      color: #eef4eb !important;
+      border: 1px solid rgba(139,159,135,.18) !important;
+      border-radius: 0 !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,.72) !important;
+    }
+
+    body.event-refresh-v813 .event-team-card .roster-head::before {
+      top: 0 !important;
+      bottom: 0 !important;
+      width: 3px !important;
+    }
+
+    body.event-refresh-v813 .event-team-card .roster-head.red {
+      border-color: rgba(215,84,73,.34) !important;
+      background: linear-gradient(90deg, rgba(215,84,73,.22), rgba(168,88,84,.10) 72%, rgba(168,88,84,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(215,84,73,.08), 0 0 13px rgba(215,84,73,.16) !important;
+    }
+    body.event-refresh-v813 .event-team-card .roster-head.green,
+    body.event-refresh-v813 .event-team-card .roster-head.sage,
+    body.event-refresh-v813 .event-team-card .roster-head.moss {
+      border-color: rgba(80,184,104,.36) !important;
+      background: linear-gradient(90deg, rgba(80,184,104,.22), rgba(114,167,102,.10) 72%, rgba(114,167,102,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(80,184,104,.08), 0 0 13px rgba(80,184,104,.16) !important;
+    }
+    body.event-refresh-v813 .event-team-card .roster-head.blue {
+      border-color: rgba(100,137,173,.40) !important;
+      background: linear-gradient(90deg, rgba(100,137,173,.24), rgba(100,137,173,.10) 72%, rgba(100,137,173,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(100,137,173,.09), 0 0 13px rgba(100,137,173,.17) !important;
+    }
+    body.event-refresh-v813 .event-team-card .roster-head.yellow {
+      border-color: rgba(231,183,46,.38) !important;
+      background: linear-gradient(90deg, rgba(231,183,46,.23), rgba(181,154,69,.10) 72%, rgba(181,154,69,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(231,183,46,.08), 0 0 13px rgba(231,183,46,.16) !important;
+    }
+    body.event-refresh-v813 .event-team-card .roster-head.purple {
+      border-color: rgba(151,108,157,.38) !important;
+      background: linear-gradient(90deg, rgba(151,108,157,.22), rgba(141,111,145,.10) 72%, rgba(141,111,145,.025)) !important;
+      box-shadow: inset 0 0 14px rgba(151,108,157,.08), 0 0 13px rgba(151,108,157,.16) !important;
+    }
+    body.event-refresh-v813 .event-team-card .roster-head.gray {
+      border-color: rgba(137,145,140,.34) !important;
+      background: linear-gradient(90deg, rgba(137,145,140,.20), rgba(137,145,140,.09) 72%, rgba(137,145,140,.02)) !important;
+      box-shadow: inset 0 0 14px rgba(137,145,140,.07), 0 0 12px rgba(137,145,140,.14) !important;
+    }
+
+    body.event-refresh-v813 .event-team-card .team-drop-total {
+      flex: 0 0 auto !important;
+      align-self: center !important;
+    }
+
+    body.event-refresh-v813 .board-outside-help {
+      width: min(900px, 100%) !important;
+      margin: 0 auto 5px !important;
+      padding: 0 !important;
+      color: #758278 !important;
+      font: 400 .7rem/1.35 Arial, Helvetica, sans-serif !important;
+      text-align: left !important;
+    }
+
+    body.event-refresh-v813 .board-outside-help + .event-board-frame {
+      margin-top: 0 !important;
+    }
+
+    @media (max-width: 680px) {
+      body.event-refresh-v813 .event-team-card .roster-head {
+        min-height: 40px !important;
+      }
+      body.event-refresh-v813 .board-outside-help {
+        margin-bottom: 4px !important;
+        padding: 0 1px !important;
+        font-size: .66rem !important;
+      }
+    }
+  </style>
+
+
+<style id="v815-creator-color-consistency">
+  .event-page-credit {
+    color: #95ad7c !important;
+  }
+  .event-page-credit .creator-name {
+    color: #eee8d2 !important;
+  }
+</style>
+
+<style id="v819-event-creator-standard">
+  body.v161-event-page .event-page-header .event-page-credit {
+    color: #95ad7c !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 1.35 !important;
+  }
+  body.v161-event-page .event-page-header .event-page-credit .creator-name {
+    color: #eee8d2 !important;
+    -webkit-text-fill-color: #eee8d2 !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+  }
+</style>
 </head>
-<body class="v161-event-page v169-clean-event v170-event-polish">
-<div class="v161-event-dots" aria-hidden="true"></div>
-<header class="v160-nav-shell" aria-label="Site navigation">
-  <div class="v170-nav-context">
-  <a class="v160-brand" href="../index.html" aria-label="Mantis OSRS home">
-    <span class="v160-brand-icon" aria-hidden="true"><img src="../images/mantis-head-mark.svg" alt=""></span>
-    <span class="v160-brand-wordmark"><span class="mantis-word">Mantis</span><span class="osrs-word">OSRS</span></span>
-  </a>
-    <div class="v170-page-label" aria-label="Current page: Tile Race"><span>ARCHIVE 02</span><strong>TILE RACE</strong></div>
-  </div>
-  <nav class="v160-nav-links" aria-label="Clan links">
-    <a href="../about.html">About Us</a>
-    <a href="https://discord.gg/YaPqtQWQ7N" target="_blank" rel="noopener noreferrer">Discord</a>
-    <a href="https://wiseoldman.net/groups/6808" target="_blank" rel="noopener noreferrer">Wise Old Man</a>
-    <a href="https://oldschool.runescape.wiki/" target="_blank" rel="noopener noreferrer">WIKI</a>
-  </nav>
+<body class="v161-event-page v169-clean-event v170-event-polish site-nav-v71331 event-refresh-v813 tile-race-refresh">
+<div aria-hidden="true" class="v161-event-dots"></div>
+<header aria-label="Site navigation" class="wrap v160-nav-shell">
+<a aria-label="Mantis OSRS home" class="home-brand-final v160-brand" href="../index.html">
+<span aria-hidden="true" class="home-brand-icon v160-brand-icon"><img alt="" src="../images/mantis-head-mark.svg"/></span>
+<span class="home-brand-wordmark v160-brand-wordmark"><span class="mantis-word">Mantis</span><span class="osrs-word">OSRS</span></span>
+</a>
+<nav aria-label="Clan links" class="site-links v160-nav-links">
+<a href="../about.html">About</a>
+<a href="https://discord.gg/YaPqtQWQ7N" rel="noopener noreferrer" target="_blank">Discord</a>
+<a href="https://wiseoldman.net/groups/6808" rel="noopener noreferrer" target="_blank">Wise Old Man</a>
+<a href="https://oldschool.runescape.wiki/" rel="noopener noreferrer" target="_blank">Wiki</a>
+</nav>
 </header>
-<main class="wrap">
-    <section class="panel">
-      <header class="event-page-header">
-      <span class="v170-header-ornament" aria-hidden="true"></span>
-        <div class="event-page-date">ARCHIVE • AUGUST 2025</div>
-        <h1>Tile Race</h1>
-        <p class="event-page-credit">Created by <span class="creator-name">TheDog</span> &amp; <span class="creator-name">Tactical Jokr</span></p>
+<main class="wrap event-refresh-wrap">
+<section class="event-page-shell"><header class="event-page-header">
+<span aria-hidden="true" class="v170-header-ornament"></span>
+<div class="event-page-date">ARCHIVE • AUGUST 2025</div>
+<h1>Tile Race</h1>
+<p class="event-page-credit">Created by <span class="creator-name">TheDog</span> &amp; <span class="creator-name">Tactical Jokr</span></p>
+<div aria-label="Tile Race event information" class="event-info-grid v170-single-info">
+<details class="event-info-panel">
+<summary>Rules</summary>
+<div class="event-info-content">
+<ol>
+<li>You will spin a wheel to move 1 or 2 spaces located in the <strong>#random-wheel</strong> channel.</li>
+<li>You <strong>MUST</strong> do all red tiles.</li>
+<li>You may do either the yellow or green path. Both may be completed simultaneously.</li>
+<li>Roll from the yellow tile or the final green tile.</li>
+<li>You can land on the orange “Go Back” tile three times. On your fourth time landing there, move forward one tile.</li>
+<li>You can land on the purple “Go Back” tile three times. On your fourth time landing there, move forward one tile.</li>
+<li>Only submit fully completed tiles to the <strong>#event-drops</strong> channel. Keep multiple screenshots in team chat until complete.</li>
+</ol>
+<p class="v170-rules-signoff">Good luck and have fun!</p>
+</div>
+</details>
+</div>
+</header><p class="drop-score-note scoreboard-outside-help">Select a player to view every drop they received throughout the event.</p><section aria-labelledby="teams-heading" class="teams-section event-scoreboard-panel">
 
-        <div class="event-info-grid v170-single-info" aria-label="Tile Race event information">
-          <details class="event-info-panel">
-            <summary>Rules</summary>
-            <div class="event-info-content">
-              <ol>
-                <li>You will spin a wheel to move 1 or 2 spaces located in the <strong>#random-wheel</strong> channel.</li>
-                <li>You <strong>MUST</strong> do all red tiles.</li>
-                <li>You may do either the yellow or green path. Both may be completed simultaneously.</li>
-                <li>Roll from the yellow tile or the final green tile.</li>
-                <li>You can land on the orange “Go Back” tile three times. On your fourth time landing there, move forward one tile.</li>
-                <li>You can land on the purple “Go Back” tile three times. On your fourth time landing there, move forward one tile.</li>
-                <li>Only submit fully completed tiles to the <strong>#event-drops</strong> channel. Keep multiple screenshots in team chat until complete.</li>
-              </ol>
-              <p class="v170-rules-signoff">Good luck and have fun!</p>
-            </div>
-          </details>
+
+<div class="teams-grid">
+<article class="roster-card event-team-card">
+<div class="roster-head red">Red Rockets <span class="team-drop-total">44 drops</span></div>
+<table class="drop-score-table">
+<thead><tr><th>Player</th><th>Score</th></tr></thead>
+<tbody>
+<tr><td><button class="drop-player-btn" data-player="TheDog" type="button">TheDog</button></td><td>18</td></tr>
+<tr><td><button class="drop-player-btn" data-player="John Fux" type="button">John Fux</button></td><td>6</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Busta Beans" type="button">Busta Beans</button></td><td>6</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Vycra" type="button">Vycra</button></td><td>6</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Durzohn" type="button">Durzohn</button></td><td>5</td></tr>
+<tr><td><button class="drop-player-btn" data-player="BIGCOKCOWBOY" type="button">BIGCOKCOWBOY</button></td><td>2</td></tr>
+<tr><td><button class="drop-player-btn" data-player="P4pa Swag" type="button">P4pa Swag</button></td><td>1</td></tr>
+</tbody>
+</table>
+</article>
+<article class="roster-card event-team-card">
+<div class="roster-head green">Mud Dogs <span class="team-drop-total">43 drops</span></div>
+<table class="drop-score-table">
+<thead><tr><th>Player</th><th>Score</th></tr></thead>
+<tbody>
+<tr><td><button class="drop-player-btn" data-player="Pyros" type="button">Pyros</button></td><td>15</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Beefy Turd" type="button">Beefy Turd</button></td><td>13</td></tr>
+<tr><td><button class="drop-player-btn" data-player="IronVikings" type="button">IronVikings</button></td><td>8</td></tr>
+<tr><td><button class="drop-player-btn" data-player="cpt_1ns4no" type="button">cpt_1ns4no</button></td><td>5</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Dhampir007" type="button">Dhampir007</button></td><td>1</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Zodiac Zack" type="button">Zodiac Zack</button></td><td>1</td></tr>
+<tr class="drop-zero"><td><button class="drop-player-btn" data-player="OtterToeBean" type="button">OtterToeBean</button></td><td>0</td></tr>
+</tbody>
+</table>
+</article>
+<article class="roster-card event-team-card">
+<div class="roster-head blue">Drop Disciples <span class="team-drop-total">37 drops</span></div>
+<table class="drop-score-table">
+<thead><tr><th>Player</th><th>Score</th></tr></thead>
+<tbody>
+<tr><td><button class="drop-player-btn" data-player="Yawp" type="button">Yawp</button></td><td>11</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Third Leg" type="button">Third Leg</button></td><td>9</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Kyle Stanley" type="button">Kyle Stanley</button></td><td>8</td></tr>
+<tr><td><button class="drop-player-btn" data-player="YeetMyLoad" type="button">YeetMyLoad</button></td><td>4</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Rskru" type="button">Rskru</button></td><td>3</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Tactical Jokr" type="button">Tactical Jokr</button></td><td>1</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Sha q" type="button">Sha q</button></td><td>1</td></tr>
+</tbody>
+</table>
+</article>
+<article class="roster-card event-team-card">
+<div class="roster-head yellow">Bueno Boys <span class="team-drop-total">40 drops</span></div>
+<table class="drop-score-table">
+<thead><tr><th>Player</th><th>Score</th></tr></thead>
+<tbody>
+<tr><td><button class="drop-player-btn" data-player="Meat Bum" type="button">Meat Bum</button></td><td>18</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Cnyr" type="button">Cnyr</button></td><td>13</td></tr>
+<tr><td><button class="drop-player-btn" data-player="l3enjie" type="button">l3enjie</button></td><td>5</td></tr>
+<tr><td><button class="drop-player-btn" data-player="CSFU" type="button">CSFU</button></td><td>3</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Cawk Balls" type="button">Cawk Balls</button></td><td>1</td></tr>
+<tr class="drop-zero"><td><button class="drop-player-btn" data-player="IHendricks" type="button">IHendricks</button></td><td>0</td></tr>
+<tr class="drop-zero"><td><button class="drop-player-btn" data-player="Juice Solo" type="button">Juice Solo</button></td><td>0</td></tr>
+</tbody>
+</table>
+</article>
+<article class="roster-card event-team-card">
+<div class="roster-head purple">Tube Men <span class="team-drop-total">24 drops</span></div>
+<table class="drop-score-table">
+<thead><tr><th>Player</th><th>Score</th></tr></thead>
+<tbody>
+<tr><td><button class="drop-player-btn" data-player="Reggie Tales" type="button">Reggie Tales</button></td><td>10</td></tr>
+<tr><td><button class="drop-player-btn" data-player="C D C D C D" type="button">C D C D C D</button></td><td>5</td></tr>
+<tr><td><button class="drop-player-btn" data-player="TFresh" type="button">TFresh</button></td><td>4</td></tr>
+<tr><td><button class="drop-player-btn" data-player="A_Dread_Head" type="button">A_Dread_Head</button></td><td>3</td></tr>
+<tr><td><button class="drop-player-btn" data-player="Gary Salty" type="button">Gary Salty</button></td><td>2</td></tr>
+<tr class="drop-zero"><td><button class="drop-player-btn" data-player="I slay yah" type="button">I slay yah</button></td><td>0</td></tr>
+<tr class="drop-zero"><td><button class="drop-player-btn" data-player="TheRealParbs" type="button">TheRealParbs</button></td><td>0</td></tr>
+</tbody>
+</table>
+</article>
+</div>
+</section><p class="scoreboard-outside-help board-outside-help">Click the board to open the full-size image.</p><div class="board-frame event-board-frame">
+<a href="../images/mantis_race.png" rel="noopener" target="_blank">
+<img alt="Final board for the 2025 Mantis Tile Race" src="../images/mantis_race.png"/>
+</a>
+</div></section>
+</main>
+<script>
+(function() {
+  const playerDrops = {"A_Dread_Head": ["Moons item","Brine saber","Dragon pickaxe"],"BIGCOKCOWBOY": ["Brine saber","Vorkath head"],"Beefy Turd": ["Brine saber","Dragon pickaxe","Venator shard","Pegasian crystal","Virtus robe bottom","Zaryte vambraces","Doom pet","Moons item","Zenyte shard","Crystal armour seed","Araxyte fang","Osmumten's fang","Inquisitor's mace"],"Busta Beans": ["Moons item","Warped sceptre","DK ring","DK ring","Vorkath head","Voidwaker hilt"],"C D C D C D": ["Moons item","Moons item","Sarachnis cudgel","DK ring","DK ring"],"CSFU": ["Brine saber","Brine saber","Hill giant club"],"Cawk Balls": ["Primordial crystal"],"Cnyr": ["Barrows piece","Barrows piece","DK ring","Zenyte shard","Ice elemental staff crown","Fire elemental staff crown","Venator shard","Venator shard","Venator shard","Zamorak hilt","Godsword shard 3","Godsword shard 1","Crystal armour seed"],"Dhampir007": ["Godsword shard 2"],"Durzohn": ["Moons item","Moons item","Sarachnis cudgel","Vorkath head","Cache of runes"],"Gary Salty": ["Warped sceptre","Zenyte shard"],"I slay yah": [],"IHendricks": [],"IronVikings": ["Sarachnis cudgel","Steel ring","Steel ring","DK ring","Dark relic","Crystal armour seed","Crystal armour seed","Godsword shard 3"],"John Fux": ["Zenyte shard","Vorkath head","Vorkath head","Venator shard","Dark relic","Crystal armour seed"],"Juice Solo": [],"Kyle Stanley": ["Barrows piece","Hill giant club","Vorkath head","Vorkath head","Dark relic","Vial of blood","Primordial crystal","Crystal armour seed"],"Meat Bum": ["Barrows piece","Barrows piece","Sarachnis cudgel","Steel ring","Warped sceptre","DK ring","DK ring","Magic fang","Magic fang","Tanzanite fang","Godsword shard 2","Ranger boots","Primordial crystal","Eternal crystal","Eternal crystal","Crystal armour seed","Crystal armour seed","Tormented synapse"],"OtterToeBean": [],"P4pa Swag": ["Moons item"],"Pyros": ["Moons item","Hill giant club","Magic fang","Serpentine visage","Serpentine visage","Venator shard","Bandos hilt","Godsword shard 1","Vial of blood","Cache of runes","Pegasian crystal","Primordial crystal","Primordial crystal","Eternal crystal","Primordial crystal"],"Reggie Tales": ["Ice elemental staff crown","Magma mutagen","Godsword shard 3","Moons item","Zenyte shard","DK ring","Fire elemental staff","Tanzanite fang","Godsword shard 1","Godsword shard 2"],"Rskru": ["Dragon pickaxe","Godsword shard 2","Crystal armour seed"],"Sha q": ["Glacial Tomatli"],"TFresh": ["Steel ring","DK ring","Magma mutagen","Saradomin hilt"],"Tactical Jokr": ["Vorkath head"],"TheDog": ["Steel ring","DK ring","Zenyte shard","DK ring","Hill giant club","Vorkath head","Vorkath head","Venator shard","Godsword shard 2","Godsword shard 1","Godsword shard 3","Bandos hilt","Vial of blood","Eternal crystal","Pegasian crystal","Pegasian crystal","Voidwaker blade","Voidwaker gem"],"TheRealParbs": [],"Third Leg": ["Barrows piece","Barrows piece","Warped sceptre","Steel ring","Vorkath head","Vorkath head","Bandos hilt","Pegasian crystal","Pegasian crystal"],"Vycra": ["Dragon pickaxe","Vorkath head","Venator shard","Crystal armour seed","Crystal armour seed","Virtus robe bottom"],"Yawp": ["Barrows piece","Sarachnis cudgel","Vorkath head","Vorkath head","Vorkath head","Venator shard","Venator shard","Venator shard","Godsword shard 3","Cache of runes","Crystal armour seed"],"YeetMyLoad": ["Barrows piece","Brine saber","Zenyte shard","Godsword shard 1"],"Zodiac Zack": ["Moons item"],"cpt_1ns4no": ["Moons item","Warped sceptre","Venator shard","Tormented synapse","Hydra's claw"],"l3enjie": ["Barrows piece","Barrows piece","Dragon pickaxe","Primordial crystal","Pegasian crystal"]};
+  const playerTeams = {"TheDog": "Red Rockets","John Fux": "Red Rockets","Busta Beans": "Red Rockets","P4pa Swag": "Red Rockets","Durzohn": "Red Rockets","Vycra": "Red Rockets","BIGCOKCOWBOY": "Red Rockets","Beefy Turd": "Mud Dogs","Pyros": "Mud Dogs","IronVikings": "Mud Dogs","cpt_1ns4no": "Mud Dogs","Dhampir007": "Mud Dogs","OtterToeBean": "Mud Dogs","Zodiac Zack": "Mud Dogs","Kyle Stanley": "Drop Disciples","Yawp": "Drop Disciples","Tactical Jokr": "Drop Disciples","YeetMyLoad": "Drop Disciples","Rskru": "Drop Disciples","Third Leg": "Drop Disciples","Sha q": "Drop Disciples","Cnyr": "Bueno Boys","Meat Bum": "Bueno Boys","l3enjie": "Bueno Boys","Cawk Balls": "Bueno Boys","IHendricks": "Bueno Boys","Juice Solo": "Bueno Boys","CSFU": "Bueno Boys","C D C D C D": "Tube Men","Reggie Tales": "Tube Men","I slay yah": "Tube Men","TFresh": "Tube Men","TheRealParbs": "Tube Men","Gary Salty": "Tube Men","A_Dread_Head": "Tube Men"};
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'drop-modal-backdrop';
+  backdrop.setAttribute('aria-hidden','true');
+  backdrop.innerHTML = `
+    <section class="drop-modal" role="dialog" aria-modal="true" aria-labelledby="dropModalTitle">
+      <div class="drop-modal-head">
+        <div>
+          <h2 id="dropModalTitle" class="drop-modal-title">Player</h2>
+          <div id="dropModalSub" class="drop-modal-sub"></div>
         </div>
-      </header>
-
-      <h2 class="event-section-title">Final Board</h2>
-
-      <div class="board-frame">
-        <a href="../images/mantis_race.png" target="_blank" rel="noopener">
-          <img src="../images/mantis_race.png" alt="Final board for the 2025 Mantis Tile Race">
-        </a>
+        <button id="dropModalClose" class="drop-modal-close" type="button">Close</button>
       </div>
+      <div id="dropModalStats" class="drop-modal-stats"></div>
+      <div id="dropModalList" class="drop-modal-list"></div>
+    </section>`;
+  document.body.appendChild(backdrop);
 
-      <div class="hint">Click the board to open the full-size image.</div>
+  const title = backdrop.querySelector('#dropModalTitle');
+  const sub = backdrop.querySelector('#dropModalSub');
+  const stats = backdrop.querySelector('#dropModalStats');
+  const list = backdrop.querySelector('#dropModalList');
+  const close = backdrop.querySelector('#dropModalClose');
+  let lastFocus = null;
 
-      <section class="teams-section" aria-labelledby="teams-heading">
-        <h2 class="teams-title" id="teams-heading">Teams</h2>
-        <div class="teams-grid">
-          <article class="roster-card">
-            <div class="roster-head red">Red Rockets</div>
-            <ul class="roster-list">
-              <li>TheDog</li>
-              <li>John Fux</li>
-              <li>Busta Beans</li>
-              <li>P4pa Swag</li>
-              <li>Durzohn</li>
-              <li>Vycra</li>
-              <li>BIGCOKCOWBOY</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head green">Mud Dogs</div>
-            <ul class="roster-list">
-              <li>Beefy Turd</li>
-              <li>Pyros</li>
-              <li>IronVikings</li>
-              <li>cpt_1ns4no</li>
-              <li>Dhampir007</li>
-              <li>OtterToeBean</li>
-              <li>Zodiac Zack</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head blue">Drop Disciples</div>
-            <ul class="roster-list">
-              <li>Kyle Stanley</li>
-              <li>Yawp</li>
-              <li>Tactical Jokr</li>
-              <li>YeetMyLoad</li>
-              <li>Rskru</li>
-              <li>Third Leg</li>
-              <li>Sha q</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head yellow">Bueno Boys</div>
-            <ul class="roster-list">
-              <li>Cnyr</li>
-              <li>Meat Bum</li>
-              <li>l3enjie</li>
-              <li>Cawk Balls</li>
-              <li>IHendricks</li>
-              <li>Juice Solo</li>
-              <li>CSFU</li>
-            </ul>
-          </article>
-          <article class="roster-card">
-            <div class="roster-head purple">Tube Men</div>
-            <ul class="roster-list">
-              <li>C D C D C D</li>
-              <li>Reggie Tales</li>
-              <li>I slay yah</li>
-              <li>TFresh</li>
-              <li>TheRealParbs</li>
-              <li>Gary Salty</li>
-              <li>A_Dread_Head</li>
-            </ul>
-          </article>
-        </div>
-      </section>
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[ch]);
+  }
 
-    </section>
-  </main>
+  function openPlayer(player) {
+    const drops = playerDrops[player] || [];
+    lastFocus = document.activeElement;
+    title.textContent = player;
+    sub.textContent = playerTeams[player] || 'Tile Race';
+    stats.innerHTML = `<strong>Total drops:</strong> ${drops.length}`;
+    const modal = backdrop.querySelector('.drop-modal');
+    const teamName = playerTeams[player] || '';
+    modal.dataset.team = /red/i.test(teamName) ? 'red' : /mud/i.test(teamName) ? 'green' : /drop disciples/i.test(teamName) ? 'blue' : /bueno/i.test(teamName) ? 'yellow' : /tube/i.test(teamName) ? 'purple' : 'green';
+    if (!drops.length) {
+      list.innerHTML = '<div class="drop-modal-empty">No recorded drops for this player.</div>';
+    } else {
+      list.innerHTML = drops.map((item,index) => `
+        <div class="drop-modal-row">
+          <div class="drop-modal-num">${index + 1}.</div>
+          <div>${escapeHtml(item)}</div>
+        </div>`).join('');
+    }
+    backdrop.classList.add('show');
+    backdrop.setAttribute('aria-hidden','false');
+    document.body.classList.add('drop-modal-open');
+    close.focus();
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('show');
+    backdrop.setAttribute('aria-hidden','true');
+    document.body.classList.remove('drop-modal-open');
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  document.addEventListener('click', event => {
+    const button = event.target.closest('.drop-player-btn');
+    if (button) openPlayer(button.dataset.player);
+  });
+  close.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', event => { if (event.target === backdrop) closeModal(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && backdrop.classList.contains('show')) closeModal(); });
+})();
+</script>
 </body>
 </html>

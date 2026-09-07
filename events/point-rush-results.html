@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="../images/mantis-head-mark.svg" type="image/svg+xml">
-  <title>Point Rush Concept - Mantis OSRS</title>
-  <meta name="description" content="A leaderboard-first visual concept for the upcoming Mantis OSRS Point Rush event.">
+  <title>Point Rush Results - Mantis OSRS</title>
+  <meta name="description" content="Final Point Rush standings, drops, and player scores for Mantis OSRS.">
   <link rel="stylesheet" href="../assets/v160.css">
   <link rel="stylesheet" href="../assets/v169-event-clean.css">
   <link rel="stylesheet" href="../assets/v170-event-detail.css">
@@ -210,6 +210,25 @@
       width: 31px;
       height: 31px;
       object-fit: contain;
+    }
+
+    .rush-loot-counter-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .rush-loot-counter-label {
+      color: #c8b66f;
+      font: 800 7px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .rush-loot-counter-value {
+      color: #f0cf54;
+      font: 800 15px/1 Arial, Helvetica, sans-serif;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
     }
 
     .rush-loot-counter-tooltip {
@@ -5438,8 +5457,6 @@
     .rush-admin-open,
     .rush-rules summary { cursor: pointer; }
 
-    .rush-recap-link { text-decoration: none; }
-
     .rush-event-countdown::before,
     .rush-admin-open::before,
     .rush-rules::before {
@@ -9283,55 +9300,921 @@
       filter: drop-shadow(0 0 5px color-mix(in srgb, var(--active-team-bright) 28%, transparent));
     }
 
-  body.v161-event-page.site-nav-v71331 .v160-brand {
-    position: relative !important;
-    isolation: isolate !important;
-    overflow: hidden !important;
-    background: rgba(4, 7, 5, .86) !important;
-    border-color: rgba(150, 148, 94, .50) !important;
-    box-shadow:
-      inset 0 0 0 1px rgba(224, 224, 186, .024),
-      0 5px 14px rgba(0, 0, 0, .15) !important;
-  }
-  body.v161-event-page.site-nav-v71331 .v160-brand::after {
-    content: "" !important;
-    display: block !important;
-    position: absolute !important;
-    inset: 0 !important;
-    z-index: 0 !important;
-    pointer-events: none !important;
-    opacity: 1 !important;
-    background-image:
-      linear-gradient(90deg, rgba(2,4,3,.64) 0%, rgba(2,4,3,.56) 30%, rgba(2,4,3,.48) 62%, rgba(2,4,3,.48) 100%),
-      url("../images/home-button-botanical-v6398.webp") !important;
-    background-repeat: no-repeat, no-repeat !important;
-    background-size: 100% 100%, cover !important;
-    background-position: center, 72% 48% !important;
-    filter: saturate(.76) brightness(.98) contrast(1.035) !important;
-  }
-  body.v161-event-page.site-nav-v71331 .v160-brand:hover,
-  body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible {
-    color: #fff !important;
-    background: rgba(10, 16, 11, .94) !important;
-    border-color: rgba(184, 180, 112, .66) !important;
-    box-shadow:
-      inset 0 0 0 1px rgba(224, 224, 186, .032),
-      0 6px 18px rgba(0, 0, 0, .20) !important;
-  }
-  body.v161-event-page.site-nav-v71331 .v160-brand:hover::after,
-  body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible::after {
-    background-image:
-      linear-gradient(90deg, rgba(2,4,3,.56) 0%, rgba(2,4,3,.48) 30%, rgba(2,4,3,.40) 62%, rgba(2,4,3,.40) 100%),
-      url("../images/home-button-botanical-v6398.webp") !important;
-    filter: saturate(.80) brightness(1.03) contrast(1.035) !important;
-  }
-  body.v161-event-page.site-nav-v71331 .v160-brand > * {
-    position: relative !important;
-    z-index: 2 !important;
-  }
 </style>
+
+  <style id="rush-results-page-style">
+    .rush-results-page .rush-results-hidden-admin { display: none !important; }
+    .rush-results-page .rush-live-board-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* Finished-event standings: keep the original title/feed plumbing, but use an
+       invisible 1px geometry anchor at the section floor instead of the removed
+       vial/progress footer. This lets the live-board SVG geometry render while
+       clipping all plumbing exactly at the standings frame. */
+    .rush-results-page .rush-standings-section { overflow: hidden; }
+    .rush-results-page .rush-standings-threshold-footer {
+      display: block !important;
+      position: absolute !important;
+      right: 9px;
+      bottom: 9px;
+      left: 9px;
+      z-index: 0 !important;
+      height: 1px;
+      min-height: 1px;
+      margin: 0;
+      padding: 0 !important;
+      border: 0;
+      background: transparent !important;
+      box-shadow: none !important;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .rush-results-page .rush-standings-threshold-footer::before,
+    .rush-results-page .rush-reward-ready-message,
+    .rush-results-page .rush-milestone-markers,
+    .rush-results-page .rush-point-total { display: none !important; }
+    .rush-results-page .rush-standings-milestone {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      padding: 0 !important;
+    }
+    .rush-results-page .rush-milestone-track {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: calc(var(--rush-team-feed-gutter) + var(--rush-team-feed-inlet-width) + var(--rush-team-feed-throat-run));
+      width: auto;
+      height: 1px;
+      min-height: 1px;
+      margin: 0 !important;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .rush-results-page .rush-team-feed-system { overflow: hidden; }
+    .rush-results-page .rush-team-feed-throat-system { display: block !important; overflow: hidden; }
+    .rush-results-page #rush-team-feed-throat-shadow,
+    .rush-results-page #rush-team-feed-throat-glass,
+    .rush-results-page #rush-team-feed-throat-inner,
+    .rush-results-page #rush-team-feed-throat-highlight,
+    .rush-results-page #rush-team-feed-throat-liquid,
+    .rush-results-page #rush-team-feed-throat-liquid-highlight { display: none !important; }
+    .rush-results-page .rush-event-countdown { display: none !important; }
+    .rush-results-page .rush-standings-column-label--recent {
+      grid-column: 2;
+      justify-self: center;
+      width: max-content;
+      text-align: center;
+    }
+    .rush-results-page .rush-team-row {
+      cursor: default;
+      pointer-events: none;
+    }
+    .rush-results-page .rush-team-entry { cursor: default; }
+    .rush-results-page .rush-team-entry[data-selected="true"] {
+      border-color: rgba(94, 112, 99, .72);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, .24), 0 4px 12px rgba(0, 0, 0, .18);
+    }
+    .rush-results-page .rush-team-viewing { display: none !important; }
+    .rush-results-page .rush-results-team-label {
+      visibility: visible;
+      grid-column: 1;
+      justify-self: center;
+      width: max-content;
+      text-align: center;
+    }
+    .rush-results-page .rush-standings-column-labels {
+      grid-template-columns: minmax(0, 1fr) minmax(250px, .48fr);
+    }
+    .rush-results-page .rush-team-detail { display: none !important; }
+
+    /* Final player results use the same framed metal/texture treatment as the
+       live standings above instead of a separate generic scoreboard card. */
+    .rush-final-scores {
+      --rush-list-corner-cut: 7px;
+      --rush-final-spine-lane: 76px;
+      --rush-final-spine-left: 30px;
+      --rush-final-spine-width: 12px;
+      --rush-final-spine-cap-height: 24px;
+      --rush-final-spine-cap-width: 30px;
+      --rush-final-spine-liquid-bright: #b9b9ff;
+      --rush-final-spine-liquid: #8a8fe8;
+      --rush-final-spine-liquid-dark: #5960b8;
+      position: relative;
+      isolation: isolate;
+      z-index: 1;
+      margin: 7px 0 0;
+      padding: 9px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      clip-path: none;
+      filter:
+        drop-shadow(0 0 7px rgba(132, 145, 134, .13))
+        drop-shadow(0 5px 7px rgba(0, 0, 0, .24));
+    }
+    .rush-final-scores::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border: 6px solid transparent;
+      background:
+        radial-gradient(circle at 18% 34%, rgba(255, 255, 255, .035) 0 1px, transparent 2px) 0 0 / 17px 15px padding-box,
+        repeating-linear-gradient(117deg, rgba(255, 255, 255, .018) 0 2px, transparent 2px 8px) padding-box,
+        linear-gradient(180deg, #111612 0%, #0f1411 58%, #0d120f 100%) padding-box,
+        linear-gradient(180deg, rgba(255, 255, 255, .14) 0, transparent 6px, transparent calc(100% - 6px), rgba(0, 0, 0, .11) 100%) border-box,
+        linear-gradient(90deg, rgba(255, 255, 255, .08) 0, transparent 6px, transparent calc(100% - 6px), rgba(0, 0, 0, .24) 100%) border-box,
+        radial-gradient(circle at 24% 31%, rgba(255, 255, 255, .075) 0 1px, transparent 2px) border-box,
+        radial-gradient(circle at 71% 67%, rgba(0, 0, 0, .40) 0 1px, transparent 2px) border-box,
+        repeating-linear-gradient(117deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 7px) border-box,
+        linear-gradient(180deg, #1b1f1c 0%, #0e120f 44%, #0b0f0c 66%, #151916 100%) border-box;
+      background-size: 17px 15px, auto, auto, auto, auto, 13px 11px, 17px 15px, auto, auto;
+      box-shadow:
+        inset 1px 1px 0 rgba(255, 255, 255, .07),
+        inset -1px 0 0 rgba(0, 0, 0, .45),
+        inset 0 0 0 2px #080b09,
+        inset 0 0 0 4px #020302,
+        0 0 0 1px #020302;
+      clip-path: polygon(
+        var(--rush-list-corner-cut) 0,
+        calc(100% - var(--rush-list-corner-cut)) 0,
+        100% var(--rush-list-corner-cut),
+        100% calc(100% - var(--rush-list-corner-cut)),
+        calc(100% - var(--rush-list-corner-cut)) 100%,
+        var(--rush-list-corner-cut) 100%,
+        0 calc(100% - var(--rush-list-corner-cut)),
+        0 var(--rush-list-corner-cut)
+      );
+      pointer-events: none;
+    }
+    .rush-final-scores::after {
+      content: "";
+      position: absolute;
+      z-index: 5;
+      top: 6px;
+      right: 6px;
+      bottom: 6px;
+      left: 6px;
+      background: transparent;
+      box-shadow:
+        inset 0 0 0 2px #080b09,
+        inset 0 0 0 3px #020302;
+      clip-path: polygon(
+        1px 0,
+        calc(100% - 1px) 0,
+        100% 1px,
+        100% calc(100% - 1px),
+        calc(100% - 1px) 100%,
+        1px 100%,
+        0 calc(100% - 1px),
+        0 1px
+      );
+      pointer-events: none;
+    }
+    .rush-final-scoreboard {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      padding: 10px 7px 10px calc(7px + var(--rush-final-spine-lane));
+    }
+    .rush-final-spine {
+      position: absolute;
+      z-index: 3;
+      left: var(--rush-final-spine-left);
+      top: 11px;
+      bottom: 11px;
+      width: var(--rush-final-spine-cap-width);
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .rush-final-spine-track {
+      position: absolute;
+      left: calc((var(--rush-final-spine-cap-width) - var(--rush-final-spine-width)) / 2);
+      top: calc(var(--rush-final-spine-cap-height) - 4px);
+      bottom: calc(var(--rush-final-spine-cap-height) - 4px);
+      width: var(--rush-final-spine-width);
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.34) 0, rgba(255,255,255,.10) 22%, rgba(5,10,8,.14) 48%, rgba(0,0,0,.58) 100%),
+        linear-gradient(180deg, #56645d 0%, #2a352f 26%, #0a100c 74%, #030705 100%);
+      box-shadow:
+        inset 1px 0 0 rgba(255,255,255,.22),
+        inset -1px 0 0 rgba(0,0,0,.55),
+        0 0 0 1px rgba(4,6,5,.75),
+        0 0 10px rgba(119, 139, 126, .12);
+    }
+    .rush-final-spine-track::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      top: 3px;
+      bottom: 3px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--rush-final-spine-liquid-bright) 0%, var(--rush-final-spine-liquid) 36%, var(--rush-final-spine-liquid-dark) 100%);
+      box-shadow:
+        inset 0 0 5px rgba(255,255,255,.28),
+        0 0 6px rgba(139, 144, 241, .42);
+      opacity: .95;
+    }
+    .rush-final-spine-track::after {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 5px;
+      bottom: 5px;
+      width: 2px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.04));
+      opacity: .72;
+    }
+    .rush-final-spine-cap {
+      position: absolute;
+      left: 0;
+      width: var(--rush-final-spine-cap-width);
+      height: var(--rush-final-spine-cap-height);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.26) 0, rgba(255,255,255,.08) 18%, rgba(7,12,9,.18) 46%, rgba(0,0,0,.62) 100%),
+        linear-gradient(180deg, #596660 0%, #2d3832 28%, #0c120e 72%, #030705 100%);
+      clip-path: polygon(0 36%, 62% 36%, 72% 18%, 100% 18%, 100% 82%, 72% 82%, 62% 64%, 0 64%);
+      border-radius: 11px 16px 16px 11px;
+      box-shadow:
+        inset 1px 0 0 rgba(255,255,255,.20),
+        inset -1px 0 0 rgba(0,0,0,.48),
+        0 0 0 1px rgba(5,8,6,.86);
+    }
+    .rush-final-spine-cap::before {
+      content: "";
+      position: absolute;
+      inset: 2px 3px;
+      border-radius: 9px 13px 13px 9px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.16) 0, rgba(255,255,255,.03) 26%, rgba(0,0,0,.16) 74%, rgba(0,0,0,.40) 100%),
+        linear-gradient(180deg, var(--rush-final-spine-liquid-bright) 0%, var(--rush-final-spine-liquid) 34%, var(--rush-final-spine-liquid-dark) 100%);
+      clip-path: inherit;
+      box-shadow: inset 0 0 5px rgba(255,255,255,.24), 0 0 7px rgba(139, 144, 241, .32);
+    }
+    .rush-final-spine-cap::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 4px;
+      bottom: 4px;
+      width: 3px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255,255,255,.46), rgba(255,255,255,.05));
+      opacity: .8;
+    }
+    .rush-final-spine-cap--top { top: 0; }
+    .rush-final-spine-cap--bottom {
+      bottom: 0;
+      transform: rotate(180deg);
+    }
+    .rush-final-team {
+      --final-player-tube-width: 128px;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid #3b443e;
+      background:
+        radial-gradient(circle at 18% 34%, rgba(255, 255, 255, .026) 0 1px, transparent 2px) 0 0 / 17px 15px,
+        repeating-linear-gradient(117deg, rgba(255, 255, 255, .014) 0 2px, transparent 2px 8px),
+        linear-gradient(180deg, #151b17, #090d0a 72%, #050705);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .055),
+        inset 0 -1px 0 rgba(0, 0, 0, .92),
+        0 3px 8px rgba(0, 0, 0, .28);
+    }
+    .rush-final-team-head {
+      min-height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 9px;
+      border-bottom: 1px solid color-mix(in srgb, var(--final-team-bright) 62%, #354039);
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--final-team) 27%, transparent), transparent 58%),
+        repeating-linear-gradient(117deg, rgba(255, 255, 255, .014) 0 2px, transparent 2px 8px),
+        linear-gradient(180deg, #151c17, #0b100c 74%, #070a08);
+      box-shadow:
+        inset 0 0 15px color-mix(in srgb, var(--final-team) 13%, transparent),
+        0 0 9px color-mix(in srgb, var(--final-team-bright) 18%, transparent);
+    }
+    .rush-final-team-head strong {
+      min-width: 0;
+      color: color-mix(in srgb, var(--final-team-bright) 76%, #f0ead7);
+      font: 800 12px/1.15 Arial, sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .rush-final-team-head span {
+      flex: 0 0 auto;
+      color: #e4e3d5;
+      font: 800 10px/1 Arial, sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+    .rush-final-player-list {
+      display: grid;
+      align-content: start;
+      background: linear-gradient(180deg, rgba(6, 12, 9, .32), rgba(6, 12, 9, .16));
+    }
+    .rush-final-player-row {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, var(--final-player-tube-width)) minmax(0, 1fr);
+      align-items: start;
+      gap: 8px;
+      min-height: 31px;
+      padding: 5px 7px;
+      border-top: 1px solid #2d3930;
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--final-team) 10%, transparent), transparent 48%),
+        linear-gradient(180deg, rgba(12, 21, 16, .66), rgba(8, 13, 10, .62));
+    }
+    .rush-final-player-row:first-child { border-top: 0; }
+    .rush-final-player-row:nth-child(even) {
+      background:
+        linear-gradient(90deg, color-mix(in srgb, var(--final-team) 8%, transparent), transparent 46%),
+        linear-gradient(180deg, rgba(6, 10, 8, .92), rgba(3, 6, 5, .88));
+    }
+    .rush-final-player-tube {
+      width: var(--final-player-tube-width);
+      max-width: 100%;
+      min-width: 0;
+      min-height: 21px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 9px;
+      padding: 3px 7px 3px 8px;
+      border: 1px solid color-mix(in srgb, var(--final-team-bright) 54%, #39433c);
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, color-mix(in srgb, white 18%, var(--final-team)) 0%, color-mix(in srgb, var(--final-team-bright) 78%, var(--final-team)) 26%, var(--final-team) 62%, color-mix(in srgb, var(--final-team-dark, #142019) 68%, black) 100%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .16),
+        inset 0 -1px 0 rgba(0, 0, 0, .34),
+        inset 0 0 11px rgba(0, 0, 0, .18),
+        0 0 0 1px rgba(5, 8, 6, .42),
+        0 0 9px color-mix(in srgb, var(--final-team) 28%, transparent);
+      overflow: hidden;
+    }
+    .rush-final-player-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #f0eee2;
+      text-shadow: 0 0 4px rgba(255,255,255,.14);
+      font: 800 12px/1 Arial, sans-serif;
+    }
+    .rush-final-player-points {
+      flex: 0 0 auto;
+      margin-left: auto;
+      color: #f1eee3;
+      text-shadow: 0 0 4px rgba(255,255,255,.10);
+      font: 800 10px/1 Arial, sans-serif;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .rush-final-items {
+      min-width: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: flex-start;
+      gap: 2px 3px;
+      padding: 0;
+      overflow: visible;
+    }
+    .rush-final-item {
+      position: relative;
+      display: grid;
+      place-items: center;
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .rush-final-item .rush-sprite-image {
+      width: 27px;
+      height: 27px;
+      max-width: 27px;
+      max-height: 27px;
+      object-fit: contain;
+      padding: 0;
+      background: transparent;
+      image-rendering: auto;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .52));
+    }
+    .rush-final-no-drops {
+      align-self: center;
+      min-height: 21px;
+      display: inline-flex;
+      align-items: center;
+      color: #69756c;
+      font: 700 8px/1.2 Arial, sans-serif;
+      letter-spacing: .03em;
+    }
+
+    .rush-final-board {
+      --rush-list-corner-cut: 7px;
+      position: relative;
+      isolation: isolate;
+      margin: 7px 0 0;
+      padding: 9px;
+      border: 0;
+      background: transparent;
+      filter:
+        drop-shadow(0 0 7px rgba(132, 145, 134, .13))
+        drop-shadow(0 5px 7px rgba(0, 0, 0, .24));
+    }
+    .rush-final-board::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border: 6px solid transparent;
+      background:
+        radial-gradient(circle at 18% 34%, rgba(255, 255, 255, .035) 0 1px, transparent 2px) 0 0 / 17px 15px padding-box,
+        repeating-linear-gradient(117deg, rgba(255, 255, 255, .018) 0 2px, transparent 2px 8px) padding-box,
+        linear-gradient(180deg, #111612 0%, #0f1411 58%, #0d120f 100%) padding-box,
+        linear-gradient(180deg, rgba(255, 255, 255, .14) 0, transparent 6px, transparent calc(100% - 6px), rgba(0, 0, 0, .11) 100%) border-box,
+        linear-gradient(90deg, rgba(255, 255, 255, .08) 0, transparent 6px, transparent calc(100% - 6px), rgba(0, 0, 0, .24) 100%) border-box,
+        repeating-linear-gradient(117deg, rgba(255, 255, 255, .035) 0 2px, transparent 2px 7px) border-box,
+        linear-gradient(180deg, #1b1f1c 0%, #0e120f 44%, #0b0f0c 66%, #151916 100%) border-box;
+      box-shadow:
+        inset 1px 1px 0 rgba(255, 255, 255, .07),
+        inset -1px 0 0 rgba(0, 0, 0, .45),
+        inset 0 0 0 2px #080b09,
+        inset 0 0 0 4px #020302,
+        0 0 0 1px #020302;
+      clip-path: polygon(
+        var(--rush-list-corner-cut) 0,
+        calc(100% - var(--rush-list-corner-cut)) 0,
+        100% var(--rush-list-corner-cut),
+        100% calc(100% - var(--rush-list-corner-cut)),
+        calc(100% - var(--rush-list-corner-cut)) 100%,
+        var(--rush-list-corner-cut) 100%,
+        0 calc(100% - var(--rush-list-corner-cut)),
+        0 var(--rush-list-corner-cut)
+      );
+      pointer-events: none;
+    }
+    .rush-final-board::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      inset: 6px;
+      background: transparent;
+      box-shadow: inset 0 0 0 2px #080b09, inset 0 0 0 3px #020302;
+      pointer-events: none;
+    }
+    .rush-final-board img {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid #3b443e;
+      background: #080b09;
+    }
+
+    @media (max-width: 980px) {
+      .rush-final-scoreboard { grid-template-columns: 1fr; gap: 9px; padding-left: calc(7px + var(--rush-final-spine-lane)); }
+      .rush-final-team { --final-player-tube-width: 150px; }
+    }
+    @media (max-width: 620px) {
+      .rush-final-scores { padding: 8px; --rush-final-spine-lane: 52px; --rush-final-spine-left: 18px; --rush-final-spine-cap-width: 24px; --rush-final-spine-cap-height: 18px; }
+      .rush-final-scoreboard { padding: 8px 6px 8px calc(6px + var(--rush-final-spine-lane)); }
+      .rush-final-player-row { gap: 6px; padding-inline: 6px; }
+      .rush-final-spine { top: 10px; bottom: 10px; }
+      .rush-results-page .rush-standings-column-labels { grid-template-columns: 1fr; }
+      .rush-results-page .rush-results-team-label { display: inline-block; }
+    }
+
+
+    /* Finished recap: repeat the original player leaderboard for all three teams,
+       omitting only its shared funnel and distribution pipe. */
+    .rush-results-page .rush-frame {
+      display: flex;
+      flex-direction: column;
+    }
+    .rush-results-page .rush-standings-shell { order: 1; }
+    .rush-results-page .rush-results-player-scores {
+      order: 2;
+      margin-top: 7px;
+      overflow-x: auto;
+    }
+    .rush-results-page .rush-results-player-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+      min-width: 880px;
+      gap: 9px;
+    }
+    .rush-results-page .rush-team-detail { display: none !important; }
+    .rush-results-page .rush-final-board {
+      order: 3;
+      margin-top: 7px;
+    }
+    .rush-results-page .rush-team-row {
+      cursor: default;
+      pointer-events: none;
+    }
+    .rush-results-page .rush-results-player-team {
+      min-width: 0;
+      --rush-leaderboard-lane-width: 0px;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-table-wrap > .rush-final-team-head {
+      --final-team: var(--active-team);
+      --final-team-bright: var(--active-team-bright);
+      justify-content: center;
+      text-align: center;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-table-wrap > .rush-final-team-head {
+      border-bottom-color: color-mix(in srgb, var(--active-team-bright) 62%, #354039);
+      background:
+        repeating-linear-gradient(117deg, rgba(255, 255, 255, .014) 0 2px, transparent 2px 8px),
+        linear-gradient(180deg,
+          color-mix(in srgb, var(--active-team) 18%, #151c17) 0%,
+          color-mix(in srgb, var(--active-team-dark) 22%, #070a08) 100%);
+      box-shadow:
+        inset 0 0 14px color-mix(in srgb, var(--active-team-bright) 28%, transparent),
+        inset 0 1px 0 rgba(255, 255, 255, .055),
+        inset 0 -1px 0 rgba(0, 0, 0, .92),
+        0 0 10px color-mix(in srgb, var(--active-team-bright) 24%, transparent);
+    }
+    .rush-results-page .rush-results-player-team .rush-player-table-wrap {
+      --rush-leaderboard-lane-width: 0px;
+      margin: 0;
+      padding: 3px 3px 8px !important;
+      overflow: hidden;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-table {
+      width: 100%;
+      margin-left: 0;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-point-bar {
+      flex: 0 0 150px;
+      width: 150px;
+      margin: 0 5px 0 0;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-bar-label {
+      gap: 5px;
+      padding-right: 7px;
+      padding-left: 7px;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-bar-label .rush-player-name {
+      line-height: 1.25;
+      padding-bottom: 1px;
+      padding-right: 2px;
+      overflow: visible;
+      text-overflow: clip;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-button--reservoir {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 3px;
+      text-align: left;
+    }
+    .rush-results-page .rush-results-player-team .rush-player-sprite-strip {
+      display: contents;
+    }
+    @media (max-width: 560px) {
+      .rush-results-page .rush-results-player-grid { min-width: 880px; }
+    }
+    .rush-results-page .rush-standings-layout {
+      grid-template-columns: minmax(0, 2fr) 1px minmax(0, 3fr);
+      align-items: stretch;
+      padding-top: 4px;
+    }
+    .rush-results-page .rush-recap-standings-middle {
+      min-width: 0;
+      min-height: 300px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .rush-results-page .rush-standings-board {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .rush-results-page .rush-recap-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-auto-rows: 1fr;
+      align-items: stretch;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px;
+    }
+    .rush-results-page .rush-recap-stat-card {
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      padding: 12px 10px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(193, 155, 45, .34);
+      border-radius: 2px;
+      color: #f0cf54;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255, 236, 142, .07), transparent 34%),
+        linear-gradient(180deg, rgba(35, 39, 23, .94), rgba(12, 15, 10, .94));
+      box-shadow: inset 0 1px 0 rgba(255, 236, 142, .10), 0 3px 9px rgba(0, 0, 0, .42);
+      text-align: center;
+      text-shadow: 0 1px 1px #000, 0 0 7px rgba(238, 190, 39, .18);
+    }
+    .rush-results-page [data-recap-stat="total"] { order: 1; }
+    .rush-results-page [data-recap-stat="tiers"] { order: 2; }
+    .rush-results-page [data-recap-stat="unique"] { order: 3; }
+    .rush-results-page [data-recap-stat="duplicate"] { order: 4; }
+    .rush-results-page [data-recap-stat="wheel"] { order: 5; }
+    .rush-results-page [data-recap-stat="pets"] { order: 6; }
+    .rush-results-page [data-recap-stat="valuable"] { order: 7; }
+    .rush-results-page [data-recap-stat="obtained"] { order: 8; }
+    .rush-results-page [data-recap-stat="scorers"] { order: 9; }
+    .rush-results-page [data-recap-stat="gp-earned"] { order: 10; }
+    button.rush-recap-stat-card {
+      width: 100%;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.rush-recap-stat-card:hover,
+    button.rush-recap-stat-card:focus-visible {
+      border-color: rgba(229, 190, 72, .72);
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255, 236, 142, .12), transparent 36%),
+        linear-gradient(180deg, rgba(45, 48, 26, .97), rgba(15, 18, 11, .97));
+      box-shadow: inset 0 1px 0 rgba(255, 236, 142, .16), 0 0 12px rgba(224, 180, 43, .20), 0 3px 9px rgba(0, 0, 0, .44);
+      outline: 2px solid rgba(229, 190, 72, .28);
+      outline-offset: 2px;
+    }
+    .rush-results-page .rush-recap-stat-label {
+      color: #c8b66f;
+      font: 800 10px/1 Arial, Helvetica, sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .rush-results-page .rush-recap-stat-total {
+      display: block;
+      margin-top: 7px;
+      color: #f5d65f;
+      font: 500 clamp(32px, 3.1vw, 44px)/1 Georgia, "Times New Roman", serif;
+      font-variant-numeric: tabular-nums;
+    }
+    .rush-results-page .rush-recap-stat-breakdown {
+      display: grid;
+      width: 100%;
+      gap: 3px;
+      margin-top: 10px;
+    }
+    .rush-results-page .rush-recap-stat-team {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font: 800 10px/1.1 Arial, Helvetica, sans-serif;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 1px 2px #000;
+    }
+    .rush-results-page .rush-recap-stat-team[data-recap-team="ember"] { color: #db6c60; }
+    .rush-results-page .rush-recap-stat-team[data-recap-team="moss"] { color: #62c9a5; }
+    .rush-results-page .rush-recap-stat-team[data-recap-team="tide"] { color: #9399e5; }
+    .rush-results-page .rush-recap-stat-total--compact {
+      font-size: clamp(22px, 2.3vw, 31px);
+    }
+    .rush-results-page .rush-recap-stat-detail {
+      display: block;
+      max-width: 100%;
+      margin-top: 7px;
+      overflow-wrap: anywhere;
+      color: #efe5bd;
+      font: 800 12px/1.15 Arial, Helvetica, sans-serif;
+    }
+    .rush-results-page .rush-recap-stat-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 5px;
+      color: #a9a28a;
+      font: 800 10px/1.15 Arial, Helvetica, sans-serif;
+    }
+    .rush-results-page .rush-recap-stat-accent[data-recap-team="ember"] { color: #db6c60; }
+    .rush-results-page .rush-recap-stat-accent[data-recap-team="moss"] { color: #62c9a5; }
+    .rush-results-page .rush-recap-stat-accent[data-recap-team="tide"] { color: #9399e5; }
+    .rush-results-page .rush-recap-top-three {
+      display: grid;
+      width: 100%;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .rush-results-page .rush-recap-top-three-row {
+      display: grid;
+      grid-template-columns: 13px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 4px;
+      font: 800 11px/1.1 Arial, Helvetica, sans-serif;
+      font-variant-numeric: tabular-nums;
+      text-align: left;
+    }
+    .rush-results-page .rush-recap-top-three-row[data-recap-team="ember"] { color: #db6c60; }
+    .rush-results-page .rush-recap-top-three-row[data-recap-team="moss"] { color: #62c9a5; }
+    .rush-results-page .rush-recap-top-three-row[data-recap-team="tide"] { color: #9399e5; }
+    .rush-results-page .rush-recap-top-three-rank { color: #c8b66f; }
+    .rush-results-page .rush-recap-top-three-name {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+    .rush-results-page .rush-recap-top-three-points { text-align: right; }
+    .rush-results-page .rush-recap-top-three--gp .rush-recap-top-three-row {
+      font-size: 10px;
+    }
+    .rush-results-page .rush-recap-ranked-list {
+      display: grid;
+      width: 100%;
+      gap: 7px;
+      margin-top: 10px;
+    }
+    .rush-results-page .rush-recap-ranked-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      font: 800 10px/1.1 Arial, Helvetica, sans-serif;
+      font-variant-numeric: tabular-nums;
+      text-align: left;
+    }
+    .rush-results-page .rush-recap-ranked-item {
+      color: #efe5bd;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+    .rush-results-page .rush-recap-ranked-value {
+      color: #f5d65f;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .rush-results-page .rush-recap-ranked-row--valuable {
+      grid-template-rows: auto auto;
+      gap: 2px 4px;
+    }
+    .rush-results-page .rush-recap-ranked-row--valuable .rush-recap-ranked-item { grid-column: 1 / 3; }
+    .rush-results-page .rush-recap-ranked-player,
+    .rush-results-page .rush-recap-ranked-row--valuable .rush-recap-ranked-value {
+      color: var(--recap-team-color, #efe5bd);
+    }
+    .rush-results-page .rush-recap-stat-accent,
+    .rush-results-page .rush-recap-top-three-row[data-recap-team],
+    .rush-results-page .rush-recap-tier-team,
+    .rush-results-page .rush-recap-ranked-player,
+    .rush-results-page .rush-recap-ranked-row--valuable .rush-recap-ranked-value {
+      text-shadow: 0 1px 2px #000;
+    }
+    .rush-results-page .rush-recap-ranked-player {
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+    @media (max-width: 1180px) and (min-width: 901px) {
+      .rush-results-page .rush-recap-stats-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+    .rush-results-page .rush-recap-tier-counts {
+      display: grid;
+      width: 100%;
+      gap: 4px;
+      margin-top: 8px;
+      color: #c8b66f;
+      font: 800 11px/1 Arial, Helvetica, sans-serif;
+      font-variant-numeric: tabular-nums;
+    }
+    .rush-results-page .rush-recap-tier-count {
+      display: grid;
+      grid-template-columns: 20px minmax(24px, 1fr) repeat(3, minmax(0, 20px));
+      align-items: center;
+      gap: 2px;
+    }
+    .rush-results-page .rush-recap-tier-name { text-align: left; }
+    .rush-results-page .rush-recap-tier-total {
+      color: #f5d65f;
+      text-align: right;
+    }
+    .rush-results-page .rush-recap-tier-team {
+      display: flex;
+      justify-content: flex-end;
+      min-width: 0;
+      text-align: right;
+    }
+    .rush-results-page .rush-recap-tier-team[data-recap-team="ember"] { color: #db6c60; }
+    .rush-results-page .rush-recap-tier-team[data-recap-team="moss"] { color: #62c9a5; }
+    .rush-results-page .rush-recap-tier-team[data-recap-team="tide"] { color: #9399e5; }
+    .rush-results-page .rush-recap-tier-team strong { color: currentColor; }
+    .rush-recap-pet-list .rush-past-drop {
+      grid-template-columns: 36px minmax(0, 1fr);
+      box-shadow: inset 3px 0 0 color-mix(in srgb, var(--drop-team) 72%, transparent);
+    }
+    .rush-results-page .rush-past-drops { align-self: stretch; }
+    .rush-results-page .rush-standings-board .rush-team-entry {
+      grid-template-columns: minmax(0, 1fr) 74px;
+    }
+    .rush-results-page .rush-standings-board .rush-unique-meter { display: block; }
+    .rush-results-page .rush-standings-board .rush-team-row {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 6px;
+      padding: 10px 6px 10px 12px;
+    }
+    .rush-results-page .rush-standings-board .rush-tier strong { font-size: 10px; white-space: nowrap; }
+    .rush-results-page .rush-standings-board .rush-progress-pair,
+    .rush-results-page .rush-standings-board .rush-team-row > .rush-row-threshold { display: none; }
+    @media (min-width: 901px) {
+      .rush-results-page .rush-standings-divider::before {
+        top: -4px;
+        bottom: -10px;
+      }
+    }
+    @media (max-width: 900px) {
+      .rush-results-page .rush-standings-layout { grid-template-columns: minmax(0, 1fr); }
+      .rush-results-page .rush-standings-divider { display: block; }
+      .rush-results-page .rush-recap-stats-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 160px)); }
+    }
+    @media (max-width: 560px) {
+      .rush-results-page .rush-standings-board .rush-team-entry { grid-template-columns: minmax(0, 1fr) 58px; }
+    }
+
+    body.v161-event-page.site-nav-v71331 .v160-brand {
+      position: relative !important;
+      isolation: isolate !important;
+      overflow: hidden !important;
+      background: rgba(4, 7, 5, .86) !important;
+      border-color: rgba(150, 148, 94, .50) !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(224, 224, 186, .024),
+        0 5px 14px rgba(0, 0, 0, .15) !important;
+    }
+    body.v161-event-page.site-nav-v71331 .v160-brand::after {
+      content: "" !important;
+      display: block !important;
+      position: absolute !important;
+      inset: 0 !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+      opacity: 1 !important;
+      background-image:
+        linear-gradient(90deg, rgba(2,4,3,.64) 0%, rgba(2,4,3,.56) 30%, rgba(2,4,3,.48) 62%, rgba(2,4,3,.48) 100%),
+        url("../images/home-button-botanical-v6398.webp") !important;
+      background-repeat: no-repeat, no-repeat !important;
+      background-size: 100% 100%, cover !important;
+      background-position: center, 72% 48% !important;
+      filter: saturate(.76) brightness(.98) contrast(1.035) !important;
+    }
+    body.v161-event-page.site-nav-v71331 .v160-brand:hover,
+    body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible {
+      color: #fff !important;
+      background: rgba(10, 16, 11, .94) !important;
+      border-color: rgba(184, 180, 112, .66) !important;
+      box-shadow:
+        inset 0 0 0 1px rgba(224, 224, 186, .032),
+        0 6px 18px rgba(0, 0, 0, .20) !important;
+    }
+    body.v161-event-page.site-nav-v71331 .v160-brand:hover::after,
+    body.v161-event-page.site-nav-v71331 .v160-brand:focus-visible::after {
+      background-image:
+        linear-gradient(90deg, rgba(2,4,3,.56) 0%, rgba(2,4,3,.48) 30%, rgba(2,4,3,.40) 62%, rgba(2,4,3,.40) 100%),
+        url("../images/home-button-botanical-v6398.webp") !important;
+      filter: saturate(.80) brightness(1.03) contrast(1.035) !important;
+    }
+    body.v161-event-page.site-nav-v71331 .v160-brand > * {
+      position: relative !important;
+      z-index: 2 !important;
+    }
+
+  </style>
+
 </head>
-<body class="v161-event-page v169-clean-event v170-event-polish rush-page rush-no-event-data site-nav-v71331 rush-static-archive">
+<body class="v161-event-page v169-clean-event v170-event-polish rush-page rush-results-page rush-no-event-data site-nav-v71331 rush-static-archive">
   <header class="v160-nav-shell" aria-label="Site navigation">
     <a class="v160-brand" href="../index.html" aria-label="Mantis OSRS home">
       <span class="v160-brand-icon" aria-hidden="true"><img src="../images/mantis-head-mark.svg" alt=""></span>
@@ -9419,7 +10302,7 @@
               <h1 class="rush-sr-only">Point Rush</h1>
               <div class="rush-loot-counter" id="rush-loot-counter" tabindex="0" aria-describedby="rush-loot-counter-tooltip" aria-label="Total loot value: 0 GP">
                 <img src="../images/point-rush/coins-detail.webp" alt="" aria-hidden="true" decoding="async">
-                <span id="rush-loot-counter-value">0</span>
+                <span class="rush-loot-counter-copy"><span class="rush-loot-counter-label">Total Loot Value</span><strong class="rush-loot-counter-value" id="rush-loot-counter-value">0 GP</strong></span>
                 <span class="rush-loot-counter-tooltip" id="rush-loot-counter-tooltip" role="tooltip">0 GP</span>
               </div>
             </div>
@@ -9431,41 +10314,14 @@
                   <span class="rush-event-countdown-ended" id="rush-event-countdown-ended" hidden>Ended</span>
                 </strong>
               </div>
-              <details class="rush-rules" id="rush-rules">
-                <summary aria-controls="rush-rules-panel">Rules</summary>
-                <div class="rush-rules-panel" id="rush-rules-panel" aria-label="Point Rush rules">
-                  <ul class="rush-rules-list">
-                    <li>Point Rush lasts two weeks. The team with the most points at the end wins.</li>
-                    <li>Drops must be submitted to the &quot;event-drops&quot; discord channel with the event tag in screenshot.</li>
-                    <li>Each team member may use a maximum of two accounts. Multi-logging is not permitted.</li>
-                    <li>All teams begin in Tier I and earn points to unlock higher tiers.</li>
-                    <li>Tiers unlock at 10, 25, 40, 60, 90, 120, and 150 base drop points.</li>
-                    <li>Only unlocked-tier items can be submitted. Previously unlocked tiers remain available.</li>
-                    <li>Each item card shows what its next drop is worth.</li>
-                    <li>Every duplicate will decrease the value of that item by 1 point.</li>
-                    <li>Tier I items can decrease to 0 points. Items in every other tier stop decreasing at 1 point.</li>
-                    <li>Items grouped under one card are tracked and scored separately.</li>
-                    <li>Collection Log-only items do not award points if the account obtained them before the event.</li>
-                    <li>Unlocking each new tier grants one wheel spin.</li>
-                    <li>Each tier contains one hidden power-up and one hidden blockage. Each can trigger only once and is revealed when activated.</li>
-                    <li>When a power-up requires an opponent choice, no drops can be recorded until the choice is confirmed.</li>
-                    <li>A blockage restricts what the affected team can obtain until its requirement is cleared.</li>
-                    <li>Power-ups, blockages, and wheel spins can change standings points but do not advance or reduce tier progression.</li>
-                  </ul>
-                </div>
-              </details>
-              <button class="rush-admin-open" id="rush-admin-open" type="button">Add Drop</button>
-              <a class="rush-admin-open rush-recap-link" href="point-rush-results.html">View Recap</a>
+              <a class="rush-admin-open rush-live-board-link" href="point-rush.html">View Full Board</a>
+              <button class="rush-admin-open rush-results-hidden-admin" id="rush-admin-open" type="button" aria-haspopup="dialog" aria-controls="rush-admin-modal">Add Drop</button>
             </div>
           </header>
-        <div class="rush-standings-column-labels">
-          <span class="rush-standings-column-label">Select a team bar to view details</span>
-          <span class="rush-standings-column-label rush-standings-column-label--recent">Recent Drops</span>
-        </div>
         <div class="rush-data-notice" id="rush-data-notice" data-state="loading" role="status">Loading confirmed event scores&hellip;</div>
         <div class="rush-standings-layout">
           <div class="rush-standings-board">
-        <div class="rush-team-list" role="group" aria-label="Select a team to view its details">
+        <div class="rush-team-list" role="group" aria-label="Final team standings">
           <div class="rush-team-entry" id="team-entry-tide" data-team-entry="tide" data-selected="true" style="--team:#50569c;--team-bright:#747bc5;--team-dark:#2d3260;--team-deep:#14172e">
             <button class="rush-team-row" id="team-button-tide" type="button" data-team="tide" aria-pressed="true" aria-controls="team-detail" tabindex="0" style="--team:#50569c;--team-bright:#747bc5;--team-dark:#2d3260;--team-deep:#14172e;--milestone-progress:0%" aria-label="Show Saradomin details below. Tied with 0 points, 0 of 10 points toward Tier II, on a shared race scale ending at 10 points.">
               <span class="rush-team-liquid" aria-hidden="true"><span class="rush-liquid-bubbles"></span><span class="rush-liquid-edge"></span></span>
@@ -9511,14 +10367,85 @@
 
           </div>
 
-          <span class="rush-standings-divider" aria-hidden="true"></span>
+          <span class="rush-standings-divider rush-standings-divider--left" aria-hidden="true"></span>
 
-          <aside class="rush-past-drops" aria-label="Recent drops">
-            <span class="rush-standings-column-label rush-past-drops-stacked-label" aria-hidden="true">Recent Drops</span>
-            <div class="rush-past-drops-scroll" tabindex="0" aria-label="Scrollable recent drops list">
-              <ol class="rush-past-drops-list" id="past-drops-list" aria-live="polite"></ol>
+          <section class="rush-recap-standings-middle" aria-label="Event recap statistics">
+            <div class="rush-recap-stats-grid">
+              <article class="rush-recap-stat-card" data-recap-stat="total" aria-label="Total drops">
+                <span class="rush-recap-stat-label">Total Drops</span>
+                <strong class="rush-recap-stat-total" id="rush-recap-drop-total">0</strong>
+                <span class="rush-recap-stat-breakdown">
+                  <span class="rush-recap-stat-team" data-recap-team="ember"><span>Zamorak</span><strong data-recap-drop-team="ember">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="moss"><span>Guthix</span><strong data-recap-drop-team="moss">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="tide"><span>Saradomin</span><strong data-recap-drop-team="tide">0</strong></span>
+                </span>
+              </article>
+              <button class="rush-recap-stat-card" data-recap-stat="pets" id="rush-recap-pets-open" type="button" aria-haspopup="dialog" aria-controls="rush-recap-pets-modal" aria-label="View pets obtained during Point Rush">
+                <span class="rush-recap-stat-label">Total Pets</span>
+                <strong class="rush-recap-stat-total" id="rush-recap-pet-total">0</strong>
+                <span class="rush-recap-stat-breakdown">
+                  <span class="rush-recap-stat-team" data-recap-team="ember"><span>Zamorak</span><strong data-recap-pet-team="ember">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="moss"><span>Guthix</span><strong data-recap-pet-team="moss">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="tide"><span>Saradomin</span><strong data-recap-pet-team="tide">0</strong></span>
+                </span>
+              </button>
+              <article class="rush-recap-stat-card" data-recap-stat="obtained" aria-label="Top five most obtained items">
+                <span class="rush-recap-stat-label">Top 5 Most Obtained</span>
+                <span class="rush-recap-ranked-list" id="rush-recap-top-obtained"></span>
+              </article>
+              <article class="rush-recap-stat-card" data-recap-stat="valuable" aria-label="Most valuable drop">
+                <span class="rush-recap-stat-label">Top 3 Most Valuable</span>
+                <span class="rush-recap-ranked-list" id="rush-recap-top-valuable"></span>
+              </article>
+              <article class="rush-recap-stat-card" data-recap-stat="scorers" aria-label="Top five scorers">
+                <span class="rush-recap-stat-label">Top 5 Scorers</span>
+                <span class="rush-recap-top-three" id="rush-recap-top-three"></span>
+              </article>
+              <article class="rush-recap-stat-card" data-recap-stat="unique" aria-label="Unique drops obtained">
+                <span class="rush-recap-stat-label">Unique Drops</span>
+                <strong class="rush-recap-stat-total" id="rush-recap-unique-item-total">0</strong>
+                <span class="rush-recap-stat-breakdown">
+                  <span class="rush-recap-stat-team" data-recap-team="ember"><span>Zamorak</span><strong data-recap-unique-team="ember">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="moss"><span>Guthix</span><strong data-recap-unique-team="moss">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="tide"><span>Saradomin</span><strong data-recap-unique-team="tide">0</strong></span>
+                </span>
+              </article>
+              <article class="rush-recap-stat-card" data-recap-stat="duplicate" aria-label="Duplicate drops">
+                <span class="rush-recap-stat-label">Duplicate Drops</span>
+                <strong class="rush-recap-stat-total" id="rush-recap-duplicate-total">0</strong>
+                <span class="rush-recap-stat-breakdown">
+                  <span class="rush-recap-stat-team" data-recap-team="ember"><span>Zamorak</span><strong data-recap-duplicate-team="ember">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="moss"><span>Guthix</span><strong data-recap-duplicate-team="moss">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="tide"><span>Saradomin</span><strong data-recap-duplicate-team="tide">0</strong></span>
+                </span>
+              </article>
+              <article class="rush-recap-stat-card" data-recap-stat="tiers" aria-label="Number of drops per tier">
+                <span class="rush-recap-stat-label">Drops by Tier</span>
+                <span class="rush-recap-tier-counts">
+                  <span class="rush-recap-tier-count" aria-label="Tier I drop counts"><span class="rush-recap-tier-name">I</span><strong class="rush-recap-tier-total" data-recap-tier="0">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-0">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-0">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-0">0</strong></span></span>
+                  <span class="rush-recap-tier-count" aria-label="Tier II drop counts"><span class="rush-recap-tier-name">II</span><strong class="rush-recap-tier-total" data-recap-tier="1">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-1">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-1">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-1">0</strong></span></span>
+                  <span class="rush-recap-tier-count" aria-label="Tier III drop counts"><span class="rush-recap-tier-name">III</span><strong class="rush-recap-tier-total" data-recap-tier="2">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-2">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-2">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-2">0</strong></span></span>
+                  <span class="rush-recap-tier-count" aria-label="Tier IV drop counts"><span class="rush-recap-tier-name">IV</span><strong class="rush-recap-tier-total" data-recap-tier="3">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-3">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-3">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-3">0</strong></span></span>
+                  <span class="rush-recap-tier-count" aria-label="Tier V drop counts"><span class="rush-recap-tier-name">V</span><strong class="rush-recap-tier-total" data-recap-tier="4">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-4">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-4">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-4">0</strong></span></span>
+                  <span class="rush-recap-tier-count" aria-label="Tier VI drop counts"><span class="rush-recap-tier-name">VI</span><strong class="rush-recap-tier-total" data-recap-tier="5">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-5">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-5">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-5">0</strong></span></span>
+                  <span class="rush-recap-tier-count" aria-label="Tier VII drop counts"><span class="rush-recap-tier-name">VII</span><strong class="rush-recap-tier-total" data-recap-tier="6">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-6">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-6">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-6">0</strong></span></span>
+                  <span class="rush-recap-tier-count" aria-label="Tier VIII drop counts"><span class="rush-recap-tier-name">VIII</span><strong class="rush-recap-tier-total" data-recap-tier="7">0</strong><span class="rush-recap-tier-team" data-recap-team="ember"><strong data-recap-tier-team="ember-7">0</strong></span><span class="rush-recap-tier-team" data-recap-team="moss"><strong data-recap-tier-team="moss-7">0</strong></span><span class="rush-recap-tier-team" data-recap-team="tide"><strong data-recap-tier-team="tide-7">0</strong></span></span>
+                </span>
+              </article>
+              <article class="rush-recap-stat-card" data-recap-stat="wheel" aria-label="Wheel spin results">
+                <span class="rush-recap-stat-label">Wheel Spin Results</span>
+                <span class="rush-recap-stat-breakdown">
+                  <span class="rush-recap-stat-team" data-recap-team="ember"><span>Zamorak</span><strong data-recap-wheel-team="ember">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="moss"><span>Guthix</span><strong data-recap-wheel-team="moss">0</strong></span>
+                  <span class="rush-recap-stat-team" data-recap-team="tide"><span>Saradomin</span><strong data-recap-wheel-team="tide">0</strong></span>
+                </span>
+              </article>
+              <article class="rush-recap-stat-card" data-recap-stat="gp-earned" aria-label="Top five GP earned">
+                <span class="rush-recap-stat-label">Top 5 GP Earned</span>
+                <span class="rush-recap-top-three rush-recap-top-three--gp" id="rush-recap-top-gp-earned"></span>
+              </article>
             </div>
-          </aside>
+          </section>
         </div>
         <footer class="rush-standings-threshold-footer" aria-label="Team threshold progress">
           <div class="rush-standings-milestone" data-team="tide">
@@ -9534,6 +10461,30 @@
         </footer>
         </section>
       </div>
+
+      <section class="rush-results-player-scores" aria-labelledby="rush-results-player-scores-title">
+        <h2 class="rush-sr-only" id="rush-results-player-scores-title">Final player scores</h2>
+        <div class="rush-results-player-grid" id="rush-results-player-scoreboard">
+          <section class="rush-results-player-team" data-results-player-team="ember" style="--active-team:#8e3028;--active-team-bright:#bb5a4d;--active-team-dark:#501a17;--active-team-deep:#250a09">
+            <div class="rush-player-table-wrap">
+              <header class="rush-final-team-head"><strong>Zamorak</strong></header>
+              <table class="rush-player-table"><thead class="rush-sr-only"><tr><th scope="col">Zamorak player and point progress</th></tr></thead><tbody id="rush-results-player-ember"></tbody></table>
+            </div>
+          </section>
+          <section class="rush-results-player-team" data-results-player-team="moss" style="--active-team:#2d8065;--active-team-bright:#45aa86;--active-team-dark:#174d3d;--active-team-deep:#071e18">
+            <div class="rush-player-table-wrap">
+              <header class="rush-final-team-head"><strong>Guthix</strong></header>
+              <table class="rush-player-table"><thead class="rush-sr-only"><tr><th scope="col">Guthix player and point progress</th></tr></thead><tbody id="rush-results-player-moss"></tbody></table>
+            </div>
+          </section>
+          <section class="rush-results-player-team" data-results-player-team="tide" style="--active-team:#50569c;--active-team-bright:#747bc5;--active-team-dark:#2d3260;--active-team-deep:#14172e">
+            <div class="rush-player-table-wrap">
+              <header class="rush-final-team-head"><strong>Saradomin</strong></header>
+              <table class="rush-player-table"><thead class="rush-sr-only"><tr><th scope="col">Saradomin player and point progress</th></tr></thead><tbody id="rush-results-player-tide"></tbody></table>
+            </div>
+          </section>
+        </div>
+      </section>
 
       <section class="rush-section rush-team-detail" id="team-detail" aria-label="Selected team details">
         <section class="rush-subsection" aria-label="Drop board">
@@ -9766,6 +10717,22 @@
       </div>
       <div class="rush-player-dialog-drops" tabindex="0" aria-label="Player drop history">
         <ol class="rush-past-drops-list" id="player-drops-list"></ol>
+      </div>
+    </section>
+  </div>
+
+  <div class="rush-player-modal" id="rush-recap-pets-modal" hidden>
+    <section class="rush-player-dialog" id="rush-recap-pets-dialog" role="dialog" aria-modal="true" aria-labelledby="rush-recap-pets-title" style="--active-team:#8e7430;--active-team-bright:#e0bf54">
+      <div class="rush-player-dialog-head">
+        <div>
+          <span class="rush-player-dialog-team">Event recap</span>
+          <h2 id="rush-recap-pets-title">Pets obtained</h2>
+          <strong class="rush-player-dialog-score" id="rush-recap-pets-summary">0 pets</strong>
+        </div>
+        <button class="rush-player-dialog-close" id="rush-recap-pets-close" type="button" aria-label="Close pets obtained">&times;</button>
+      </div>
+      <div class="rush-player-dialog-drops" tabindex="0" aria-label="Pets obtained during Point Rush">
+        <ol class="rush-past-drops-list rush-recap-pet-list" id="rush-recap-pets-list"></ol>
       </div>
     </section>
   </div>
@@ -11492,6 +12459,20 @@
       const playerDialog = document.getElementById("player-dialog");
       const playerDialogClose = document.getElementById("player-dialog-close");
       const playerDropsList = document.getElementById("player-drops-list");
+      const recapDropTotal = document.getElementById("rush-recap-drop-total");
+      const recapPetTotal = document.getElementById("rush-recap-pet-total");
+      const recapTopObtained = document.getElementById("rush-recap-top-obtained");
+      const recapTopValuable = document.getElementById("rush-recap-top-valuable");
+      const recapTopThree = document.getElementById("rush-recap-top-three");
+      const recapTopGpEarned = document.getElementById("rush-recap-top-gp-earned");
+      const recapUniqueItemTotal = document.getElementById("rush-recap-unique-item-total");
+      const recapDuplicateTotal = document.getElementById("rush-recap-duplicate-total");
+      const recapPetsOpen = document.getElementById("rush-recap-pets-open");
+      const recapPetsModal = document.getElementById("rush-recap-pets-modal");
+      const recapPetsDialog = document.getElementById("rush-recap-pets-dialog");
+      const recapPetsClose = document.getElementById("rush-recap-pets-close");
+      const recapPetsSummary = document.getElementById("rush-recap-pets-summary");
+      const recapPetsList = document.getElementById("rush-recap-pets-list");
       const itemGroupModal = document.getElementById("rush-item-group-modal");
       const itemGroupDialog = document.getElementById("rush-item-group-dialog");
       const itemGroupClose = document.getElementById("rush-item-group-close");
@@ -11615,7 +12596,6 @@
       const pointRushBackendConfigured = false;
       const pointRushDirectPublicReads = false;
       const pointRushBackendEnabled = false;
-      const pointRushArchiveReadOnly = true;
       const pointRushSnapshotCacheKey = `mantis-point-rush-public-snapshot-v1:${pointRushBackendEventId}`;
       const pointRushPollBaseDelay = 20_000;
       const pointRushPollMaximumDelay = 300_000;
@@ -11630,7 +12610,7 @@
       let eventCountdownTimer = null;
       let pendingPinAction = null;
       const requestedTeam = pageParameters.get("team");
-      let selectedTeamKey = teamKeyFromUrlValue(requestedTeam) || "tide";
+      let selectedTeamKey = teamKeyFromUrlValue(requestedTeam) || "ember";
       let selectedTierIndex = 0;
       let selectedTierView = "cards";
       let tierListNeedsRender = true;
@@ -11971,7 +12951,7 @@
       function refreshLootCounter() {
         if (!lootCounter || !lootCounterValue || !lootCounterTooltip) return;
         const exact = `${Math.trunc(lootValueGp).toLocaleString("en-US")} GP`;
-        lootCounterValue.textContent = compactGpValue(lootValueGp);
+        lootCounterValue.textContent = exact;
         lootCounterTooltip.textContent = exact;
         lootCounter.setAttribute("aria-label", `Total loot value: ${exact}`);
       }
@@ -13394,6 +14374,11 @@
       }
 
       function renderPastDrops() {
+        if (!pastDropsList) {
+          syncBlockedTeamPulses();
+          scheduleStandingsSurfaceSync();
+          return;
+        }
         const visibleActivity = [...derivedDrops.filter((drop) => !drop.suppressed && !drop.feedHidden), ...mechanicActivity, ...wheelResults];
         const activityGroups = new Map();
         visibleActivity.forEach((activityItem) => {
@@ -14042,10 +15027,11 @@
       }
 
       function openPlayerModal(button) {
-        const team = currentTeam();
+        const teamKey = button.dataset.team || selectedTeamKey;
+        const team = teams[teamKey];
         const playerName = button.dataset.player;
         const points = team.playerPoints[playerName] || 0;
-        const drops = [...derivedDrops].reverse().filter((drop) => drop.type === "drop" && !drop.suppressed && drop.team === selectedTeamKey && drop.player === playerName);
+        const drops = [...derivedDrops].reverse().filter((drop) => drop.type === "drop" && !drop.suppressed && drop.team === teamKey && drop.player === playerName);
         lastPlayerTrigger = button;
         document.getElementById("player-dialog-team").textContent = team.name;
         document.getElementById("player-dialog-name").textContent = playerName;
@@ -14065,6 +15051,39 @@
         lastPlayerTrigger = null;
         if (restoreFocus && focusTarget) focusTarget.focus();
         liveStatus.textContent = "Player drop history closed.";
+      }
+
+      let lastRecapPetsTrigger = null;
+
+      function openRecapPetsModal() {
+        lastRecapPetsTrigger = recapPetsOpen;
+        recapPetsModal.hidden = false;
+        document.body.classList.add("rush-modal-open");
+        recapPetsClose.focus();
+        liveStatus.textContent = "Point Rush pet results opened.";
+      }
+
+      function closeRecapPetsModal(restoreFocus = true) {
+        if (recapPetsModal.hidden) return;
+        recapPetsModal.hidden = true;
+        if (playerModal.hidden && itemGroupModal.hidden && !isListItemCardOpen() && wheelModal.hidden && adminOverlayStack.length === 0) document.body.classList.remove("rush-modal-open");
+        const focusTarget = lastRecapPetsTrigger;
+        lastRecapPetsTrigger = null;
+        if (restoreFocus && focusTarget) focusTarget.focus();
+        liveStatus.textContent = "Point Rush pet results closed.";
+      }
+
+      function handleRecapPetsModalKeys(event) {
+        if (recapPetsModal.hidden) return;
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeRecapPetsModal();
+          return;
+        }
+        if (event.key === "Tab") {
+          event.preventDefault();
+          recapPetsClose.focus();
+        }
       }
 
       function handleModalKeys(event) {
@@ -14828,19 +15847,27 @@
           lootCounter.style.top = `${(((titleGeometry.topY + titleGeometry.bottomY) / 2) - (titleMountRect.top - sectionRect.top)).toFixed(2)}px`;
         }
 
-        // The lower outlet starts where the removed lower-barrel inlet lived, then flares downward.
-        const outletTipY = Math.min(
-          Math.max(trackY + 12, height - 75),
-          height - throatLength - 42
-        );
-        const outletEndY = outletTipY + throatLength;
+        // On the finished results page the vial/progress assembly is gone, so the
+        // glass riser should terminate cleanly at the standings frame instead of
+        // drawing the old transfer elbow/outlet into empty space.
+        const isFinishedResultsPage = document.body.classList.contains("rush-results-page");
+        const finishedInnerBorderInset = 9;
+        const outletEndY = isFinishedResultsPage
+          ? Math.max(throatLength + 1, height - finishedInnerBorderInset)
+          : Math.min(
+              Math.max(trackY + 12, height - 75),
+              height - throatLength - 42
+            ) + throatLength;
+        const outletTipY = outletEndY - throatLength;
         const footerRadius = Math.min(radius, Math.max(4, (tubeEndX - riserX) / 2));
         const naturalTopY = Math.min(...rowGeometry.map((item) => item.y)) - radius;
         const topY = titleGeometry.path ? Math.min(naturalTopY, titleGeometry.topY) : naturalTopY;
         const glassSegments = [
-          `M ${riserX.toFixed(2)} ${topY.toFixed(2)} V ${(outletTipY + 1).toFixed(2)}`,
-          `M ${riserX.toFixed(2)} ${trackY.toFixed(2)} H ${(riserX + footerRadius).toFixed(2)} Q ${(riserX + footerRadius * 2).toFixed(2)} ${trackY.toFixed(2)} ${(riserX + footerRadius * 2).toFixed(2)} ${trackY.toFixed(2)} H ${tubeEndX.toFixed(2)}`
+          `M ${riserX.toFixed(2)} ${topY.toFixed(2)} V ${(outletTipY + 1).toFixed(2)}`
         ];
+        if (!isFinishedResultsPage) {
+          glassSegments.push(`M ${riserX.toFixed(2)} ${trackY.toFixed(2)} H ${(riserX + footerRadius).toFixed(2)} Q ${(riserX + footerRadius * 2).toFixed(2)} ${trackY.toFixed(2)} ${(riserX + footerRadius * 2).toFixed(2)} ${trackY.toFixed(2)} H ${tubeEndX.toFixed(2)}`);
+        }
         if (titleGeometry.path) glassSegments.push(titleGeometry.path);
         rowGeometry.forEach(({ x, y }) => {
           const branchRadius = Math.min(radius, Math.max(4, (x - riserX) / 2));
@@ -14853,9 +15880,11 @@
         const selectedBranchRadius = Math.min(radius, Math.max(4, (selected.x - riserX) / 2));
         const liquidSegments = [
           `M ${selected.x.toFixed(2)} ${selected.y.toFixed(2)} H ${(riserX + selectedBranchRadius).toFixed(2)}`,
-          `M ${(riserX + selectedBranchRadius).toFixed(2)} ${selected.y.toFixed(2)} Q ${riserX.toFixed(2)} ${selected.y.toFixed(2)} ${riserX.toFixed(2)} ${(selected.y + selectedBranchRadius).toFixed(2)} V ${(outletTipY + 1).toFixed(2)}`,
-          `M ${riserX.toFixed(2)} ${trackY.toFixed(2)} H ${tubeEndX.toFixed(2)}`
+          `M ${(riserX + selectedBranchRadius).toFixed(2)} ${selected.y.toFixed(2)} Q ${riserX.toFixed(2)} ${selected.y.toFixed(2)} ${riserX.toFixed(2)} ${(selected.y + selectedBranchRadius).toFixed(2)} V ${(outletTipY + 1).toFixed(2)}`
         ];
+        if (!isFinishedResultsPage) {
+          liquidSegments.push(`M ${riserX.toFixed(2)} ${trackY.toFixed(2)} H ${tubeEndX.toFixed(2)}`);
+        }
         const liquidPath = liquidSegments.join(" ");
         teamFeedLiquid.setAttribute("d", liquidPath);
         teamFeedLiquidHighlight.setAttribute("d", liquidPath);
@@ -14896,13 +15925,19 @@
         teamFeedThroatLiquid.setAttribute("d", flaredTeamFeedThroatPath(throatTipX - 1, throatEndX, trackY, liquidRadius, trackLiquidRadius));
         teamFeedThroatLiquidHighlight.setAttribute("d", `M ${(throatTipX - 1).toFixed(2)} ${trackY.toFixed(2)} H ${throatEndX.toFixed(2)}`);
 
-        // Same molded throat, rotated vertically: narrow tube at top, wide transfer outlet at bottom.
-        const outletGlassPath = flaredTeamFeedVerticalThroatPath(riserX, outletTipY, outletEndY, glassRadius, trackOuterRadius);
+        // Same molded throat, rotated vertically: narrow tube at top, wide connector at bottom.
+        // On the finished results page the hidden 1px geometry track cannot supply a useful
+        // flare radius, so give the cap the same visibly tapered language as the other molded
+        // connectors and land its wide edge exactly on the inner frame border.
+        const outletOuterRadius = isFinishedResultsPage ? Math.max(trackOuterRadius, glassRadius + 6) : trackOuterRadius;
+        const outletInnerRadius = isFinishedResultsPage ? Math.max(trackInnerRadius, outletOuterRadius - 3.5) : trackInnerRadius;
+        const outletLiquidRadius = isFinishedResultsPage ? Math.max(trackLiquidRadius, outletOuterRadius - 5) : trackLiquidRadius;
+        const outletGlassPath = flaredTeamFeedVerticalThroatPath(riserX, outletTipY, outletEndY, glassRadius, outletOuterRadius);
         tierOutletShadow.setAttribute("d", outletGlassPath);
         tierOutletGlass.setAttribute("d", outletGlassPath);
-        tierOutletInner.setAttribute("d", flaredTeamFeedVerticalThroatPath(riserX, outletTipY, outletEndY, innerRadius, trackInnerRadius));
-        tierOutletHighlight.setAttribute("d", flaredTeamFeedVerticalThroatHighlightPath(riserX, outletTipY, outletEndY, glassRadius, trackOuterRadius));
-        tierOutletLiquid.setAttribute("d", flaredTeamFeedVerticalThroatPath(riserX, outletTipY - 1, outletEndY, liquidRadius, trackLiquidRadius));
+        tierOutletInner.setAttribute("d", flaredTeamFeedVerticalThroatPath(riserX, outletTipY, outletEndY, innerRadius, outletInnerRadius));
+        tierOutletHighlight.setAttribute("d", flaredTeamFeedVerticalThroatHighlightPath(riserX, outletTipY, outletEndY, glassRadius, outletOuterRadius));
+        tierOutletLiquid.setAttribute("d", flaredTeamFeedVerticalThroatPath(riserX, outletTipY - 1, outletEndY, liquidRadius, outletLiquidRadius));
         tierOutletLiquidHighlight.setAttribute("d", `M ${riserX.toFixed(2)} ${(outletTipY - 1).toFixed(2)} V ${outletEndY.toFixed(2)}`);
 
         if (tierDisplayShell && tierFunnel) {
@@ -15538,6 +16573,166 @@
         updateTeamButtons();
       }
 
+      function renderRecapStats() {
+        const dropEntries = entries.filter((entry) => entry.eventType === "drop");
+        const petEntries = dropEntries.filter((entry) => entry.cardItem === "Any Pet");
+        const recapTeamOrder = ["ember", "moss", "tide"];
+        recapDropTotal.textContent = String(dropEntries.length);
+        recapPetTotal.textContent = String(petEntries.length);
+        recapTeamOrder.forEach((teamKey) => {
+          const teamDrops = dropEntries.filter((entry) => entry.team === teamKey).length;
+          const teamPets = petEntries.filter((entry) => entry.team === teamKey).length;
+          document.querySelector(`[data-recap-drop-team="${teamKey}"]`).textContent = String(teamDrops);
+          document.querySelector(`[data-recap-pet-team="${teamKey}"]`).textContent = String(teamPets);
+        });
+        const obtainedItemGroups = new Map();
+        dropEntries.forEach((entry) => {
+          const group = obtainedItemGroups.get(entry.item) || [];
+          group.push(entry);
+          obtainedItemGroups.set(entry.item, group);
+        });
+        const topObtainedItems = [...obtainedItemGroups.entries()]
+          .sort((first, second) => second[1].length - first[1].length || first[0].localeCompare(second[0]))
+          .slice(0, 5);
+        recapTopObtained.innerHTML = topObtainedItems.map(([item, itemEntries], index) => `
+          <span class="rush-recap-ranked-row" aria-label="Rank ${index + 1}: ${item}, ${itemEntries.length} obtained">
+            <strong class="rush-recap-ranked-item" title="${item}">${item}</strong>
+            <strong class="rush-recap-ranked-value">×${itemEntries.length}</strong>
+          </span>`).join("");
+
+        const topValuableDrops = [...dropEntries]
+          .sort((first, second) => gpValueForEntry(second) - gpValueForEntry(first) || new Date(first.createdAt) - new Date(second.createdAt))
+          .slice(0, 3);
+        recapTopValuable.innerHTML = topValuableDrops.map((entry, index) => {
+          const gpValue = gpValueForEntry(entry);
+          const displayedGp = gpValue >= 1000000 ? `${(gpValue / 1000000).toFixed(1).replace(/\.0$/, "")}M` : compactGpValue(gpValue);
+          return `
+            <span class="rush-recap-ranked-row rush-recap-ranked-row--valuable" style="--recap-team-color:${teams[entry.team].bright}" aria-label="Rank ${index + 1}: ${entry.item}, ${gpValue.toLocaleString("en-US")} GP, obtained by ${entry.player} for ${teams[entry.team].name}">
+              <strong class="rush-recap-ranked-item" title="${entry.item}">${entry.item}</strong>
+              <span class="rush-recap-ranked-player">${entry.player}</span>
+              <strong class="rush-recap-ranked-value">${displayedGp}</strong>
+            </span>`;
+        }).join("");
+
+        const playerScores = recapTeamOrder.flatMap((teamKey) => teams[teamKey].playerNames.map((player, rosterIndex) => ({
+          teamKey,
+          player,
+          rosterIndex,
+          points: Number(teams[teamKey].playerPoints[player]) || 0
+        })));
+        const topScorers = playerScores
+          .sort((first, second) => second.points - first.points || recapTeamOrder.indexOf(first.teamKey) - recapTeamOrder.indexOf(second.teamKey) || first.rosterIndex - second.rosterIndex)
+          .slice(0, 5);
+        recapTopThree.innerHTML = topScorers.map((scorer, index) => `
+          <span class="rush-recap-top-three-row" data-recap-team="${scorer.teamKey}" aria-label="Rank ${index + 1}: ${scorer.player}, ${scorer.points} points, ${teams[scorer.teamKey].name}">
+            <span class="rush-recap-top-three-rank">${index + 1}.</span>
+            <strong class="rush-recap-top-three-name">${scorer.player}</strong>
+            <strong class="rush-recap-top-three-points">${scorer.points}</strong>
+          </span>`).join("");
+
+        const gpEarnedByPlayer = new Map();
+        dropEntries.forEach((entry) => {
+          const playerKey = `${entry.team}|${entry.player}`;
+          const playerTotal = gpEarnedByPlayer.get(playerKey) || { teamKey: entry.team, player: entry.player, gp: 0 };
+          playerTotal.gp += gpValueForEntry(entry);
+          gpEarnedByPlayer.set(playerKey, playerTotal);
+        });
+        const topGpEarners = [...gpEarnedByPlayer.values()]
+          .sort((first, second) => second.gp - first.gp || first.player.localeCompare(second.player))
+          .slice(0, 5);
+        recapTopGpEarned.innerHTML = topGpEarners.map((earner, index) => {
+          const displayedGp = earner.gp >= 1000000 ? `${(earner.gp / 1000000).toFixed(1).replace(/\.0$/, "")}M` : compactGpValue(earner.gp);
+          return `
+            <span class="rush-recap-top-three-row" data-recap-team="${earner.teamKey}" aria-label="Rank ${index + 1}: ${earner.player}, ${earner.gp.toLocaleString("en-US")} GP, ${teams[earner.teamKey].name}">
+              <span class="rush-recap-top-three-rank">${index + 1}.</span>
+              <strong class="rush-recap-top-three-name">${earner.player}</strong>
+              <strong class="rush-recap-top-three-points">${displayedGp}</strong>
+            </span>`;
+        }).join("");
+
+        recapTeamOrder.forEach((teamKey) => {
+          const teamWheelPoints = wheelResults.filter((result) => result.team === teamKey).reduce((total, result) => total + (Number(result.points) || 0), 0);
+          document.querySelector(`[data-recap-wheel-team="${teamKey}"]`).textContent = `${teamWheelPoints > 0 ? "+" : ""}${teamWheelPoints}`;
+        });
+
+        recapUniqueItemTotal.textContent = String(new Set(dropEntries.map((entry) => entry.item)).size);
+        let duplicateTotal = 0;
+        recapTeamOrder.forEach((teamKey) => {
+          const teamDropEntries = dropEntries.filter((entry) => entry.team === teamKey);
+          const uniqueTeamItems = new Set(teamDropEntries.map((entry) => entry.item)).size;
+          const teamDuplicates = teamDropEntries.length - uniqueTeamItems;
+          duplicateTotal += teamDuplicates;
+          document.querySelector(`[data-recap-unique-team="${teamKey}"]`).textContent = String(uniqueTeamItems);
+          document.querySelector(`[data-recap-duplicate-team="${teamKey}"]`).textContent = String(teamDuplicates);
+        });
+        recapDuplicateTotal.textContent = String(duplicateTotal);
+        tiers.forEach((tier, tierIndex) => {
+          const tierEntries = dropEntries.filter((entry) => entry.tierIndex === tierIndex);
+          document.querySelector(`[data-recap-tier="${tierIndex}"]`).textContent = String(tierEntries.length);
+          recapTeamOrder.forEach((teamKey) => {
+            document.querySelector(`[data-recap-tier-team="${teamKey}-${tierIndex}"]`).textContent = String(tierEntries.filter((entry) => entry.team === teamKey).length);
+          });
+        });
+        recapPetsOpen.setAttribute("aria-label", `View all ${petEntries.length} pets obtained during Point Rush`);
+        const uniquePets = new Set(petEntries.map((entry) => entry.item)).size;
+        recapPetsSummary.textContent = `${petEntries.length} pets · ${uniquePets} unique pet types`;
+        recapPetsList.innerHTML = [...petEntries]
+          .sort((first, second) => recapTeamOrder.indexOf(first.team) - recapTeamOrder.indexOf(second.team) || new Date(first.createdAt) - new Date(second.createdAt))
+          .map((entry) => {
+            const team = teams[entry.team];
+            return `
+              <li class="rush-past-drop" style="--drop-team:${team.accent}">
+                <span class="rush-drop-sprite" aria-hidden="true">${spriteImageMarkup(entry.item)}</span>
+                <span class="rush-past-drop-copy">
+                  <strong>${entry.item}</strong>
+                  <span class="rush-past-drop-meta"><span class="rush-past-drop-team" style="color:${team.bright}">${team.name}</span><span class="rush-past-drop-player">Obtained by ${entry.player}</span></span>
+                </span>
+              </li>`;
+          }).join("");
+      }
+
+      function renderFinalPlayerScores() {
+        const scoreboard = document.getElementById("rush-results-player-scoreboard");
+        if (!scoreboard) return;
+        teamOrder.forEach((teamKey) => {
+          const team = teams[teamKey];
+          const target = document.getElementById(`rush-results-player-${teamKey}`);
+          const teamPanel = scoreboard.querySelector(`[data-results-player-team="${teamKey}"]`);
+          if (!target || !teamPanel) return;
+          const players = team.playerNames
+            .map((name, originalIndex) => ({ name, originalIndex, points: Number(team.playerPoints[name]) || 0 }))
+            .sort((first, second) => second.points - first.points || first.originalIndex - second.originalIndex);
+          const maximumPlayerPoints = Math.max(0, ...players.map(({ points }) => points));
+          target.innerHTML = players.map(({ name, points }) => {
+            const drops = derivedDrops.filter((drop) => drop.type === "drop" && !drop.suppressed && drop.team === teamKey && drop.player === name);
+            const sprites = drops.map((drop) => {
+              const image = spriteImageMarkup(drop.item);
+              return image ? `<span class="rush-player-sprite-cell">${image}</span>` : "";
+            }).join("");
+            const playerProgress = maximumPlayerPoints > 0 ? Math.max(0, points) / maximumPlayerPoints * 100 : 0;
+            return `
+              <tr data-player-row>
+                <td class="rush-player-reservoir-cell">
+                  <div class="rush-player-reservoir">
+                    <button class="rush-player-button rush-player-button--reservoir" type="button" data-team="${teamKey}" data-player="${name}" aria-haspopup="dialog" aria-label="${name}, ${points} points, ${drops.length} recorded drops. Open drop history.">
+                      <span class="rush-player-point-bar" data-player-progress style="--rush-player-progress:${Math.min(playerProgress, 100).toFixed(2)}%" aria-hidden="true">
+                        <span class="rush-player-point-fill"></span>
+                        <span class="rush-player-bar-label"><span class="rush-player-name">${name}</span><strong class="rush-player-score rush-player-reservoir-score">${points} pts</strong></span>
+                      </span>
+                      ${sprites ? `<span class="rush-player-sprite-strip" aria-hidden="true">${sprites}</span>` : ""}
+                    </button>
+                    <span class="rush-sr-only">${maximumPlayerPoints > 0 ? `${Math.round(Math.min(playerProgress, 100))}% of the current team-leading player score` : "No player points recorded"}</span>
+                  </div>
+                </td>
+              </tr>`;
+          }).join("");
+          target.querySelectorAll(".rush-player-button").forEach((button) => {
+            button.addEventListener("click", () => openPlayerModal(button));
+          });
+        });
+        updateTeamButtons();
+      }
+
       function renderAllDetails() {
         setActiveTeam();
         renderMechanicRail();
@@ -15547,6 +16742,8 @@
         renderMilestones();
         renderTierTabs();
         renderItems();
+        renderRecapStats();
+        renderFinalPlayerScores();
         tierListNeedsRender = true;
         if (selectedTierView === "list") renderTierList();
         selectTierView(selectedTierView, false);
@@ -15581,9 +16778,9 @@
         if (prefersReducedMotion() || activeBlockages.length === 0) return;
         activeBlockages.forEach(({ teamKey, state }) => {
           const entry = document.getElementById(`team-entry-${teamKey}`);
-          const activityRows = Array.from(pastDropsList.querySelectorAll(
+          const activityRows = pastDropsList ? Array.from(pastDropsList.querySelectorAll(
             `[data-mechanic-id="${state.mechanic.id}"][data-mechanic-phase="triggered"], [data-mechanic-id="${state.mechanic.id}"][data-mechanic-phase="progress"]`
-          ));
+          )) : [];
           [entry, ...activityRows].filter(Boolean).forEach((target) => {
             target.style.setProperty("--blockage-pulse-color", teams[teamKey].bright);
             target.classList.add("rush-blockage-panel-pulse");
@@ -15987,10 +17184,6 @@
       }
 
       async function managePlayerRoster(action) {
-        if (pointRushArchiveReadOnly) {
-          playerManagerStatus.textContent = "Point Rush has ended. This archived board is read-only.";
-          return;
-        }
         if (!pointRushBackendEnabled) {
           playerManagerStatus.textContent = "Player management requires the Point Rush backend.";
           return;
@@ -16137,10 +17330,6 @@
       }
 
       async function recordPendingTarget() {
-        if (pointRushArchiveReadOnly) {
-          liveStatus.textContent = "Point Rush has ended. This archived board is read-only.";
-          return;
-        }
         const state = pendingTargetMechanicState();
         if (!state || !pendingTargetChoice || pendingTargetChoice === state.claimedTeam || !teams[pendingTargetChoice]) return;
 
@@ -16205,10 +17394,6 @@
       }
 
       async function recordDraftEntry(draft, options = {}) {
-        if (pointRushArchiveReadOnly) {
-          liveStatus.textContent = "Point Rush has ended. This archived board is read-only.";
-          return;
-        }
         if (!draft) return;
         const requirement = draft.eventType === "requirement";
         if (requirement ? !requirementAllowedByMechanics(draft) : !dropAllowedByMechanics(draft)) {
@@ -16335,10 +17520,6 @@
       }
 
       async function confirmUndoEntry() {
-        if (pointRushArchiveReadOnly) {
-          liveStatus.textContent = "Point Rush has ended. This archived board is read-only.";
-          return;
-        }
         const id = pendingUndoEntryId;
         if (!id) return;
 
@@ -16400,10 +17581,6 @@
       }
 
       async function restoreAdminEntry() {
-        if (pointRushArchiveReadOnly) {
-          liveStatus.textContent = "Point Rush has ended. This archived board is read-only.";
-          return;
-        }
         if (!removedEntry) return;
 
         if (pointRushBackendEnabled) {
@@ -16558,7 +17735,7 @@
         button.addEventListener("keydown", handleTeamKeys);
       });
 
-      pastDropsList.addEventListener("click", (event) => {
+      if (pastDropsList) pastDropsList.addEventListener("click", (event) => {
         const button = event.target.closest("[data-recent-team][data-recent-drop]");
         if (!button || !pastDropsList.contains(button)) return;
         const teamKey = button.dataset.recentTeam;
@@ -16611,6 +17788,11 @@
       playerModal.addEventListener("click", (event) => {
         if (event.target === playerModal) closePlayerModal();
       });
+      recapPetsOpen.addEventListener("click", openRecapPetsModal);
+      recapPetsClose.addEventListener("click", () => closeRecapPetsModal());
+      recapPetsModal.addEventListener("click", (event) => {
+        if (event.target === recapPetsModal) closeRecapPetsModal();
+      });
       itemGrid.addEventListener("click", (event) => {
         const trigger = event.target.closest("[data-group-tier][data-group-item]");
         if (trigger && itemGrid.contains(trigger)) openItemGroupModal(trigger);
@@ -16655,6 +17837,7 @@
       });
       document.addEventListener("keydown", handleWheelModalKeys);
       document.addEventListener("keydown", handleModalKeys);
+      document.addEventListener("keydown", handleRecapPetsModalKeys);
       document.addEventListener("keydown", handleItemGroupModalKeys);
       document.addEventListener("keydown", handleListItemCardModalKeys);
       document.addEventListener("keydown", handleAdminOverlayKeys);
@@ -16686,7 +17869,7 @@
         if (!button || !adminHistoryList.contains(button)) return;
         openUndoConfirmation(button.dataset.adminRemove, button);
       });
-      pastDropsList.addEventListener("click", (event) => {
+      if (pastDropsList) pastDropsList.addEventListener("click", (event) => {
         const target = event.target;
         const button = target && typeof target.closest === "function" ? target.closest("[data-pending-mechanic]") : null;
         if (!button || !pastDropsList.contains(button)) return;
@@ -16736,7 +17919,7 @@
 
       window.addEventListener("popstate", () => {
         const value = new URLSearchParams(window.location.search).get("team");
-        const key = teamKeyFromUrlValue(value) || "tide";
+        const key = teamKeyFromUrlValue(value) || "ember";
         selectTeam(key, false, false);
         if (value && value.toLowerCase() !== teamUrlSlugByKey[key]) updateTeamUrl(key, true);
       });
@@ -16777,8 +17960,8 @@
       pointRushDataNotice.hidden = true;
       if (eventCountdownRunning) eventCountdownRunning.hidden = true;
       if (eventCountdownEnded) { eventCountdownEnded.hidden = false; eventCountdownEnded.textContent = "Ended"; }
-      if (eventCountdownLabel) eventCountdownLabel.textContent = "Event";
-      document.querySelectorAll(".rush-mechanic-action-button").forEach((element) => element.remove());
+      if (eventCountdownLabel) eventCountdownLabel.textContent = "Event ended";
+      document.querySelectorAll("button.rush-admin-open, .rush-admin-modal, .rush-admin-confirm-modal, .rush-mechanic-action-button").forEach((element) => element.remove());
       document.querySelectorAll(".rush-milestone-marker[data-ready='true']").forEach((button) => { button.disabled = true; button.dataset.ready = "false"; });
     })();
   </script>
