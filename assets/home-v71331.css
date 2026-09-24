@@ -6501,6 +6501,9 @@ body.v160-home .home-event-highlights > div {
 }
 
 body.v160-home .home-champions-v71332 {
+  width: min(720px, 100%);
+  margin-left: auto;
+  margin-right: auto;
   padding-left: 0;
 }
 
@@ -6528,9 +6531,13 @@ body.v160-home #upcoming-event-heading > span {
 }
 
 body.v160-home .home-champions-v71332 .home-section-head-v630 {
+  width: 100% !important;
   max-width: 720px;
   margin-left: auto !important;
   margin-right: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   text-align: center;
 }
 
@@ -6586,9 +6593,10 @@ body.v160-home .home-champions-list li {
   min-width: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   color: #e9eadf;
-  font: 700 .74rem/1.1 Arial, Helvetica, sans-serif;
+  font: 700 .78rem/1.1 Arial, Helvetica, sans-serif;
   letter-spacing: .01em;
   white-space: nowrap;
 }
@@ -6645,8 +6653,8 @@ body.v160-home .home-current-v630 .upcoming-event-message {
   body.v160-home .home-champions-card,
   body.v160-home .home-current-v630 .current-card.current-event-teaser.upcoming-event-teaser,
   body.v160-home .home-current-v630 .upcoming-event-teaser .event-teaser-art {
-    min-height: 108px !important;
-    height: 108px !important;
+    min-height: 138px !important;
+    height: 138px !important;
   }
 
   body.v160-home .home-champions-card {
@@ -6658,18 +6666,18 @@ body.v160-home .home-current-v630 .upcoming-event-message {
   }
 
   body.v160-home .home-champions-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(8, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
     column-gap: 10px;
   }
 
   body.v160-home .home-champions-list li {
-    gap: 4px;
-    font-size: .61rem;
+    gap: 5px;
+    font-size: .76rem;
   }
 
   body.v160-home .home-champion-trophy {
-    font-size: .70rem;
+    font-size: .84rem;
   }
 }
 
@@ -6705,11 +6713,11 @@ body.v160-home .home-current-v630 .upcoming-event-message {
 
   body.v160-home .home-champions-list li {
     gap: 5px;
-    font-size: .70rem;
+    font-size: .76rem;
   }
 
   body.v160-home .home-champion-trophy {
-    font-size: .78rem;
+    font-size: .84rem;
   }
 
   body.v160-home .home-current-v630 .current-card.current-event-teaser.upcoming-event-teaser,

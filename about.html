@@ -25,8 +25,8 @@
   --radius: 14px;
 
   /* Meet the Team hero presentation */
-  --team-hero-height: 195px;
-  --team-hero-mobile-height: 240px;
+  --team-hero-height: 175px;
+  --team-hero-mobile-height: 205px;
   --team-hero-image-size: 180%;
   --team-hero-image-x: calc(50% - 260px);
   --team-hero-image-y: 15%;
@@ -180,11 +180,9 @@ body.site-nav-v71331 .v160-brand:focus-visible::after {
   width: min(1120px, calc(100% - 36px));
   min-height: var(--team-hero-height);
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 480px);
+  display: flex;
   align-items: center;
-  gap: 40px;
-  padding: 30px 0;
+  padding: 20px 0;
 }
 
 h1, h2, h3, p { margin-top: 0; }
@@ -197,15 +195,6 @@ h1 {
   font-weight: 500;
   letter-spacing: -.04em;
   text-shadow: 0 8px 35px rgba(0, 0, 0, .58);
-}
-.team-origin-placeholder {
-  min-height: 116px;
-  border: 1px solid rgba(194, 173, 112, .30);
-  border-radius: 12px;
-  background: rgba(8, 12, 9, .72);
-  box-shadow:
-    inset 0 1px 0 rgba(231, 224, 195, .035),
-    0 12px 28px rgba(0, 0, 0, .20);
 }
 main {
   width: min(1120px, calc(100% - 36px));
@@ -386,11 +375,8 @@ main {
   .nav-links a { padding: 7px 8px; }
   .hero-inner {
     min-height: var(--team-hero-mobile-height);
-    grid-template-columns: 1fr;
-    gap: 16px;
-    padding: 24px 0;
+    padding: 20px 0;
   }
-  .team-origin-placeholder { min-height: 84px; }
   h1 { font-size: clamp(2.6rem, 13vw, 3.75rem); }
   main { padding: 32px 0 54px; }
   .team-section + .team-section { margin-top: 34px; }
@@ -424,6 +410,22 @@ main {
 .rank-section-head::before,
 .section-rule {
   opacity: .66;
+}
+.owner-section .rank-section-head {
+  width: min(190px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+.recruitment-section .rank-section-head {
+  width: min(606px, 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+.owner-section .rank-section-head::before,
+.owner-section .section-rule,
+.recruitment-section .rank-section-head::before,
+.recruitment-section .section-rule {
+  min-width: 0;
 }
 .rank-section-head h2 {
   font-size: clamp(1.45rem, 2.35vw, 1.95rem) !important;
@@ -983,7 +985,6 @@ main {
 <div class="hero-heading">
 <h1>Meet the Team</h1>
 </div>
-<div class="team-origin-placeholder"></div>
 </div>
 </section>
 <main>
