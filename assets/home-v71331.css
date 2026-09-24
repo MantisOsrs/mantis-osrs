@@ -2000,6 +2000,338 @@ body.v160-home main > section:first-child {
   }
 }
 
+/* Mantis OSRS v7.13.33 — monthly leaders and homepage section order. */
+body.v160-home #monthly-competition-heading {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif !important;
+  font-size: 1.24rem !important;
+  font-weight: 600 !important;
+  line-height: 1.06 !important;
+  letter-spacing: -.008em !important;
+  color: #ece5cf !important;
+  text-shadow: 0 1px 7px rgba(0, 0, 0, .38) !important;
+}
+
+body.v160-home #monthly-competition-heading > span {
+  font: inherit !important;
+  color: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+body.v160-home .home-monthly-awards-v71333 .home-section-head-v630 {
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  text-align: center;
+}
+
+body.v160-home #monthly-competition-heading {
+  margin: 0 !important;
+}
+
+body.v160-home #monthly-competition-heading::after {
+  content: none !important;
+  display: none !important;
+}
+
+body.v160-home .home-monthly-live-status {
+  min-height: 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border: 1px solid rgba(121, 218, 98, .22);
+  border-radius: 999px;
+  color: #b9c8b7;
+  background: rgba(8, 14, 10, .62);
+  font: 800 .56rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body.v160-home .home-monthly-live-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #79da62;
+  box-shadow: 0 0 7px rgba(121, 218, 98, .68);
+}
+
+body.v160-home .home-monthly-live-status[data-state="saved"] {
+  border-color: rgba(199, 192, 170, .22);
+  color: #aaa997;
+}
+
+body.v160-home .home-monthly-live-status[data-state="saved"] .home-monthly-live-dot {
+  background: #aaa997;
+  box-shadow: none;
+}
+
+body.v160-home .home-monthly-awards-card {
+  min-height: 204px;
+  height: 204px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: 38px minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid rgba(150, 146, 96, .18);
+  background: linear-gradient(180deg, rgba(16, 22, 17, .82), rgba(8, 12, 9, .82));
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+}
+
+body.v160-home .home-monthly-period {
+  grid-column: 1 / -1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(150, 146, 96, .14);
+  color: #d8ba52;
+  background: linear-gradient(90deg, rgba(216, 186, 82, .025), rgba(216, 186, 82, .08), rgba(216, 186, 82, .025));
+  font: 800 .70rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+body.v160-home .home-monthly-period-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+body.v160-home .home-monthly-period-label::before,
+body.v160-home .home-monthly-period-label::after {
+  content: "";
+  width: clamp(8px, 4vw, 54px);
+  height: 6px;
+  border-top: 1px solid rgba(216, 186, 82, .62);
+}
+
+body.v160-home .home-monthly-period-label::before {
+  border-left: 1px solid rgba(216, 186, 82, .62);
+}
+
+body.v160-home .home-monthly-period-label::after {
+  border-right: 1px solid rgba(216, 186, 82, .62);
+}
+
+body.v160-home .home-monthly-competition-link {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 10px;
+  border: 1px solid rgba(150, 146, 96, .28);
+  border-radius: 2px;
+  color: #dfe5da;
+  background: rgba(8, 14, 10, .58);
+  font: 800 .59rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: .055em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.v160-home .home-monthly-competition-link:first-child {
+  justify-self: start;
+}
+
+body.v160-home .home-monthly-competition-link:last-child {
+  justify-self: end;
+}
+
+body.v160-home .home-monthly-competition-link:hover,
+body.v160-home .home-monthly-competition-link:focus-visible {
+  border-color: rgba(216, 186, 82, .60);
+  color: #fff7df;
+  background: rgba(42, 45, 27, .78);
+}
+
+body.v160-home .home-monthly-category {
+  min-width: 0;
+  margin-top: 0;
+  padding: 8px 18px 11px;
+  display: flex;
+  flex-direction: column;
+}
+
+body.v160-home .home-monthly-category + .home-monthly-category {
+  border-left: 1px solid rgba(150, 146, 96, .14);
+}
+
+body.v160-home .home-monthly-category h3 {
+  margin: 0 0 6px;
+  color: #c7c0aa;
+  font: 800 .80rem/1.1 Arial, Helvetica, sans-serif;
+  letter-spacing: .09em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+body.v160-home .home-monthly-standings {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: 2px;
+  list-style: none;
+}
+
+body.v160-home .home-monthly-standings li {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(188, 184, 154, .18);
+  color: #dfe5da;
+  font: 700 .84rem/1.05 Arial, Helvetica, sans-serif;
+}
+
+body.v160-home .home-monthly-rank {
+  color: #b9b6a4;
+  font-variant-numeric: tabular-nums;
+}
+
+body.v160-home .home-monthly-standings li:nth-child(1) .home-monthly-rank { color: #d8ba52; }
+body.v160-home .home-monthly-standings li:nth-child(2) .home-monthly-rank { color: #cfd5d9; }
+body.v160-home .home-monthly-standings li:nth-child(3) .home-monthly-rank { color: #b87345; }
+
+body.v160-home .home-monthly-name-slot {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.v160-home .home-monthly-value-slot {
+  min-width: 86px;
+  color: #c7c0aa;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+body.v160-home .home-upcoming-row-v71333 {
+  margin-top: 0;
+  width: 100%;
+}
+
+body.v160-home .home-upcoming-row-v71333 .home-section-head-v630 {
+  margin: 0 0 6px !important;
+  padding: 0 !important;
+}
+
+body.v160-home .home-upcoming-row-v71333 .upcoming-event-teaser {
+  width: 100% !important;
+}
+
+@media (min-width: 621px) and (max-width: 860px) {
+  body.v160-home .home-monthly-awards-card {
+    min-height: 194px;
+    height: 194px;
+  }
+
+  body.v160-home .home-monthly-category {
+    padding: 7px 12px 9px;
+  }
+
+  body.v160-home .home-monthly-category h3 {
+    margin-bottom: 5px;
+    font-size: .78rem;
+  }
+
+  body.v160-home .home-upcoming-row-v71333 {
+    width: 100%;
+  }
+
+  body.v160-home .home-monthly-standings {
+    gap: 1px;
+  }
+
+  body.v160-home .home-monthly-standings li {
+    min-height: 0;
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    gap: 7px;
+    font-size: .74rem;
+  }
+
+  body.v160-home .home-monthly-value-slot {
+    min-width: 76px;
+  }
+}
+
+@media (max-width: 700px) {
+  body.v160-home #monthly-competition-heading {
+    font-size: 1.12rem !important;
+  }
+}
+
+@media (max-width: 620px) {
+  body.v160-home .home-monthly-awards-card {
+    min-height: 204px;
+    height: 204px;
+  }
+
+  body.v160-home .home-upcoming-row-v71333 {
+    margin-top: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  body.v160-home .home-monthly-awards-card {
+    height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: 38px auto auto;
+  }
+
+  body.v160-home .home-monthly-period {
+    gap: 6px;
+    padding: 0 6px;
+  }
+
+  body.v160-home .home-monthly-period-label {
+    gap: 5px;
+  }
+
+  body.v160-home .home-monthly-competition-link {
+    min-height: 22px;
+    padding: 3px 6px;
+    font-size: .52rem;
+    letter-spacing: .035em;
+  }
+
+  body.v160-home .home-monthly-live-status {
+    min-height: 20px;
+    padding: 3px 7px;
+    font-size: .52rem;
+  }
+
+  body.v160-home .home-monthly-category {
+    min-height: 166px;
+    padding: 8px 14px 10px;
+  }
+
+  body.v160-home .home-monthly-category + .home-monthly-category {
+    border-top: 1px solid rgba(150, 146, 96, .14);
+    border-left: 0;
+  }
+}
+
 @media (max-width: 430px) {
   body.v160-home .home-hero-v628__stage {
     min-height: 244px;
@@ -6157,8 +6489,9 @@ body.v160-home #event-archive-heading > span {
 /* Mantis OSRS v7.13.32
    Pair the compact upcoming-event teaser with the Point Rush champions roster. */
 body.v160-home .home-event-highlights {
+  margin-top: 34px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   align-items: start;
 }
@@ -6168,7 +6501,7 @@ body.v160-home .home-event-highlights > div {
 }
 
 body.v160-home .home-champions-v71332 {
-  padding-left: 28px;
+  padding-left: 0;
 }
 
 body.v160-home .home-event-highlights .home-section-head-v630 {
@@ -6195,8 +6528,9 @@ body.v160-home #upcoming-event-heading > span {
 }
 
 body.v160-home .home-champions-v71332 .home-section-head-v630 {
-  max-width: 520px;
+  max-width: 720px;
   margin-left: auto !important;
+  margin-right: auto !important;
   text-align: center;
 }
 
@@ -6221,8 +6555,9 @@ body.v160-home .home-current-v630 .upcoming-event-teaser .event-teaser-art {
 body.v160-home .home-champions-card {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 720px;
   margin-left: auto;
+  margin-right: auto;
   padding: 3px 2px;
   border: 0;
   background: transparent;
@@ -6303,7 +6638,7 @@ body.v160-home .home-current-v630 .upcoming-event-message {
 
 @media (min-width: 621px) and (max-width: 860px) {
   body.v160-home .home-event-highlights {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 11px;
   }
 
@@ -6319,7 +6654,7 @@ body.v160-home .home-current-v630 .upcoming-event-message {
   }
 
   body.v160-home .home-champions-v71332 {
-    padding-left: 18px;
+    padding-left: 0;
   }
 
   body.v160-home .home-champions-list {

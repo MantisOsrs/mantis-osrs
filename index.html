@@ -87,7 +87,7 @@
     </a>
 
     <nav class="site-links v160-nav-links" aria-label="Clan links">
-      <a href="about.html">About</a>
+      <a href="about.html">Meet the Team</a>
 
       <a href="https://discord.gg/YaPqtQWQ7N"
          target="_blank"
@@ -127,19 +127,44 @@
   <main class="wrap">
 
     <section id="events" class="home-section-v630 home-current-v630" aria-label="Mantis event highlights">
-      <div class="home-event-highlights">
-        <div class="home-upcoming-v71332" aria-labelledby="upcoming-event-heading">
+      <div class="home-monthly-awards-v71333" aria-labelledby="monthly-competition-heading">
           <div class="home-section-head-v630">
-            <h2 class="section-title" id="upcoming-event-heading"><span>Upcoming Event</span></h2>
+            <h2 class="section-title" id="monthly-competition-heading"><span>Monthly Competition</span></h2>
+            <span class="home-monthly-live-status" data-wom-live-status role="status" aria-live="polite">
+              <span class="home-monthly-live-dot" aria-hidden="true"></span>
+              <time data-wom-updated>Connecting…</time>
+            </span>
           </div>
-          <div class="current-card current-event-teaser upcoming-event-teaser" aria-label="Stay tuned for the next Mantis event">
-            <div class="event-teaser-art">
-              <img src="images/upcoming-event-teaser.png" alt="A road through open scenery blocked by a caution barrier">
-              <p class="upcoming-event-message">Stay Tuned for the Next Event</p>
+          <div class="home-monthly-awards-card">
+            <div class="home-monthly-period">
+              <a class="home-monthly-competition-link" href="https://wiseoldman.net/competitions/154855" target="_blank" rel="noopener noreferrer">EHB Standings</a>
+              <span class="home-monthly-period-label">September</span>
+              <a class="home-monthly-competition-link" href="https://wiseoldman.net/competitions/154856" target="_blank" rel="noopener noreferrer">XP Standings</a>
             </div>
+            <section class="home-monthly-category" aria-labelledby="september-ehb-heading">
+              <h3 id="september-ehb-heading">EHB</h3>
+              <ol class="home-monthly-standings" data-wom-leaderboard="ehb" aria-label="September EHB standings" aria-live="polite">
+                <li aria-label="First place name not entered"><span class="home-monthly-rank">1st</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Second place name not entered"><span class="home-monthly-rank">2nd</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Third place name not entered"><span class="home-monthly-rank">3rd</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Fourth place name not entered"><span class="home-monthly-rank">4th</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Fifth place name not entered"><span class="home-monthly-rank">5th</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+              </ol>
+            </section>
+            <section class="home-monthly-category" aria-labelledby="september-xp-heading">
+              <h3 id="september-xp-heading">XP</h3>
+              <ol class="home-monthly-standings" data-wom-leaderboard="xp" aria-label="September XP standings" aria-live="polite">
+                <li aria-label="First place name not entered"><span class="home-monthly-rank">1st</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Second place name not entered"><span class="home-monthly-rank">2nd</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Third place name not entered"><span class="home-monthly-rank">3rd</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Fourth place name not entered"><span class="home-monthly-rank">4th</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+                <li aria-label="Fifth place name not entered"><span class="home-monthly-rank">5th</span><span class="home-monthly-name-slot" aria-hidden="true"></span><span class="home-monthly-value-slot" aria-hidden="true"></span></li>
+              </ol>
+            </section>
           </div>
-        </div>
+      </div>
 
+      <div class="home-event-highlights">
         <div class="home-champions-v71332" aria-labelledby="point-rush-winners-heading">
           <div class="home-section-head-v630">
             <h2 class="section-title" id="point-rush-winners-heading"><span>Point Rush Winners</span></h2>
@@ -165,6 +190,7 @@
           </div>
         </div>
       </div>
+
     </section>
 
     <section class="home-section-v630 home-archive-v630" aria-labelledby="event-archive-heading">
@@ -243,7 +269,7 @@
       <p class="home-footer-v640__description">Old School RuneScape community</p>
     </div>
     <nav class="home-footer-v636__links" aria-label="Footer links">
-      <a href="about.html">About</a>
+      <a href="about.html">Meet the Team</a>
       <a href="https://discord.gg/YaPqtQWQ7N" target="_blank" rel="noopener noreferrer">Discord</a>
       <a href="https://wiseoldman.net/groups/6808" target="_blank" rel="noopener noreferrer">Wise Old Man</a>
       <a href="https://oldschool.runescape.wiki/" target="_blank" rel="noopener noreferrer">Wiki</a>
@@ -254,5 +280,6 @@
       link.addEventListener("click", (event) => event.preventDefault());
     });
   </script>
+  <script src="assets/wom-monthly-competition-v1.js?v=6"></script>
 </body>
 </html>
