@@ -6733,3 +6733,51 @@ body.v160-home .home-current-v630 .upcoming-event-message {
     font-size: .88rem;
   }
 }
+
+/* Employee of the Month archive entry point. */
+body.v160-home .home-monthly-awards-v71333 .home-section-head-v630 {
+  position: relative;
+  min-height: 28px;
+}
+
+body.v160-home .home-monthly-archive-link {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  min-height: 26px;
+  padding: 5px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(194, 173, 112, .34);
+  color: #dcd6bc;
+  background: rgba(9, 14, 10, .72);
+  font: 700 .62rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transform: translateY(-50%);
+  transition: border-color .16s ease, color .16s ease, background .16s ease;
+}
+
+body.v160-home .home-monthly-archive-link:hover,
+body.v160-home .home-monthly-archive-link:focus-visible {
+  border-color: rgba(216, 186, 82, .72);
+  color: #fff4c7;
+  background: rgba(18, 27, 19, .94);
+  outline: none;
+}
+
+@media (max-width: 700px) {
+  body.v160-home .home-monthly-awards-v71333 .home-section-head-v630 {
+    min-height: 58px;
+    padding-bottom: 30px !important;
+  }
+
+  body.v160-home .home-monthly-archive-link {
+    top: auto;
+    right: 50%;
+    bottom: 0;
+    transform: translateX(50%);
+  }
+}
