@@ -2110,18 +2110,8 @@ body.v160-home .home-monthly-period-label {
 
 body.v160-home .home-monthly-period-label::before,
 body.v160-home .home-monthly-period-label::after {
-  content: "";
-  width: clamp(8px, 4vw, 54px);
-  height: 6px;
-  border-top: 1px solid rgba(216, 186, 82, .62);
-}
-
-body.v160-home .home-monthly-period-label::before {
-  border-left: 1px solid rgba(216, 186, 82, .62);
-}
-
-body.v160-home .home-monthly-period-label::after {
-  border-right: 1px solid rgba(216, 186, 82, .62);
+  content: none;
+  display: none;
 }
 
 body.v160-home .home-monthly-competition-link {
@@ -2146,6 +2136,15 @@ body.v160-home .home-monthly-competition-link:first-child {
 
 body.v160-home .home-monthly-competition-link:last-child {
   justify-self: end;
+}
+
+body.v160-home .home-monthly-competition-link::after {
+  content: "↗";
+  margin-left: 5px;
+  color: #d8ba52;
+  font-size: .82em;
+  line-height: 1;
+  transform: translateY(-1px);
 }
 
 body.v160-home .home-monthly-competition-link:hover,
@@ -6737,26 +6736,42 @@ body.v160-home .home-current-v630 .upcoming-event-message {
 /* Employee of the Month archive entry point. */
 body.v160-home .home-monthly-awards-v71333 .home-section-head-v630 {
   position: relative;
-  min-height: 28px;
+  min-height: 32px;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+body.v160-home #monthly-competition-heading {
+  grid-column: 2;
+  justify-self: center;
+  font-size: clamp(1.28rem, 2.7vw, 1.48rem) !important;
+  text-align: center;
+}
+
+body.v160-home .home-monthly-awards-v71333 .home-section-head-v630 .home-monthly-live-status {
+  grid-column: 3;
+  justify-self: start;
 }
 
 body.v160-home .home-monthly-archive-link {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  min-height: 26px;
-  padding: 5px 10px;
-  display: inline-flex;
+  position: static;
+  width: max-content;
+  min-height: 28px;
+  margin: 8px auto 0;
+  padding: 6px 13px;
+  display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid rgba(194, 173, 112, .34);
   color: #dcd6bc;
   background: rgba(9, 14, 10, .72);
-  font: 700 .62rem/1 Arial, Helvetica, sans-serif;
+  font: 700 .65rem/1 Arial, Helvetica, sans-serif;
   letter-spacing: .075em;
   text-transform: uppercase;
   text-decoration: none;
-  transform: translateY(-50%);
+  transform: none;
   transition: border-color .16s ease, color .16s ease, background .16s ease;
 }
 
@@ -6768,16 +6783,302 @@ body.v160-home .home-monthly-archive-link:focus-visible {
   outline: none;
 }
 
-@media (max-width: 700px) {
+body.v160-home .home-monthly-archive-link::after {
+  content: "↗";
+  margin-left: 5px;
+  color: #d8ba52;
+  font-size: .82em;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
   body.v160-home .home-monthly-awards-v71333 .home-section-head-v630 {
-    min-height: 58px;
-    padding-bottom: 30px !important;
+    min-height: 53px;
+    padding-bottom: 0 !important;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    row-gap: 5px;
   }
 
-  body.v160-home .home-monthly-archive-link {
-    top: auto;
-    right: 50%;
-    bottom: 0;
-    transform: translateX(50%);
+  body.v160-home #monthly-competition-heading,
+  body.v160-home .home-monthly-awards-v71333 .home-section-head-v630 .home-monthly-live-status {
+    grid-column: 1;
+    justify-self: center;
+  }
+}
+
+/* Previous-month winners attached beneath the live monthly scoreboard. */
+body.v160-home .home-previous-winners {
+  position: relative;
+  margin-top: 6px;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.v160-home .home-previous-winners-label {
+  min-height: 24px;
+  padding: 2px 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  text-align: center;
+  transform: translateY(3px);
+}
+
+body.v160-home .home-previous-winners-label h3 {
+  width: max-content;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #d8ba52;
+  font: 800 .70rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+body.v160-home .home-previous-winners-label h3::before,
+body.v160-home .home-previous-winners-label h3::after {
+  content: "";
+  width: clamp(16px, 5vw, 30px);
+  height: 7px;
+  flex: 0 1 30px;
+  background: rgba(216, 186, 82, .72);
+}
+
+body.v160-home .home-previous-winners-label h3::before {
+  clip-path: polygon(0 50%, 8px 0, 8px 3px, 100% 3px, 100% 4px, 8px 4px, 8px 100%);
+}
+
+body.v160-home .home-previous-winners-label h3::after {
+  clip-path: polygon(100% 50%, calc(100% - 8px) 0, calc(100% - 8px) 3px, 0 3px, 0 4px, calc(100% - 8px) 4px, calc(100% - 8px) 100%);
+}
+
+body.v160-home .home-previous-winners-grid {
+  width: 100%;
+  min-height: 286px;
+  margin: -4px auto 0;
+  padding: 0 0 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: stretch;
+  gap: 0;
+}
+
+body.v160-home .home-previous-winner {
+  min-width: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+body.v160-home .home-previous-winner-frame {
+  width: min(157px, calc(100% - 8px));
+  padding: 5px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(194, 173, 112, .38);
+  background: #0d1510;
+  box-shadow: inset 0 0 0 1px rgba(238, 228, 194, .045), 0 8px 17px rgba(0, 0, 0, .24);
+}
+
+body.v160-home .home-previous-winner-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  object-position: center;
+  image-rendering: pixelated;
+  border: 1px solid rgba(194, 173, 112, .16);
+  background: #080c09;
+}
+
+body.v160-home .home-previous-winner-frame img.winner-character-sprite {
+  object-fit: contain;
+  object-position: center;
+  background: radial-gradient(circle at 50% 42%, #1a241b 0%, #0d1510 48%, #080c09 100%);
+}
+
+body.v160-home .home-previous-winner > span {
+  margin-top: 8px;
+  color: #d8ba52;
+  font: 900 .55rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+body.v160-home .home-previous-winner h4 {
+  max-width: 100%;
+  margin: 5px 0 0;
+  overflow: hidden;
+  color: #f0eee3;
+  font: 600 .91rem/1.05 Georgia, "Times New Roman", serif;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.v160-home .home-previous-winner > .home-previous-winner-score {
+  margin-top: 5px;
+  color: #c7c0aa;
+  font: 700 .68rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: .035em;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+@media (min-width: 701px) {
+  body.v160-home .home-previous-winners-label {
+    position: absolute;
+    z-index: 1;
+    top: 22px;
+    right: 0;
+    left: 0;
+    min-height: 0;
+    padding: 0;
+    pointer-events: none;
+    transform: none;
+  }
+
+  body.v160-home .home-previous-winners-label h3 {
+    width: max(180px, calc(50% - 170px));
+  }
+
+  body.v160-home .home-previous-winners-label h3::before,
+  body.v160-home .home-previous-winners-label h3::after {
+    width: auto;
+    flex: 1 1 auto;
+  }
+
+  body.v160-home .home-previous-winners-grid {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  body.v160-home .home-previous-winners-grid {
+    width: 100%;
+    padding-inline: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body.v160-home .home-previous-winners-label h3 {
+    font-size: .62rem;
+  }
+
+  body.v160-home .home-previous-winner h4 {
+    font-size: .84rem;
+  }
+}
+
+/* Compact full-width Point Rush roster above the event archive. */
+body.v160-home .home-point-rush-strip {
+  width: 100%;
+  margin: 8px auto 30px;
+  padding-top: 0;
+}
+
+body.v160-home .home-point-rush-strip::before,
+body.v160-home .home-point-rush-strip::after {
+  content: none !important;
+  display: none !important;
+}
+
+body.v160-home .home-point-rush-strip + .home-archive-v630 {
+  margin-top: 0;
+}
+
+body.v160-home .home-point-rush-strip-heading {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+body.v160-home .home-point-rush-strip-heading h2 {
+  margin: 0;
+  color: #ece5cf;
+  font: 600 1.2rem/1.08 "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  letter-spacing: -.008em;
+  text-shadow: 0 1px 7px rgba(0, 0, 0, .38);
+}
+
+body.v160-home .home-point-rush-strip-card {
+  padding: 11px 18px;
+  border-top: 1px solid rgba(194, 173, 112, .16);
+  border-bottom: 1px solid rgba(194, 173, 112, .16);
+  background: linear-gradient(90deg, transparent, rgba(13, 20, 14, .64) 10%, rgba(13, 20, 14, .64) 90%, transparent);
+}
+
+body.v160-home .home-point-rush-list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px 20px;
+  list-style: none;
+}
+
+body.v160-home .home-point-rush-list li {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #e9eadf;
+  font: 700 clamp(.74rem, 1.05vw, .82rem)/1.15 Arial, Helvetica, sans-serif;
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+
+body.v160-home .home-point-rush-list li > span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.v160-home .home-point-rush-trophy {
+  flex: 0 0 auto;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  font-size: .86rem;
+  line-height: 1;
+  filter: drop-shadow(0 1px 3px rgba(229, 183, 64, .32));
+}
+
+@media (max-width: 760px) {
+  body.v160-home .home-point-rush-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 12px;
+  }
+}
+
+@media (max-width: 500px) {
+  body.v160-home .home-point-rush-strip {
+    width: 100%;
+    margin-bottom: 26px;
+  }
+
+  body.v160-home .home-point-rush-strip-heading h2 {
+    font-size: 1.08rem;
+  }
+
+  body.v160-home .home-point-rush-strip-card {
+    padding: 10px 5px;
+  }
+
+  body.v160-home .home-point-rush-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px 8px;
+  }
+
+  body.v160-home .home-point-rush-list li {
+    font-size: .75rem;
   }
 }
