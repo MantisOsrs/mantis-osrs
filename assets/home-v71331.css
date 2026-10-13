@@ -2224,20 +2224,6 @@ body.v160-home .home-monthly-value-slot {
   white-space: nowrap;
 }
 
-body.v160-home .home-upcoming-row-v71333 {
-  margin-top: 0;
-  width: 100%;
-}
-
-body.v160-home .home-upcoming-row-v71333 .home-section-head-v630 {
-  margin: 0 0 6px !important;
-  padding: 0 !important;
-}
-
-body.v160-home .home-upcoming-row-v71333 .upcoming-event-teaser {
-  width: 100% !important;
-}
-
 @media (min-width: 621px) and (max-width: 860px) {
   body.v160-home .home-monthly-awards-card {
     min-height: 194px;
@@ -2251,10 +2237,6 @@ body.v160-home .home-upcoming-row-v71333 .upcoming-event-teaser {
   body.v160-home .home-monthly-category h3 {
     margin-bottom: 5px;
     font-size: .78rem;
-  }
-
-  body.v160-home .home-upcoming-row-v71333 {
-    width: 100%;
   }
 
   body.v160-home .home-monthly-standings {
@@ -2285,10 +2267,6 @@ body.v160-home .home-upcoming-row-v71333 .upcoming-event-teaser {
     height: 204px;
   }
 
-  body.v160-home .home-upcoming-row-v71333 {
-    margin-top: 0;
-    width: 100%;
-  }
 }
 
 @media (max-width: 520px) {
