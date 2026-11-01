@@ -120,7 +120,16 @@ body.eom-archive-page .v160-nav-shell .v160-brand-wordmark {
   border-top: 1px solid rgba(150, 146, 96, .15);
 }
 
+.eom-archive-month {
+  display: grid;
+  grid-template-columns: minmax(132px, 156px) minmax(0, 1fr) minmax(132px, 156px);
+  align-items: center;
+  gap: clamp(14px, 2vw, 22px);
+}
+
 .eom-archive-scoreboard {
+  grid-column: 2;
+  grid-row: 1;
   min-height: 204px;
   height: 204px;
   display: grid;
@@ -279,17 +288,11 @@ body.eom-archive-page .v160-nav-shell .v160-brand-wordmark {
 }
 
 .eom-archive-winners {
-  border: 0;
-  background: transparent;
+  display: contents;
 }
 
 .eom-archive-winners-grid {
-  width: 100%;
-  min-height: 282px;
-  margin: 0 auto;
-  padding: 7px 0 10px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: contents;
 }
 
 .eom-archive-winner {
@@ -299,6 +302,16 @@ body.eom-archive-page .v160-nav-shell .v160-brand-wordmark {
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+.eom-archive-winner:first-child {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.eom-archive-winner:last-child {
+  grid-column: 3;
+  grid-row: 1;
 }
 
 .eom-archive-winner-frame {
@@ -343,6 +356,33 @@ body.eom-archive-page .v160-nav-shell .v160-brand-wordmark {
   font: 600 .91rem/1.05 Georgia, "Times New Roman", serif;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@media (max-width: 800px) {
+  .eom-archive-month {
+    display: block;
+  }
+
+  .eom-archive-winners {
+    display: block;
+    border: 0;
+    background: transparent;
+  }
+
+  .eom-archive-winners-grid {
+    width: 100%;
+    min-height: 282px;
+    margin: 0 auto;
+    padding: 14px 0 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .eom-archive-winner:first-child,
+  .eom-archive-winner:last-child {
+    grid-column: auto;
+    grid-row: auto;
+  }
 }
 
 @media (max-width: 620px) {

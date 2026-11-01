@@ -1,12 +1,12 @@
 (() => {
   "use strict";
 
-  const CACHE_KEY = "mantis-wom-october-leaders-v1";
+  const CACHE_KEY = "mantis-wom-november-leaders-v1";
   const CACHE_TTL_MS = 5 * 60 * 1000;
   const RANK_LABELS = ["First", "Second", "Third", "Fourth", "Fifth"];
   const COMPETITIONS = Object.freeze({
-    ehb: 155166,
-    xp: 155167
+    ehb: 158945,
+    xp: 158946
   });
 
   const leaderboards = new Map(
